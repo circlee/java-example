@@ -1,4 +1,4 @@
-# Java-JVM Structure（内存结构）
+# Java - JVM 组成
 
 ![jvm-size](jvm-size.png)
 

@@ -1,4 +1,4 @@
-# Java-Sorting（排序法）
+# Java - 排序法
 
 ##  冒泡排序
 

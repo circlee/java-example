@@ -1,4 +1,4 @@
-# Java-Garbage Collection（垃圾回收）
+# Java - JVM 垃圾回收
 
 ## JVM内存分配策略
 
