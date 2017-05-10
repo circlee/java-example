@@ -43,3 +43,5 @@
 ## [Java - Concurrent Collection 集合](java-example-concurrent-collection)
 
 ## [Java - Concurrent Blocking Queue 阻塞队列](java-example-concurrent-blocking-queue)
+
+## [Java - Concurrent Blocking Deque 阻塞双端队列](java-example-concurrent-blocking-deque)
