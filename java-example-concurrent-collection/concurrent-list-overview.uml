@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement />
+  <nodes>
+    <node x="87.0" y="0.0">java.util.List</node>
+    <node x="104.0" y="81.0">java.util.concurrent.CopyOnWriteArrayList</node>
+    <node x="0.0" y="81.0">java.util.ArrayList</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="java.util.concurrent.CopyOnWriteArrayList" target="java.util.List">
+      <point x="0.0" y="-15.5" />
+      <point x="185.0" y="56.0" />
+      <point x="126.75" y="56.0" />
+      <point x="13.25" y="15.5" />
+    </edge>
+    <edge source="java.util.ArrayList" target="java.util.List">
+      <point x="0.0" y="-15.5" />
+      <point x="42.0" y="56.0" />
+      <point x="100.25" y="56.0" />
+      <point x="-13.25" y="15.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="133.0" y="56.0" />
+  <SelectedNodes />
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement />
+  <nodes>
+    <node x="0.0" y="81.0">java.util.HashSet</node>
+    <node x="85.0" y="0.0">java.util.Set</node>
+    <node x="101.0" y="81.0">java.util.concurrent.CopyOnWriteArraySet</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="java.util.HashSet" target="java.util.Set">
+      <point x="0.0" y="-15.5" />
+      <point x="40.5" y="56.0" />
+      <point x="98.0" y="56.0" />
+      <point x="-13.0" y="15.5" />
+    </edge>
+    <edge source="java.util.concurrent.CopyOnWriteArraySet" target="java.util.Set">
+      <point x="0.0" y="-15.5" />
+      <point x="181.5" y="56.0" />
+      <point x="124.0" y="56.0" />
+      <point x="13.0" y="15.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="131.0" y="56.0" />
+  <SelectedNodes />
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
