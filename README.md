@@ -41,3 +41,5 @@
 ## [Java - Concurrent Operation 操作](java-example-concurrent-operation)
 
 ## [Java - Concurrent Collection 集合](java-example-concurrent-collection)
+
+## [Java - Concurrent Blocking Queue 阻塞队列](java-example-concurrent-blocking-queue)
