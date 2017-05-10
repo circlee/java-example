@@ -18,7 +18,7 @@ public class QuartzManager {
      * @param jobGroup    任务组
      * @param jobClass    任务实现类
      * @param jobData     任务数据
-     * @param triggerCron 触发器定时表示式
+     * @param triggerCron 触发器Cron表示式
      */
     public void addJob(String jobName, String jobGroup, Class<? extends Job> jobClass, Map<String, Object> jobData, String triggerCron) {
         String triggerName = "TRIGGER-" + jobName;
@@ -35,7 +35,7 @@ public class QuartzManager {
      * @param jobData      任务数据
      * @param triggerName  触发器名
      * @param triggerGroup 触发器组
-     * @param triggerCron  触发器定时表示式
+     * @param triggerCron  触发器Cron表示式
      */
     public void addJob(String jobName, String jobGroup, Class<? extends Job> jobClass, Map<String, Object> jobData, String triggerName, String triggerGroup, String triggerCron) {
         try {
@@ -48,7 +48,6 @@ public class QuartzManager {
             TriggerBuilder<Trigger> triggerBuilder = TriggerBuilder.newTrigger();
             // 触发器名,触发器组
             triggerBuilder.withIdentity(triggerName, triggerGroup);
-            // triggerBuilder.startNow();
             // 触发器时间设定
             triggerBuilder.withSchedule(CronScheduleBuilder.cronSchedule(triggerCron));
             // 创建Trigger对象
@@ -62,62 +61,158 @@ public class QuartzManager {
     }
 
     /**
-     * 修改触发器定时表示式
+     * 添加任务
      *
-     * @param jobName     任务名
-     * @param jobGroup    任务组
-     * @param triggerCron 触发器定时表示式
+     * @param jobName         任务名
+     * @param jobGroup        任务组
+     * @param jobClass        任务实现类
+     * @param jobData         任务数据
+     * @param triggerInterval 触发器间隔（毫秒）
+     * @param triggerRepeat   触发器次数
      */
-    public void modifyJobCron(String jobName, String jobGroup, String triggerCron) {
+    public void addJob(String jobName, String jobGroup, Class<? extends Job> jobClass, Map<String, Object> jobData, Long triggerInterval, Integer triggerRepeat) {
         String triggerName = "TRIGGER-" + jobName;
         String triggerGroup = "TRIGGER-GROUP-" + jobGroup;
-        modifyJobCron(jobName, jobGroup, triggerName, triggerGroup, triggerCron);
+        addJob(jobName, jobGroup, jobClass, jobData, triggerName, triggerGroup, triggerInterval, triggerRepeat);
     }
 
     /**
-     * 修改触发器定时表示式
+     * 添加任务
      *
-     * @param jobName      任务名
-     * @param jobGroup     任务组
-     * @param triggerName  触发器名
-     * @param triggerGroup 触发器组
-     * @param triggerCron  触发器定时表示式
+     * @param jobName         任务名
+     * @param jobGroup        任务组
+     * @param jobClass        任务实现类
+     * @param jobData         任务数据
+     * @param triggerName     触发器名
+     * @param triggerGroup    触发器组
+     * @param triggerInterval 触发器间隔（毫秒）
+     * @param triggerRepeat   触发器重复执行次数
      */
-    public void modifyJobCron(String jobName, String jobGroup, String triggerName, String triggerGroup, String triggerCron) {
+    public void addJob(String jobName, String jobGroup, Class<? extends Job> jobClass, Map<String, Object> jobData, String triggerName, String triggerGroup, Long triggerInterval, Integer triggerRepeat) {
         try {
-            TriggerKey triggerKey = TriggerKey.triggerKey(triggerName, triggerGroup);
-            CronTrigger trigger = (CronTrigger) scheduler.getTrigger(triggerKey);
-            if (trigger == null) {
-                return;
-            }
+            // 任务名，任务组，任务执行类
+            JobDetail jobDetail = JobBuilder.newJob(jobClass).withIdentity(jobName, jobGroup).build();
+            if (jobData != null && jobData.size() > 0)
+                jobDetail.getJobDataMap().putAll(jobData);
 
-            String oldCron = trigger.getCronExpression();
-            if (!oldCron.equalsIgnoreCase(triggerCron)) {
-                // 触发器
-                TriggerBuilder<Trigger> triggerBuilder = TriggerBuilder.newTrigger();
-                // 触发器名,触发器组
-                triggerBuilder.withIdentity(triggerName, triggerGroup);
-                // triggerBuilder.startNow();
-                // 触发器时间设定
-                triggerBuilder.withSchedule(CronScheduleBuilder.cronSchedule(triggerCron));
-                // 创建Trigger对象
-                trigger = (CronTrigger) triggerBuilder.build();
-                // 方式一 ：修改一个任务的触发时间
-                scheduler.rescheduleJob(triggerKey, trigger);
-            }
+            // 触发器
+            TriggerBuilder<Trigger> triggerBuilder = TriggerBuilder.newTrigger();
+            // 触发器名,触发器组
+            triggerBuilder.withIdentity(triggerName, triggerGroup);
+            // 触发器时间设定
+            triggerBuilder.withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInMilliseconds(triggerInterval).withRepeatCount(triggerRepeat));
+            // 创建Trigger对象
+            SimpleTrigger trigger = (SimpleTrigger) triggerBuilder.build();
+
+            // 调度容器设置JobDetail和Trigger
+            scheduler.scheduleJob(jobDetail, trigger);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
     /**
-     * 修改任务数据
+     * 添加触发器
+     *
+     * @param jobName     任务名
+     * @param jobGroup    任务组
+     * @param triggerCron 触发器Cron表示式
+     */
+    public void addTrigger(String jobName, String jobGroup, String triggerCron) {
+        String triggerName = "TRIGGER-" + jobName;
+        String triggerGroup = "TRIGGER-GROUP-" + jobGroup;
+        addTrigger(jobName, jobGroup, triggerName, triggerGroup, triggerCron);
+    }
+
+    /**
+     * 添加触发器
+     *
+     * @param jobName      任务名
+     * @param jobGroup     任务组
+     * @param triggerName  触发器名
+     * @param triggerGroup 触发器组
+     * @param triggerCron  触发器Cron表示式
+     */
+    public void addTrigger(String jobName, String jobGroup, String triggerName, String triggerGroup, String triggerCron) {
+        try {
+            JobKey jobKey = JobKey.jobKey(jobName, jobGroup);
+            JobDetail jobDetail = scheduler.getJobDetail(jobKey);
+            if (jobDetail == null) {
+                return;
+            }
+
+            // 触发器
+            TriggerBuilder<Trigger> triggerBuilder = TriggerBuilder.newTrigger();
+            // 触发器名,触发器组
+            triggerBuilder.withIdentity(triggerName, triggerGroup);
+            // 触发器时间设定
+            triggerBuilder.withSchedule(CronScheduleBuilder.cronSchedule(triggerCron));
+            // 创建Trigger对象
+            CronTrigger trigger = (CronTrigger) triggerBuilder.build();
+
+            // 调度容器设置Trigger
+            scheduler.scheduleJob(jobDetail, trigger);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 添加触发器
+     *
+     * @param jobName         任务名
+     * @param jobGroup        任务组
+     * @param triggerInterval 触发器间隔（毫秒）
+     * @param triggerRepeat   触发器重复执行次数
+     */
+    public void addTrigger(String jobName, String jobGroup, Long triggerInterval, Integer triggerRepeat) {
+        String triggerName = "TRIGGER-" + jobName;
+        String triggerGroup = "TRIGGER-GROUP-" + jobGroup;
+        addTrigger(jobName, jobGroup, triggerName, triggerGroup, triggerInterval, triggerRepeat);
+    }
+
+    /**
+     * 添加触发器
+     *
+     * @param jobName         任务名
+     * @param jobGroup        任务组
+     * @param triggerName     触发器名
+     * @param triggerGroup    触发器组
+     * @param triggerInterval 触发器间隔（毫秒）
+     * @param triggerRepeat   触发器重复执行次数
+     */
+    public void addTrigger(String jobName, String jobGroup, String triggerName, String triggerGroup, Long triggerInterval, Integer triggerRepeat) {
+        try {
+            JobKey jobKey = JobKey.jobKey(jobName, jobGroup);
+            JobDetail jobDetail = scheduler.getJobDetail(jobKey);
+            if (jobDetail == null) {
+                return;
+            }
+
+            // 触发器
+            TriggerBuilder<Trigger> triggerBuilder = TriggerBuilder.newTrigger();
+            // 触发器名,触发器组
+            triggerBuilder.withIdentity(triggerName, triggerGroup);
+            // 触发器时间设定
+            triggerBuilder.withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInMilliseconds(triggerInterval).withRepeatCount(triggerRepeat));
+            // 创建Trigger对象
+            SimpleTrigger trigger = (SimpleTrigger) triggerBuilder.build();
+
+            // 调度容器设置Trigger
+            scheduler.scheduleJob(jobDetail, trigger);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 修改任务
      *
      * @param jobName  任务名
      * @param jobGroup 任务组
      * @param jobData  任务数据
      */
-    public void modifyJobData(String jobName, String jobGroup, Map<String, Object> jobData) {
+    public void modifyJob(String jobName, String jobGroup, Map<String, Object> jobData) {
         try {
             JobKey jobKey = JobKey.jobKey(jobName, jobGroup);
             JobDetail jobDetail = scheduler.getJobDetail(jobKey);
@@ -134,6 +229,104 @@ public class QuartzManager {
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     * 修改触发器
+     *
+     * @param jobName     任务名
+     * @param jobGroup    任务组
+     * @param triggerCron 触发器Cron表示式
+     */
+    public void modifyTrigger(String jobName, String jobGroup, String triggerCron) {
+        String triggerName = "TRIGGER-" + jobName;
+        String triggerGroup = "TRIGGER-GROUP-" + jobGroup;
+        modifyTrigger(jobName, jobGroup, triggerName, triggerGroup, triggerCron);
+    }
+
+    /**
+     * 修改触发器
+     *
+     * @param jobName      任务名
+     * @param jobGroup     任务组
+     * @param triggerName  触发器名
+     * @param triggerGroup 触发器组
+     * @param triggerCron  触发器Cron表示式
+     */
+    public void modifyTrigger(String jobName, String jobGroup, String triggerName, String triggerGroup, String triggerCron) {
+        try {
+            TriggerKey triggerKey = TriggerKey.triggerKey(triggerName, triggerGroup);
+            CronTrigger trigger = (CronTrigger) scheduler.getTrigger(triggerKey);
+            if (trigger == null) {
+                return;
+            }
+
+            String oldCron = trigger.getCronExpression();
+            if (!oldCron.equalsIgnoreCase(triggerCron)) {
+                // 触发器
+                TriggerBuilder<Trigger> triggerBuilder = TriggerBuilder.newTrigger();
+                // 触发器名,触发器组
+                triggerBuilder.withIdentity(triggerName, triggerGroup);
+                // 触发器时间设定
+                triggerBuilder.withSchedule(CronScheduleBuilder.cronSchedule(triggerCron));
+                // 创建Trigger对象
+                trigger = (CronTrigger) triggerBuilder.build();
+                // 更新触发器到调度容器中
+                scheduler.rescheduleJob(triggerKey, trigger);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 修改触发器
+     *
+     * @param jobName         任务名
+     * @param jobGroup        任务组
+     * @param triggerInterval 触发器间隔（毫秒）
+     * @param triggerRepeat   触发器重复执行次数
+     */
+    public void modifyTrigger(String jobName, String jobGroup, Long triggerInterval, Integer triggerRepeat) {
+        String triggerName = "TRIGGER-" + jobName;
+        String triggerGroup = "TRIGGER-GROUP-" + jobGroup;
+        modifyTrigger(jobName, jobGroup, triggerName, triggerGroup, triggerInterval, triggerRepeat);
+    }
+
+    /**
+     * 修改触发器
+     *
+     * @param jobName         任务名
+     * @param jobGroup        任务组
+     * @param triggerName     触发器名
+     * @param triggerGroup    触发器组
+     * @param triggerInterval 触发器间隔（毫秒）
+     * @param triggerRepeat   触发器重复执行次数
+     */
+    public void modifyTrigger(String jobName, String jobGroup, String triggerName, String triggerGroup, Long triggerInterval, Integer triggerRepeat) {
+        try {
+            TriggerKey triggerKey = TriggerKey.triggerKey(triggerName, triggerGroup);
+            SimpleTrigger trigger = (SimpleTrigger) scheduler.getTrigger(triggerKey);
+            if (trigger == null) {
+                return;
+            }
+
+            if (trigger.getRepeatInterval() != triggerInterval && trigger.getRepeatCount() != triggerRepeat) {
+                // 触发器
+                TriggerBuilder<Trigger> triggerBuilder = TriggerBuilder.newTrigger();
+                // 触发器名,触发器组
+                triggerBuilder.withIdentity(triggerName, triggerGroup);
+                // 触发器时间设定
+                triggerBuilder.withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInMilliseconds(triggerInterval).withRepeatCount(triggerRepeat));
+                // 创建Trigger对象
+                trigger = (SimpleTrigger) triggerBuilder.build();
+                // 更新触发器到调度容器中
+                scheduler.rescheduleJob(triggerKey, trigger);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     /**
      * 移除任务
@@ -162,6 +355,21 @@ public class QuartzManager {
             scheduler.pauseTrigger(triggerKey);// 停止触发器
             scheduler.unscheduleJob(triggerKey);// 移除触发器
             scheduler.deleteJob(JobKey.jobKey(jobName, jobGroup));// 删除任务
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 触发任务
+     *
+     * @param jobName  任务名
+     * @param jobGroup 任务组
+     */
+    public void triggerJob(String jobName, String jobGroup) {
+        try {
+            JobKey jobKey = JobKey.jobKey(jobName, jobGroup);
+            scheduler.triggerJob(jobKey);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -284,7 +492,7 @@ public class QuartzManager {
     }
 
     /**
-     * 启动调度器
+     * 启动调度容器
      */
     public void startScheduler() {
         try {
@@ -297,7 +505,7 @@ public class QuartzManager {
     }
 
     /**
-     * 关闭调度器
+     * 关闭调度容器
      */
     public void stopScheduler() {
         try {
