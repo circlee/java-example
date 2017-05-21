@@ -29,7 +29,7 @@ public class QuartzTest {
             if (i % 3 == 0) {
                 jobData = new HashMap<>();
                 jobData.put("x", i + "");
-                quartzManager.modifyJobData("myJob", "test", jobData);
+                quartzManager.modifyJob("myJob", "test", jobData);
 
             }
             Thread.sleep(1000);
