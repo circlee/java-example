@@ -14,6 +14,27 @@ public class QuartzManager {
     /**
      * 添加任务
      *
+     * @param jobName  任务名
+     * @param jobGroup 任务组
+     * @param jobClass 任务实现类
+     * @param jobData  任务数据
+     */
+    public void addJob(String jobName, String jobGroup, Class<? extends Job> jobClass, Map<String, Object> jobData) {
+        try {
+            // 任务名，任务组，任务执行类
+            JobDetail jobDetail = JobBuilder.newJob(jobClass).withIdentity(jobName, jobGroup).build();
+            if (jobData != null && jobData.size() > 0)
+                jobDetail.getJobDataMap().putAll(jobData);
+
+            scheduler.addJob(jobDetail, true, true);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 添加任务
+     *
      * @param jobName     任务名
      * @param jobGroup    任务组
      * @param jobClass    任务实现类
@@ -323,6 +344,58 @@ public class QuartzManager {
                 scheduler.rescheduleJob(triggerKey, trigger);
             }
         } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 是否存在任务
+     *
+     * @param jobName  任务名
+     * @param jobGroup 任务组
+     * @return
+     */
+    public Boolean hasJob(String jobName, String jobGroup) {
+        try {
+            JobKey jobKey = JobKey.jobKey(jobName, jobGroup);
+            return scheduler.checkExists(jobKey);
+        } catch (SchedulerException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 是否存在触发器
+     *
+     * @param jobName  任务名
+     * @param jobGroup 任务组
+     * @return
+     */
+    public Boolean hasTrigger(String jobName, String jobGroup) {
+        try {
+            String triggerName = "TRIGGER-" + jobName;
+            String triggerGroup = "TRIGGER-GROUP-" + jobGroup;
+            TriggerKey triggerKey = TriggerKey.triggerKey(triggerName, triggerGroup);
+            return scheduler.checkExists(triggerKey);
+        } catch (SchedulerException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * 是否存在触发器
+     *
+     * @param jobName      任务名
+     * @param jobGroup     任务组
+     * @param triggerName  触发器名
+     * @param triggerGroup 触发器组
+     * @return
+     */
+    public Boolean hasTrigger(String jobName, String jobGroup, String triggerName, String triggerGroup) {
+        try {
+            TriggerKey triggerKey = TriggerKey.triggerKey(triggerName, triggerGroup);
+            return scheduler.checkExists(triggerKey);
+        } catch (SchedulerException e) {
             throw new RuntimeException(e);
         }
     }
