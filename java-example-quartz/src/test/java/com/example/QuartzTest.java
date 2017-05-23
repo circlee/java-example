@@ -5,6 +5,7 @@ import org.quartz.Scheduler;
 import org.quartz.SchedulerFactory;
 import org.quartz.impl.StdSchedulerFactory;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,6 +35,24 @@ public class QuartzTest {
             }
             Thread.sleep(1000);
         }
+    }
+
+    @Test
+    public void test2() throws Exception {
+        SchedulerFactory schedulerFactory = new StdSchedulerFactory();
+        Scheduler scheduler = schedulerFactory.getScheduler();
+        QuartzManager quartzManager = new QuartzManager(scheduler);
+
+        // quartzManager.addJob("myJob", "test", MyJob.class, Collections.singletonMap("x", "1"));
+        quartzManager.addJob("myJob", "test", MyJob.class, Collections.singletonMap("x", "2"), "0/3 * * * * ?");
+        quartzManager.startScheduler();
+        Thread.sleep(6000);
+        quartzManager.addJob("myJob", "test", MyJob.class, Collections.singletonMap("x", "3"));
+
+
+
+        while (Thread.activeCount() > 0)
+            Thread.yield();
     }
 
 }
