@@ -1,4 +1,4 @@
-package com.example;
+package com.example.job;
 
 import org.quartz.*;
 

@@ -1,4 +1,4 @@
-package com.example;
+package com.example.quartz;
 
 import org.quartz.*;
 

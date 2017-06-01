@@ -1,5 +1,7 @@
 package com.example;
 
+import com.example.job.MyJob;
+import com.example.quartz.QuartzManager;
 import org.junit.Test;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerFactory;
