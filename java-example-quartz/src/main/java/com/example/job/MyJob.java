@@ -8,7 +8,7 @@ import java.util.Date;
 
 public class MyJob implements Job {
 
-    private static final DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+    private final DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {

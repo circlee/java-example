@@ -8,8 +8,6 @@ import org.quartz.SchedulerFactory;
 import org.quartz.impl.StdSchedulerFactory;
 
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 public class QuartzTest {
 
@@ -19,42 +17,31 @@ public class QuartzTest {
         Scheduler scheduler = schedulerFactory.getScheduler();
         QuartzManager quartzManager = new QuartzManager(scheduler);
 
-        Map<String, Object> jobData = new HashMap<>();
-        jobData.put("x", "1");
-        jobData.put("y", "1");
-        String triggerCron = "0/5 * * * * ?";
-        quartzManager.addJob("myJob", "test", MyJob.class, jobData, triggerCron);
+        // 每1000毫秒执行一次，重复执行3次，共执行4次
+        quartzManager.addJob("myJob", "test", MyJob.class, Collections.singletonMap("x", "1"), 1000L, 3);
+        quartzManager.startScheduler();
+
+        while (Thread.activeCount() > 0)
+            Thread.yield();
+    }
+
+    @Test
+    public void testModify() throws Exception {
+        SchedulerFactory schedulerFactory = new StdSchedulerFactory();
+        Scheduler scheduler = schedulerFactory.getScheduler();
+        QuartzManager quartzManager = new QuartzManager(scheduler);
+
+        quartzManager.addJob("myJob", "test", MyJob.class, Collections.singletonMap("x", "1"), "0/5 * * * * ?");
         quartzManager.startScheduler();
 
         Thread.sleep(1500);
 
         for (int i = 0; Thread.activeCount() > 0; i ++) {
             if (i % 3 == 0) {
-                jobData = new HashMap<>();
-                jobData.put("x", i + "");
-                quartzManager.modifyJob("myJob", "test", jobData);
-
+                quartzManager.modifyJob("myJob", "test", Collections.singletonMap("x", i + ""));
             }
             Thread.sleep(1000);
         }
-    }
-
-    @Test
-    public void test2() throws Exception {
-        SchedulerFactory schedulerFactory = new StdSchedulerFactory();
-        Scheduler scheduler = schedulerFactory.getScheduler();
-        QuartzManager quartzManager = new QuartzManager(scheduler);
-
-        // quartzManager.addJob("myJob", "test", MyJob.class, Collections.singletonMap("x", "1"));
-        quartzManager.addJob("myJob", "test", MyJob.class, Collections.singletonMap("x", "2"), "0/3 * * * * ?");
-        quartzManager.startScheduler();
-        Thread.sleep(6000);
-        quartzManager.addJob("myJob", "test", MyJob.class, Collections.singletonMap("x", "3"));
-
-
-
-        while (Thread.activeCount() > 0)
-            Thread.yield();
     }
 
 }
