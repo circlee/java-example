@@ -18,8 +18,8 @@ public class JxlsTest {
     @Test
     public void test() throws Exception {
         List<User> users = listUser();
-        try (InputStream is = new FileInputStream(getTemplate("user.xls"))) {
-            try (OutputStream os = new FileOutputStream(getOutput("user.xls"))) {
+        try (InputStream is = new FileInputStream(getTemplate("user.xlsx"))) {
+            try (OutputStream os = new FileOutputStream(getOutput("user.xlsx"))) {
                 Context context = new Context();
                 context.putVar("users", users);
                 JxlsHelper.getInstance().processTemplate(is, os, context);
