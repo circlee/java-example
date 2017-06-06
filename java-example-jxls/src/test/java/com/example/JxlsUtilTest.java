@@ -21,7 +21,7 @@ public class JxlsUtilTest {
         try (InputStream input = new FileInputStream(getTemplate("user-util.xlsx"))) {
             try (OutputStream output = new FileOutputStream(getOutput("user-util.xlsx"))) {
                 Map<String, Object> data = new HashMap<>();
-                data.put("users", listUser());
+                data.put("users", users);
                 JxlsUtil.export(input, output, data);
             }
         }
