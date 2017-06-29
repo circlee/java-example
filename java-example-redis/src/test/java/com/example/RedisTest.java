@@ -10,9 +10,8 @@ public class RedisTest {
     public void test() throws Exception {
         Jedis jedis = RedisConfig.getJedis();
 
-        jedis.set("name", "conanli");
-        String name = jedis.get("name");
-        System.out.println(String.format("name: %s", name));
+        jedis.set("hello", "Hello World!");
+        System.out.println(String.format("hello: %s", jedis.get("hello")));
 
         jedis.close();
     }
