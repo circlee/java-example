@@ -46,25 +46,25 @@ RabbitMQ常用的Exchange Type有fanout、direct、topic、headers四种。
 
 ![exchange-direct](exchange-direct.png)
 
-- routingKey=”error”发送消息，则会同时路由到Queue1（amqp.gen-S9b…）和Queue2（amqp.gen-Agl…）
-- routingKey=”info”或routingKey=”warning”发送消息，则只会路由到Queue2
+- routingKey="error"发送消息，则会同时路由到Queue1（amqp.gen-S9b…）和Queue2（amqp.gen-Agl…）
+- routingKey="info"或routingKey="warning"发送消息，则只会路由到Queue2
 - 以其他routingKey发送消息，则不会路由到这两个Queue中
 
 #### *topic*
 
 把消息路由到bindingKey与routingKey模糊匹配的Queue中，匹配规则如下：
 
-- routingKey为一个句点号“.”分隔的字符串（被句点号“.”分隔开的每一段独立的字符串称为一个单词）
-- bindingKey与routingKey一样也是句点号“.”分隔的字符串
-- bindingKey中可以存在两种特殊字符“*”与“#”，用于做模糊匹配，其中“*”用于匹配一个单词，“#”用于匹配多个单词（可以是零个）
+- routingKey为一个句点号`.`分隔的字符串（被句点号`.`分隔开的每一段独立的字符串称为一个单词）
+- bindingKey与routingKey一样也是句点号`.`分隔的字符串
+- bindingKey中可以存在两种特殊字符`*`与`#`，用于做模糊匹配，其中`*`用于匹配一个单词，`#`用于匹配多个单词（可以是零个）
 
 ![exchange-topic](exchange-topic.png)
 
-- routingKey=”quick.orange.rabbit”发送信息，则会同时路由到Q1与Q2
-- routingKey=”lazy.orange.fox”发送信息，则只会路由到Q1
-- routingKey=”lazy.brown.fox”发送消息，则只会路由到Q2
-- routingKey=”lazy.pink.rabbit”发送消息，则只会路由到Q2（只会投递给Q2一次，虽然这个routingKey与Q2的两个bindingKey都匹配）
-- routingKey=”quick.brown.fox”、routingKey=”orange”、routingKey=”quick.orange.male.rabbit”发送消息，则会被丢弃，它们并没有匹配任何bindingKey
+- routingKey="quick.orange.rabbit"发送信息，则会同时路由到Q1与Q2
+- routingKey="lazy.orange.fox"发送信息，则只会路由到Q1
+- routingKey="lazy.brown.fox"发送消息，则只会路由到Q2
+- routingKey="lazy.pink.rabbit"发送消息，则只会路由到Q2（只会投递给Q2一次，虽然这个routingKey与Q2的两个bindingKey都匹配）
+- routingKey="quick.brown.fox"、routingKey="orange"、routingKey="quick.orange.male.rabbit"发送消息，则会被丢弃，它们并没有匹配任何bindingKey
 
 #### *headers*
 
@@ -132,7 +132,6 @@ public class Receiver {
         Channel channel = connection.createChannel();
 
         channel.queueDeclare(QUEUE_NAME, false, false, false, null);
-        System.out.println("Waiting for messages. To exit press CTRL+C");
 
         Consumer consumer = new DefaultConsumer(channel) {
             @Override
@@ -141,6 +140,7 @@ public class Receiver {
                 System.out.println(String.format("Received{queue=%s}: %s", QUEUE_NAME, message));
             }
         };
+        System.out.println("Waiting for messages. To exit press CTRL+C");
         channel.basicConsume(QUEUE_NAME, true, consumer);
     }
 
