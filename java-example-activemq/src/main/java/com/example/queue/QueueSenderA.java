@@ -4,7 +4,7 @@ import org.apache.activemq.ActiveMQConnectionFactory;
 
 import javax.jms.*;
 
-public class SenderB {
+public class QueueSenderA {
 
     private final static String QUEUE_NAME = "myqueue";
 
@@ -19,7 +19,7 @@ public class SenderB {
         producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
 
         TextMessage message = session.createTextMessage("Hello world!");
-        message.setStringProperty("JMSXGroupID", "myqueue-b");
+        message.setStringProperty("JMSXGroupID", "myqueue-a");
         System.out.println(String.format("Sent{queue=%s}: %s", QUEUE_NAME, message.getText()));
         producer.send(message);
 
