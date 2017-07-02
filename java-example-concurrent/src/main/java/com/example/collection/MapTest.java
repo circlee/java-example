@@ -8,17 +8,40 @@ public class MapTest {
     public static void main(String[] args) {
         ConcurrentMap<String, Object> map = new ConcurrentHashMap<>();
 
-        map.put("a", 1);
-        System.out.println("a: " + map.get("a"));
+        /*
+         *
+         * get(key)
+         * @return
+         */
+        System.out.println("a: " + map.get("a"));// a: null
 
-        map.putIfAbsent("a", 2);
-        System.out.println("a: " + map.get("a"));
+        /*
+         *
+         * put(key, value)
+         * @return
+         */
+        System.out.println("a: " + map.put("a", 1));
 
-        map.replace("a", 1, 2);
-        System.out.println("a: " + map.get("a"));
+        /*
+         *
+         * putIfAbsent(key, value)
+         * @return
+         */
+        System.out.println("a: " + map.putIfAbsent("a", 2));
 
-        map.remove("a", 2);
-        System.out.println("a: " + map.get("a"));
+        /*
+         *
+         * replace(key, oldValue, newValue)
+         * @return
+         */
+        System.out.println("succeed: " + map.replace("a", 1, 2));
+
+        /*
+         *
+         * remove(key, value)
+         * @return
+         */
+        System.out.println("succeed: " + map.remove("a", 2));
     }
 
 }

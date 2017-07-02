@@ -23,7 +23,7 @@
 - 如果这个阻塞队列达到容量上限，生产线程再尝试放入新的对象时会被阻塞，直到消费线程从队列中取出对象
 - 如果消费线程尝试从一个空的队列中取出对象，它会被阻塞，直到生产线程向队列中放入对象
 
-## BlockingQueue实现类
+### BlockingQueue实现类
 
 #### ArrayBlockingQueue
 
@@ -53,7 +53,7 @@
 
 - 只能容纳一个对象
 
-# 阻塞双端队列
+## 阻塞双端队列
 
 代表一个线程安全的队列，通常用于一个线程放入对象，另一个线程取出对象。可以对队列的两端执行操作。
 
@@ -78,13 +78,13 @@ Examine Last  | getLast          | peekLast(o)   |              |
 - Block 如果企图的操作不可能立即完成，这个方法会阻塞，直到可以继续进行。
 - Times Out 如果企图的操作不可能立即完成，这个方法会阻塞，但是阻塞的时间最长不会超过指定的timeout值，达到timeout后会返回一个特殊的值（通常是true/false/null）来告诉你操作是否成功。
 
-## BlockingDeque 实现类
+### BlockingDeque 实现类
 
 #### LinkedBlockingDeque
 
 ## 集合
 
-## ConcurrentMap
+#### ConcurrentMap
 
 ![concurrent-map-overview](concurrent-map-overview.png)
 
@@ -95,34 +95,22 @@ Examine Last  | getLast          | peekLast(o)   |              |
 - ConcurrentHashMap
 - ConcurrentNavigableMap
 
-使用方法：
-
-- get(key)
-- put(key, value)
-- putIfAbsent(key, value)
-- replace(key, oldValue, newValue)
-- remove(key, value)
-
-## CopyOnWriteArrayList
+#### CopyOnWriteArrayList
 
 ![concurrent-list-overview](concurrent-list-overview.png)
 
-## CopyOnWriteArraySet
+#### CopyOnWriteArraySet
 
 ![concurrent-set-overview](concurrent-set-overview.png)
 
-*PS：本文使用的是java-1.8*
 
-
-# Java - Concurrent Executor 执行器
-
-> 参考Jakob Jenkov的[java.util.concurrent](http://tutorials.jenkov.com/java-util-concurrent/index.html)
+## 执行器
 
 ExecutorService接口代表了一种异步执行机制，可以在后台执行任务。使用线程池实现。
 
 ![executor-service-overview](executor-service-overview.png)
 
-## 创建ExecutorService
+### 创建ExecutorService
 
 可以使用`java.util.concurrent.Executors`工厂类快速创建。
 
@@ -136,20 +124,15 @@ ScheduledExecutorService executor3 = Executors.newSingleThreadScheduledExecutor(
 ScheduledExecutorService executor4 = Executors.newScheduledThreadPool(10);
 ```
 
-## 关闭ExecutorService
+### 关闭ExecutorService
 
 当你使用完`ExecutorService`后，应该使用`shutdown()`方法关闭它，这样线程就不会继续运行了。`ExecutorService`并不会立即关闭，但是它也不会再接收新任务，当所有的线程完成了它们的任务后`ExecutorService`就会关闭。
 
 如果你想立即结束`ExecutorService`，应该调用`shutdownNow()`方法，但是这个并没有保障，也许它们会停止也许会执行完。
 
+### ExecutorService实现类
 
-## ExecutorService实现类
-
-- ThreadPoolExecutor
-- ScheduledThreadPoolExecutor
-- ForkJoinPool
-
-## ThreadPoolExecutor
+#### ThreadPoolExecutor
 
 内部维护着一个线程池，可以执行给定的任务。
 
@@ -347,12 +330,7 @@ Integer sum = executor.invoke(new RecursiveTask<Integer>() {
 });
 ```
 
-*PS：本文使用的是java-1.8*
-
-
-# Java - Concurrent Lock 锁
-
-> 参考Jakob Jenkov的[java.util.concurrent](http://tutorials.jenkov.com/java-util-concurrent/index.html)
+## Lock锁
 
 ## Lock 互斥锁
 
@@ -371,9 +349,7 @@ Integer sum = executor.invoke(new RecursiveTask<Integer>() {
 *PS：本文使用的是java-1.8*
 
 
-# Java - Concurrent Operation 操作
-
-> 参考Jakob Jenkov的[java.util.concurrent](http://tutorials.jenkov.com/java-util-concurrent/index.html)
+## Operation操作
 
 ## CountDownLatch 闭锁
 
