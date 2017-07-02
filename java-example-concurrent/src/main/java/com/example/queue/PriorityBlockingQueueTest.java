@@ -6,6 +6,15 @@ import java.util.Date;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.PriorityBlockingQueue;
 
+/*
+ * 运行结果
+ * 2017-03-12 17-42-13 : producer : p1
+ * 2017-03-12 17-42-13 : producer : p2
+ * 2017-03-12 17-42-13 : producer : p3
+ * 2017-03-12 17-42-16 : consumer : p3
+ * 2017-03-12 17-42-16 : consumer : p2
+ * 2017-03-12 17-42-16 : consumer : p1
+ */
 public class PriorityBlockingQueueTest {
 
     private static DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");

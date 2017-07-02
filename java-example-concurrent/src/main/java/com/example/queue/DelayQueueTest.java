@@ -8,6 +8,15 @@ import java.util.concurrent.DelayQueue;
 import java.util.concurrent.Delayed;
 import java.util.concurrent.TimeUnit;
 
+/*
+ * 运行结果
+ * 2017-03-12 17-18-59 : producer : p1
+ * 2017-03-12 17-18-59 : producer : p2
+ * 2017-03-12 17-18-59 : producer : p3
+ * 2017-03-12 17-19-00 : consumer : p3
+ * 2017-03-12 17-19-01 : consumer : p2
+ * 2017-03-12 17-19-02 : consumer : p1
+ */
 public class DelayQueueTest {
 
     private static DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
