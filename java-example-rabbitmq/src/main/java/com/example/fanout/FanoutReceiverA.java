@@ -4,9 +4,9 @@ import com.rabbitmq.client.*;
 
 import java.io.IOException;
 
-public class ReceiverB {
+public class FanoutReceiverA {
 
-    private final static String QUEUE_NAME = "myfanout-b";
+    private final static String QUEUE_NAME = "myfanout-a";
     private final static String EXCHANGE_NAME = "myfanout";
 
     public static void main(String[] argv) throws Exception {

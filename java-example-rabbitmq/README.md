@@ -99,7 +99,7 @@ RabbitMQ中实现RPC的机制是：
 ```java
 public class Sender {
 
-    private final static String QUEUE_NAME = "mydirect";
+    private final static String QUEUE_NAME = "hello";
 
     public static void main(String[] args) throws Exception {
         ConnectionFactory factory = new ConnectionFactory();
@@ -123,7 +123,7 @@ public class Sender {
 ```java
 public class Receiver {
 
-    private final static String QUEUE_NAME = "mydirect";
+    private final static String QUEUE_NAME = "hello";
 
     public static void main(String[] argv) throws Exception {
         ConnectionFactory factory = new ConnectionFactory();
