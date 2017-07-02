@@ -97,7 +97,7 @@ RabbitMQ中实现RPC的机制是：
 ## Hello World
 
 ```java
-public class Sender {
+public class HelloSender {
 
     private final static String QUEUE_NAME = "hello";
 
@@ -121,7 +121,7 @@ public class Sender {
 ```
 
 ```java
-public class Receiver {
+public class HelloReceiver {
 
     private final static String QUEUE_NAME = "hello";
 
