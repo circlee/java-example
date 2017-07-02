@@ -15,7 +15,6 @@ public class DirectReceiver {
         Channel channel = connection.createChannel();
 
         channel.queueDeclare(QUEUE_NAME, false, false, false, null);
-        System.out.println("Waiting for messages. To exit press CTRL+C");
 
         Consumer consumer = new DefaultConsumer(channel) {
             @Override
@@ -24,6 +23,7 @@ public class DirectReceiver {
                 System.out.println(String.format("Received{queue=%s}: %s", QUEUE_NAME, message));
             }
         };
+        System.out.println("Waiting for messages. To exit press CTRL+C");
         channel.basicConsume(QUEUE_NAME, true, consumer);
     }
 

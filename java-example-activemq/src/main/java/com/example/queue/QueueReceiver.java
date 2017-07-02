@@ -17,12 +17,19 @@ public class QueueReceiver {
         Destination destination = session.createQueue(QUEUE_NAME);
         MessageConsumer consumer = session.createConsumer(destination);
 
-        TextMessage message = (TextMessage) consumer.receive(1000);
-        System.out.println(String.format("Received{queue=%s}: %s", QUEUE_NAME, message.getText()));
-
-        consumer.close();
-        session.close();
-        connection.close();
+        MessageListener listener = new MessageListener() {
+            @Override
+            public void onMessage(Message message) {
+                try {
+                    TextMessage textMessage = (TextMessage) message;
+                    System.out.println(String.format("Received{queue=%s}: %s", QUEUE_NAME, textMessage.getText()));
+                } catch (JMSException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        System.out.println("Waiting for messages. To exit press CTRL+C");
+        consumer.setMessageListener(listener);
     }
 
 }

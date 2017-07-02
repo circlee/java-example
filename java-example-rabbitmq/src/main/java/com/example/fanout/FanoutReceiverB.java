@@ -18,7 +18,6 @@ public class FanoutReceiverB {
         channel.queueDeclare(QUEUE_NAME, false, false, false, null);
         channel.exchangeDeclare(EXCHANGE_NAME, "fanout");
         channel.queueBind(QUEUE_NAME, EXCHANGE_NAME, "");
-        System.out.println("Waiting for messages. To exit press CTRL+C");
 
         Consumer consumer = new DefaultConsumer(channel) {
             @Override
@@ -27,6 +26,7 @@ public class FanoutReceiverB {
                 System.out.println(String.format("Received{queue=%s, exchange=%s}: %s", QUEUE_NAME, EXCHANGE_NAME, message));
             }
         };
+        System.out.println("Waiting for messages. To exit press CTRL+C");
         channel.basicConsume(QUEUE_NAME, true, consumer);
     }
 

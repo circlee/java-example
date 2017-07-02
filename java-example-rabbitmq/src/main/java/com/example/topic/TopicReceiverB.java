@@ -19,7 +19,6 @@ public class TopicReceiverB {
         channel.queueDeclare(QUEUE_NAME, false, false, false, null);
         channel.exchangeDeclare(EXCHANGE_NAME, "topic");
         channel.queueBind(QUEUE_NAME, EXCHANGE_NAME, BINDING_KEY);
-        System.out.println("Waiting for messages. To exit press CTRL+C");
 
         Consumer consumer = new DefaultConsumer(channel) {
             @Override
@@ -28,6 +27,7 @@ public class TopicReceiverB {
                 System.out.println(String.format("Received{queue=%s, exchange=%s, binding=%s}: %s", QUEUE_NAME, EXCHANGE_NAME, BINDING_KEY, message));
             }
         };
+        System.out.println("Waiting for messages. To exit press CTRL+C");
         channel.basicConsume(QUEUE_NAME, true, consumer);
     }
 
