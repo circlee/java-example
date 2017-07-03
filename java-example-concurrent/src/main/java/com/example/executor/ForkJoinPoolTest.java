@@ -19,11 +19,19 @@ public class ForkJoinPoolTest {
 
     private static void testInvoke(ForkJoinPool executor) throws Exception {
         PrintTask task = new PrintTask(1, 1000);
+
+        /*
+         * java.util.concurrent.RecursiveAction 接口没返回值
+         */
         executor.invoke(task);
     }
 
     private static void testInvoke2(ForkJoinPool executor) throws Exception {
         SumTask task = new SumTask(1, 1000);
+
+        /*
+         * java.util.concurrent.RecursiveTask 接口有返回值
+         */
         Integer sum = executor.invoke(task);
         System.out.println("sum: " + sum);
     }

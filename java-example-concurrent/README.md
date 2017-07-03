@@ -103,7 +103,6 @@ Examine Last  | getLast          | peekLast(o)   |              |
 
 ![concurrent-set-overview](concurrent-set-overview.png)
 
-
 ## 执行器
 
 ExecutorService接口代表了一种异步执行机制，可以在后台执行任务。使用线程池实现。
@@ -155,93 +154,13 @@ public ThreadPoolExecutor(int corePoolSize,
                           RejectedExecutionHandler handler) {}
 ```
 
-- execute(runnable)
-- submit(runnable)
-- submit(callable)
-- invokeAny(callables)
-- invokeAll(callables)
+- `void execute(runnable)`
+- `Feture submit(runnable)`
+- `Feture submit(callable)`
+- `T invokeAny(callables)`
+- `List<Feture> invokeAll(callables)`
 
-#### *execute(runnable)*
-
-- 只接收一个`java.lang.Runnable`对象
-- 没有返回结果
-
-```java
-executor.execute(new Runnable() {
-    @Override
-    public void run() {
-        ...
-    }
-});
-```
-
-#### *submit(runnable)*
-
-- 只接收一个`java.lang.Runnable`对象
-- 返回`java.util.concurrent.Feture`对象，可以检查执行状态
-
-```java
-Future future = executor.submit(new Runnable() {
-    @Override
-    public void run() {
-        ...
-    }
-});
-
-Boolean isDone = future.isDone();
-```
-
-#### *submit(callable)*
-
-- 只接收一个`java.util.concurrent.Callable`对象
-- 返回`java.util.concurrent.Feture`对象，不仅可以检查执行状态，还能获取执行结果
-
-```java
-Future<String> future = executor.submit(new Callable<String>() {
-    @Override
-    public String call() throws Exception {
-        ...
-    }
-});
-
-String result = future.get();
-```
-
-#### *invokeAny(callables)*
-
-- 可以接收多个`java.util.concurrent.Callable`对象
-- 只返回一个执行结果，并且无法确定是那个任务的
-
-```java
-Set<Callable<String>> callables = new HashSet<>();
-
-callables.add(new Callable<String>() {
-    public String call() throws Exception {
-        ...
-    }
-});
-
-String result = executor.invokeAny(callables);
-```
-
-#### *invokeAll(callables)*
-
-- 可以接收多个`java.util.concurrent.Callable`对象
-- 返回所有任务的`java.util.concurrent.Feture`对象
-
-```java
-Set<Callable<String>> callables = new HashSet<>();
-
-callables.add(new Callable<String>() {
-    public String call() throws Exception {
-        ...
-    }
-});
-
-List<Future<String>> futures = executor.invokeAll(callables);
-```
-
-#### *ScheduledThreadPoolExecutor*
+#### ScheduledThreadPoolExecutor
 
 继承自ThreadPoolExecutor类，实现了ScheduledExecutorService接口，主要用于延迟执行、定时执行。
 
@@ -256,44 +175,10 @@ public ScheduledThreadPoolExecutor(int corePoolSize,
                                    RejectedExecutionHandler handler) {}
 ```
 
-- schedule(runnable, delay, unit)
-- schedule(callable, delay, unit)
+- `ScheduledFuture schedule(runnable, delay, unit)`
+- `ScheduledFuture schedule(callable, delay, unit)`
 
-#### *schedule(runnable, delay, unit)*
-
-- 只接收一个`java.lang.Runnable`对象
-- 可以设置延时时间
-- 返回`java.util.concurrent.ScheduledFuture`对象，可以检查执行状态
-
-```java
-ScheduledFuture future = executor.schedule(new Runnable() {
-    @Override
-    public void run() {
-        ...
-    }
-}, 3000, TimeUnit.MILLISECONDS);
-
-Boolean isDone = future.isDone();
-```
-
-#### *schedule(callable, delay, unit)*
-
-- 只接收一个`java.util.concurrent.Callable`对象
-- 可以设置延时时间
-- 返回`java.util.concurrent.ScheduledFuture`对象，不仅可以检查执行状态，还能获取执行结果
-
-```java
-ScheduledFuture<String> future = executor.schedule(new Callable<String>() {
-    @Override
-    public String call() throws Exception {
-        ...
-    }
-}, 3000, TimeUnit.MILLISECONDS);
-
-String result = future.get();
-```
-
-#### *ForkJoinPool*
+#### ForkJoinPool
 
 使用分治法来解决问题。
 
@@ -310,48 +195,27 @@ public ForkJoinPool(int parallelism,
                     boolean asyncMode) {}
 ```
 
-- invoke(task)
-
-```java
-// RecursiveAction接口没返回值
-executor.invoke(new RecursiveAction() {
-    @Override
-    protected void compute() {
-        
-    }
-});
-
-// RecursiveTask接口有返回值
-Integer sum = executor.invoke(new RecursiveTask<Integer>() {
-    @Override
-    protected Integer compute() {
-        ...
-    }
-});
-```
+- `T invoke(task)`
 
 ## Lock锁
 
-## Lock 互斥锁
+#### Lock互斥锁
 
 一个可重入的互斥锁。
 
-实现类
+实现类：
 
 - ReentrantLock
 
-## ReadWriteLock 读写锁
+#### ReadWriteLock读写锁
 
-实现类
+实现类：
 
 - ReentrantReadWriteLock
 
-*PS：本文使用的是java-1.8*
-
-
 ## Operation操作
 
-## CountDownLatch 闭锁
+#### CountDownLatch闭锁
 
 允许一个或多个线程等待其他线程完成操作后再执行。
 
@@ -423,7 +287,7 @@ public static void main(String[] args) throws Exception {
 }
 ```
 
-## CyclicBarrier 栅栏
+#### CyclicBarrier栅栏
 
 可以堵住线程的执行，直到所有线程就绪。
 
@@ -474,7 +338,7 @@ public static void main(String[] args) throws Exception {
 }
 ```
 
-## Semaphore 信号量
+#### Semaphore信号量
 
 通过构造函数设定一个数量的许可，然后通过 acquire 方法获得许可，release 方法释放许可。
 
@@ -503,7 +367,7 @@ public static void main(String[] args) {
 }
 ```
 
-## CountDownLatch、CyclicBarrier、Semaphore
+#### CountDownLatch、CyclicBarrier、Semaphore比较
 
 CountDownLatch 是能使一组线程等另一组线程都跑完了再继续跑；
 
@@ -511,7 +375,7 @@ CyclicBarrier 能够使一组线程在一个时间点上达到同步，可以是
 
 Semaphore 是只允许一定数量的线程同时执行一段任务。
 
-## Exchanger 交换器
+#### Exchanger交换器
 
 两个线程之间交换数据。
 

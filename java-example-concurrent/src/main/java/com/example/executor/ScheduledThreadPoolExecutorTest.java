@@ -22,6 +22,10 @@ public class ScheduledThreadPoolExecutorTest {
     }
 
     private static void testSchedule(ScheduledThreadPoolExecutor executor) throws Exception {
+        /*
+         * 接收一个java.lang.Runnable对象，可以设置延时时间
+         * @return java.util.concurrent.ScheduledFuture 检查执行状态
+         */
         ScheduledFuture future = executor.schedule(new Runnable() {
             @Override
             public void run() {
@@ -39,6 +43,10 @@ public class ScheduledThreadPoolExecutorTest {
     }
 
     private static void testSchedule2(ScheduledThreadPoolExecutor executor) throws Exception {
+        /*
+         * 接收一个java.lang.Runnable对象，可以设置延时时间
+         * @return java.util.concurrent.ScheduledFuture 检查执行状态，获取执行结果
+         */
         ScheduledFuture<String> future = executor.schedule(new Callable<String>() {
             @Override
             public String call() throws Exception {

@@ -25,6 +25,9 @@ public class ThreadPoolExecutorTest {
     }
 
     private static void testExecute(ThreadPoolExecutor executor) {
+        /*
+         * 接收一个java.lang.Runnable对象
+         */
         executor.execute(new Runnable() {
             @Override
             public void run() {
@@ -39,6 +42,10 @@ public class ThreadPoolExecutorTest {
     }
 
     private static void testSubmit(ThreadPoolExecutor executor) throws Exception {
+        /*
+         * 接收一个java.lang.Runnable对象
+         * @return java.util.concurrent.Feture 检查执行状态
+         */
         Future future = executor.submit(new Runnable() {
             @Override
             public void run() {
@@ -56,6 +63,10 @@ public class ThreadPoolExecutorTest {
     }
 
     private static void testSubmit2(ThreadPoolExecutor executor) throws Exception {
+        /*
+         * 接收一个java.util.concurrent.Callable对象
+         * @return java.util.concurrent.Feture 检查执行状态，获取执行结果
+         */
         Future<String> future = executor.submit(new Callable<String>() {
             @Override
             public String call() throws Exception {
@@ -87,6 +98,10 @@ public class ThreadPoolExecutorTest {
             }
         });
 
+        /*
+         * 接收多个java.util.concurrent.Callable对象
+         * @return 只返回一个执行结果，并且无法确定是那个任务的
+         */
         String result = executor.invokeAny(callables);
         System.out.println(String.format("%s : async any task result : %s", df.format(new Date()), result));
     }
@@ -109,6 +124,10 @@ public class ThreadPoolExecutorTest {
             }
         });
 
+        /*
+         * 接收多个java.util.concurrent.Callable对象
+         * @return java.util.concurrent.Feture列表
+         */
         List<Future<String>> futures = executor.invokeAll(callables);
 
         for (Future<String> future : futures) {
