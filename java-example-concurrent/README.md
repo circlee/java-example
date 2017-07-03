@@ -2,7 +2,11 @@
 
 > 参考Jakob Jenkov的[java.util.concurrent](http://tutorials.jenkov.com/java-util-concurrent/index.html)
 
-## 原子化数据类型
+来自于java-1.5的java.util.concurrent工具包是Doug Lea的作品。他是对Java影响力最大的个人。
+
+## Atomic 原子化数据类型
+
+在`java.util.concurrent.atomic`中，实现了原子化操作的数据类型。
 
 - AtomicBoolean
 - AtomicInteger
@@ -14,7 +18,7 @@
 - AtomicLongArray
 - AtomicReferenceArray
 
-## 阻塞队列
+## BlockingQueue 阻塞队列
 
 代表一个线程安全的队列，通常用于一个线程放入对象，另一个线程取出对象。
 
@@ -23,7 +27,7 @@
 - 如果这个阻塞队列达到容量上限，生产线程再尝试放入新的对象时会被阻塞，直到消费线程从队列中取出对象
 - 如果消费线程尝试从一个空的队列中取出对象，它会被阻塞，直到生产线程向队列中放入对象
 
-### BlockingQueue实现类
+### BlockingQueue 实现类
 
 #### ArrayBlockingQueue
 
@@ -53,7 +57,7 @@
 
 - 只能容纳一个对象
 
-## 阻塞双端队列
+## BlockingDeque 阻塞双端队列
 
 代表一个线程安全的队列，通常用于一个线程放入对象，另一个线程取出对象。可以对队列的两端执行操作。
 
@@ -82,7 +86,9 @@ Examine Last  | getLast          | peekLast(o)   |              |
 
 #### LinkedBlockingDeque
 
-## 集合
+## 集合类的线程安全实现
+
+集合类的并发实现，主要是List、Map、Queue。
 
 #### ConcurrentMap
 
@@ -103,13 +109,13 @@ Examine Last  | getLast          | peekLast(o)   |              |
 
 ![concurrent-set-overview](concurrent-set-overview.png)
 
-## 执行器
+## ExecutorService 执行器
 
 ExecutorService接口代表了一种异步执行机制，可以在后台执行任务。使用线程池实现。
 
 ![executor-service-overview](executor-service-overview.png)
 
-### 创建ExecutorService
+### 创建 ExecutorService
 
 可以使用`java.util.concurrent.Executors`工厂类快速创建。
 
@@ -123,13 +129,13 @@ ScheduledExecutorService executor3 = Executors.newSingleThreadScheduledExecutor(
 ScheduledExecutorService executor4 = Executors.newScheduledThreadPool(10);
 ```
 
-### 关闭ExecutorService
+### 关闭 ExecutorService
 
 当你使用完`ExecutorService`后，应该使用`shutdown()`方法关闭它，这样线程就不会继续运行了。`ExecutorService`并不会立即关闭，但是它也不会再接收新任务，当所有的线程完成了它们的任务后`ExecutorService`就会关闭。
 
 如果你想立即结束`ExecutorService`，应该调用`shutdownNow()`方法，但是这个并没有保障，也许它们会停止也许会执行完。
 
-### ExecutorService实现类
+### ExecutorService 实现类
 
 #### ThreadPoolExecutor
 
@@ -197,9 +203,11 @@ public ForkJoinPool(int parallelism,
 
 - `T invoke(task)`
 
-## Lock锁
+## Lock 锁
 
-#### Lock互斥锁
+在`java.util.concurrent.locks`包中，实现了并发操作中一些锁。
+
+#### Lock 互斥锁
 
 一个可重入的互斥锁。
 
@@ -207,31 +215,33 @@ public ForkJoinPool(int parallelism,
 
 - ReentrantLock
 
-#### ReadWriteLock读写锁
+#### ReadWriteLock 读写锁
 
 实现类：
 
 - ReentrantReadWriteLock
 
-## Operation操作
+## Operation 操作
 
-#### CountDownLatch闭锁
+对线程集合的管理的实现，主要涉及到三个概念，Callable（被执行的任务）、Executor（执行任务）、Future（异步提交任务的返回数据）。
+
+#### CountDownLatch 闭锁
 
 允许一个或多个线程等待其他线程完成操作后再执行。
 
 适用于一组线程和另一个主线程之间的工作协作。一个主线程等待一组工作线程的任务完毕才继续它的执行。
 
-#### CyclicBarrier栅栏
+#### CyclicBarrier 栅栏
 
 可以堵住线程的执行，直到所有线程就绪。
 
 适用于一组线程需要在特定事件上达成一致。它可以接受Runnable参数，被释放时执行。
 
-#### Semaphore信号量
+#### Semaphore 信号量
 
 通过构造函数设定一个数量的许可，然后通过 acquire 方法获得许可，release 方法释放许可。
 
-#### CountDownLatch、CyclicBarrier、Semaphore比较
+#### CountDownLatch、CyclicBarrier、Semaphore 比较
 
 CountDownLatch 是能使一组线程等另一组线程都跑完了再继续跑；
 
@@ -239,7 +249,7 @@ CyclicBarrier 能够使一组线程在一个时间点上达到同步，可以是
 
 Semaphore 是只允许一定数量的线程同时执行一段任务。
 
-#### Exchanger交换器
+#### Exchanger 交换器
 
 两个线程之间交换数据。
 
