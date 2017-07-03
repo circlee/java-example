@@ -2,6 +2,10 @@ package com.example.operation;
 
 import java.util.concurrent.Exchanger;
 
+/**
+ * 两个线程之间交换数据
+ * Lily、lucy两个线程交换礼物
+ */
 public class ExchangerTest {
 
     public static void main(String[] args) throws Exception {

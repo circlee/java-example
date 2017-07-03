@@ -3,6 +3,9 @@ package com.example.operation;
 import java.util.Random;
 import java.util.concurrent.Semaphore;
 
+/**
+ * 通过构造函数设定一个数量的许可，然后通过 acquire 方法获得许可，release 方法释放许可
+ */
 public class SemaphoreTest {
 
     public static void main(String[] args) {

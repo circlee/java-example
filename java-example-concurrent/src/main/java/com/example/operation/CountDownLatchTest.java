@@ -2,6 +2,11 @@ package com.example.operation;
 
 import java.util.concurrent.CountDownLatch;
 
+/**
+ * 允许一个或多个线程等待其他线程完成操作后再执行
+ * 适用于一组线程和另一个主线程之间的工作协作。一个主线程等待一组工作线程的任务完毕才继续它的执行
+ * 有`Waiter`，`Decrementer`两个线程，`Waiter`必须等`Decrementer`内的所有操作完成才能继续往下执行
+ */
 public class CountDownLatchTest {
 
     public static void main(String[] args) throws Exception {

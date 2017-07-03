@@ -3,6 +3,11 @@ package com.example.operation;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
+/**
+ * 可以堵住线程的执行，直到所有线程就绪
+ * 适用于一组线程需要在特定事件上达成一致。它可以接受Runnable参数，被释放时执行
+ * 当两个Waiter就绪后，才继续往下执行
+ */
 public class CyclicBarrierTest {
 
     public static void main(String[] args) throws Exception {
