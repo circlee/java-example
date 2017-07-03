@@ -10,7 +10,10 @@ public class HelloSender {
 
     public static void main(String[] args) throws Exception {
         ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost("localhost");
+        factory.setHost("localhost");// 默认：localhost
+        factory.setPort(5672);// 默认：5672
+        factory.setUsername("guest");// 默认：guest
+        factory.setPassword("guest");// 默认：guest
         Connection connection = factory.newConnection();
         Channel channel = connection.createChannel();
 
