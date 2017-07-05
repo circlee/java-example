@@ -17,7 +17,7 @@ public class CyclicBarrierTest {
         Waiter waiter2 = new Waiter(barrier, "lucy", 2000L);
 
         new Thread(waiter1).start();
-        new Thread(waiter1).start();
+        new Thread(waiter2).start();
 
         Thread.sleep(4000);
     }
