@@ -1,14 +1,12 @@
-package com.example.argument;
+package com.example.advance;
 
 import com.rabbitmq.client.*;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class HelloReceiver {
 
-    private final static String QUEUE_NAME = "arguments";
+    private final static String QUEUE_NAME = "advance";
 
     public static void main(String[] argv) throws Exception {
         ConnectionFactory factory = new ConnectionFactory();
@@ -24,10 +22,22 @@ public class HelloReceiver {
             @Override
             public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
                 String message = new String(body, "UTF-8");
-                System.out.println(String.format("Received{queue=%s}: %s", QUEUE_NAME, message));
+                try {
+                    System.out.println(String.format("Received{queue=%s}: %s", QUEUE_NAME, message));
+                    // 如果autoAck=false，这里需求手动地确认
+                    // channel.basicAck(envelope.getDeliveryTag(), false);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         };
         System.out.println("Waiting for messages. To exit press CTRL+C");
+        /*
+         * @param queue 队列名
+         * @param autoAck 自动确认机制
+         * @param callback 消费消息的回调函数
+         * @return
+         */
         channel.basicConsume(QUEUE_NAME, true, consumer);
     }
 
