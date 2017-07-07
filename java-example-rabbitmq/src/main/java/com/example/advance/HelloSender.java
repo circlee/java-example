@@ -22,7 +22,7 @@ public class HelloSender {
         arguments.put("x-max-length", 5);// 设置队列最大消息数量为5
         /*
          * @param queue 队列名
-         * @param durable 队列持久化，如果已经定义了一个非持久的同名队列，会报错
+         * @param durable 队列持久化，服务重启后队列仍存在。如果已经定义了一个非持久的同名队列，会报错
          * @param exclusive
          * @param autoDelete
          * @param arguments
@@ -35,7 +35,7 @@ public class HelloSender {
             /*
              * @param exchange 交换器名
              * @param routingKey 队列名
-             * @param props {@link com.rabbitmq.client.MessageProperties} PERSISTENT_TEXT_PLAIN 持久化消息
+             * @param props {@link com.rabbitmq.client.MessageProperties} PERSISTENT_TEXT_PLAIN 持久化消息，服务重启后消息仍存在，前提是队列也是持久化的。
              * @param body 消息内容
              * @throws java.io.IOException if an error is encountered
              */

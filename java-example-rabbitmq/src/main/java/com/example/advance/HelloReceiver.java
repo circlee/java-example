@@ -18,6 +18,8 @@ public class HelloReceiver {
         // arguments.put("x-max-length", 5);// 设置队列最大消息数量为5，如果超出5个，抛弃老信息
         // channel.queueDeclare(QUEUE_NAME, false, false, false, null);
 
+        channel.basicQos(1);// 同一时间给一个消息给消费者
+
         Consumer consumer = new DefaultConsumer(channel) {
             @Override
             public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
