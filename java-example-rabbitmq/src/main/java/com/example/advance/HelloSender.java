@@ -1,9 +1,6 @@
 package com.example.advance;
 
-import com.rabbitmq.client.Channel;
-import com.rabbitmq.client.Connection;
-import com.rabbitmq.client.ConnectionFactory;
-import com.rabbitmq.client.MessageProperties;
+import com.rabbitmq.client.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,18 +31,35 @@ public class HelloSender {
          */
         channel.queueDeclare(QUEUE_NAME, true, false, false, arguments);
 
-        for (int i = 0; i < 7; i ++) {
-            String message = "Hello World!-" + i;
-            /*
-             * @param exchange 交换器名
-             * @param routingKey 队列名
-             * @param props {@link com.rabbitmq.client.MessageProperties} PERSISTENT_TEXT_PLAIN 持久化消息，服务重启后消息仍存在，前提是队列也是持久化的。
-             * @param body 消息内容
-             * @throws java.io.IOException if an error is encountered
-             */
-            channel.basicPublish("", QUEUE_NAME, MessageProperties.PERSISTENT_TEXT_PLAIN, message.getBytes("UTF-8"));
+        String message = "Hello World!";
+        /*
+         * @param exchange 交换器名
+         * @param routingKey 队列名
+         * @param props {@link com.rabbitmq.client.MessageProperties} PERSISTENT_TEXT_PLAIN 持久化消息，服务重启后消息仍存在，前提是队列也是持久化的。
+         * @param body 消息内容
+         * @throws java.io.IOException if an error is encountered
+         */
+        // channel.basicPublish("", QUEUE_NAME, MessageProperties.PERSISTENT_TEXT_PLAIN, message.getBytes("UTF-8"));
+
+        /*
+         * 自定义
+         */
+        Map<String, Object> headers = new HashMap<String, Object>();
+        /*
+         * deliveryMode 非持久化 1 持久化 2
+         * priority 优先级
+         */
+        AMQP.BasicProperties props = new AMQP.BasicProperties().builder().headers(headers).deliveryMode(2).priority(1).expiration("60000").build();
+        channel.basicPublish("", QUEUE_NAME, props, message.getBytes("UTF-8"));
+        System.out.println(String.format("Sent{queue=%s}: %s", QUEUE_NAME, message));
+
+        for (int i = 1; i < 7; i ++) {
+            message = "Hello World!-" + i;
+            channel.basicPublish("", QUEUE_NAME, null, message.getBytes("UTF-8"));
             System.out.println(String.format("Sent{queue=%s}: %s", QUEUE_NAME, message));
         }
+
+
 
         channel.close();
         connection.close();
