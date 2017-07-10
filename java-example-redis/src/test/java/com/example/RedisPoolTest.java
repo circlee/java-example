@@ -45,4 +45,25 @@ public class RedisPoolTest {
         jedis.close();
     }
 
+    @Test
+    public void testShare2() throws Exception {
+        ShardedJedisPool jedisPool = RedisConfig.getSharedPool();
+        ShardedJedis jedis = jedisPool.getResource();
+
+        System.out.println(String.format("name1: %s", jedis.get("name1")));
+        System.out.println(String.format("name2: %s", jedis.get("name2")));
+        System.out.println(String.format("name3: %s", jedis.get("name3")));
+        System.out.println(String.format("name4: %s", jedis.get("name4")));
+
+        Thread.sleep(10 * 1000);
+        System.out.println("sleep 10 seconds, and shutdown one redis");// 抛出 JedisException: Could not get a resource from the pool
+
+        System.out.println(String.format("name1: %s", jedis.get("name1")));
+        System.out.println(String.format("name2: %s", jedis.get("name2")));
+        System.out.println(String.format("name3: %s", jedis.get("name3")));
+        System.out.println(String.format("name4: %s", jedis.get("name4")));
+
+        jedis.close();
+    }
+
 }
