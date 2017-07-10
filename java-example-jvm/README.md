@@ -388,3 +388,35 @@ Object o2 = o1;
 o1 = null; // 这时o1指向的那个对象回收了吗？没有，因为它还被o2引用着
 o2 = null; // 这样才能回收
 ```
+
+## JVisualVM 远程监听
+
+第一步：创建`jstatd.all.policy`文件
+ 
+ ```text
+grant codebase "file:${java.home}/../lib/tools.jar" {
+    permission java.security.AllPermission;
+};
+```
+
+第二步：启动 jstatd 服务
+
+```shell
+jstatd -J-Djava.security.policy=jstatd.all.policy 
+```
+
+- `-J-Djava.security.policy=POLICY_FILENAME` 指定配置文件
+- `-J-Djava.rmi.server.hostname=HOSTNAME` 指定IP地址
+- `-p PORT` 默认1099
+
+启动JMX：
+
+- `-J-Dcom.sun.management.jmxremote.port=PORT` 
+- `-J-Dcom.sun.management.jmxremote.ssl=false`
+- `-J-Dcom.sun.management.jmxremote.authenticate=false`
+
+完整示例：
+
+```shell
+jstatd -J-Djava.security.policy=jstatd.all.policy -J-Djava.rmi.server.hostname=192.168.198.187 -p 1099 -J-Dcom.sun.management.jmxremote.port=9888 -J-Dcom.sun.management.jmxremote.ssl=false -J-Dcom.sun.management.jmxremote.authenticate=false
+```
