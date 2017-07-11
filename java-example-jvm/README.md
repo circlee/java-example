@@ -112,11 +112,11 @@ protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundE
 - 通过`ClassLoader.loadClass()`方法动态加载
 
 ```java
-public class LoaderTest {
+public class ClassLoaderTest {
     public static void main(String[] args) throws ClassNotFoundException {
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
 
-        System.out.println(loader);
+        System.out.println("classLoader: " + loader);
 
         // 使用ClassLoader.loadClass()来加载类，不会执行初始化块
         loader.loadClass("com.example.class_loader.Bar1");
@@ -139,7 +139,9 @@ public class LoaderTest {
 
 #### 自定义类加载器
 
-通常情况下，我们都是直接使用系统类加载器。但是，有的时候，我们也需要自定义类加载器。比如应用是通过网络来传输 Java 类的字节码，为保证安全性，这些字节码经过了加密处理，这时系统类加载器就无法对其进行加载，这样则需要自定义类加载器来实现。自定义类加载器一般都是继承自 ClassLoader 类，从上面对 loadClass 方法来分析来看，我们只需要重写 findClass 方法即可。
+通常情况下，我们都是直接使用系统类加载器。但是，有的时候，我们也需要自定义类加载器。比如应用是通过网络来传输Java类的字节码，为保证安全性，这些字节码经过了加密处理，这时系统类加载器就无法对其进行加载，这样则需要自定义类加载器来实现。
+
+自定义类加载器一般都是继承自`ClassLoader`类，从上面对`loadClass`方法来分析来看，我们只需要重写`findClass`方法即可。
 
 ```java
 public class MyClassLoader extends ClassLoader {
@@ -182,9 +184,9 @@ public class MyClassLoaderTest {
 
         Class<?> myBarClass = null;
         try {
-            myBarClass = classLoader.loadClass("com.example.MyBar");
+            myBarClass = classLoader.loadClass("com.example.class_loader.MyBar");
             Object myBar = myBarClass.newInstance();
-            System.out.println(myBar.getClass().getClassLoader());
+            System.out.println("classLoader: " + myBar.getClass().getClassLoader());
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (InstantiationException e) {
@@ -196,27 +198,20 @@ public class MyClassLoaderTest {
 }
 ```
 
-自定义类加载器的核心在于对字节码文件的获取，如果是加密的字节码则需要在该类中对文件进行解密。由于这里只是演示，我并未对class文件进行加密，因此没有解密的过程。这里有几点需要注意：
-
-1. 这里传递的文件名需要是类的全限定性名称，即`com.example.MyBar`格式的，因为`loadClassData`方法是按这种格式进行处理的。
-2. 最好不要重写loadClass方法，因为这样容易破坏双亲委托模式。
-3. 这类`MyBar`类本身可以被AppClassLoader类加载，因此我们不能把 com/example/MyBar.class放在类路径下。否则，由于双亲委托机制的存在，会直接导致该类由AppClassLoader加载，而不会通过我们自定义类加载器来加载。
-
 ## JVM内存模型
 
 ![jvm-size](jvm-size.png)
 
-控制参数：
-
-- -Xms 设置堆的最小空间大小。空余堆内存小于40%时，JVM就会增大堆直到-Xmx的最大限制。
-- -Xmx 设置堆的最大空间大小。空余堆内存大于70%时，JVM就会减少堆直到-Xms的最小限制。
-- -XX:NewSize 设置新生代最小空间大小。
-- -XX:MaxNewSize 设置新生代最大空间大小。
-- -XX:PermSize 设置永久代最小空间大小。
-- -XX:MaxPermSize 设置永久代最大空间大小。
-- -Xss 设置每个线程的堆栈大小。
-- -XX:NewRatio=1:2 设置Young与Old的比例。
-- -XX:SurvivorRatio=1:8 设置Eden与Survivor的比例。
+- -Xms 设置堆的最小空间大小。空余堆内存小于40%时，JVM就会增大堆直到-Xmx的最大限制
+- -Xmx 设置堆的最大空间大小。空余堆内存大于70%时，JVM就会减少堆直到-Xms的最小限制
+- -Xmn 设置新生代内存大小的最大值，包括E区和两个S区的总和
+- -Xss 设置每个线程的堆栈大小
+- -XX:NewSize 设置新生代最小空间大小
+- -XX:MaxNewSize 设置新生代最大空间大小
+- -XX:PermSize 设置永久代最小空间大小
+- -XX:MaxPermSize 设置永久代最大空间大小
+- -XX:SurvivorRatio=1:8 设置Eden与Survivor的比例
+- -XX:NewRatio=1:2 设置Young与Old的比例
 
 ## JVM垃圾回收
 
@@ -300,6 +295,7 @@ PretenureSizeThreshold参数只对Serial和ParNew两款收集器有效。
 
 - 多线程并行
 - mark-summary-compact 标记-总结-压缩
+- -XX:+UseAdaptiveSizePolicy
 
 #### ParNew GC（-XX:+UseParNewGC）
 
@@ -331,39 +327,8 @@ Type                    | Young       | Old/Perm
 -XX:+UseParallelOldGC   | Parallel GC | Parallel Old GC
 -XX:+UseConcMarkSweepGC | ParNew GC   | CMS GC/Serial Old GC
 
-#### -XX:+UseSerialGC
+不支持组合：
 
-young Copy and old MarkSweepCompact
-
-#### -XX:+UseG1GC
-
-young G1 Young and old G1 Mixed
-
-#### -XX:+UseParallelGC -XX:+UseParallelOldGC -XX:+UseAdaptiveSizePolicy
-
-young PS Scavenge old PS MarkSweep with adaptive sizing
-
-#### -XX:+UseParallelGC -XX:+UseParallelOldGC -XX:-UseAdaptiveSizePolicy
-
-young PS Scavenge old PS MarkSweep, no adaptive sizing
-
-#### -XX:+UseParNewGC
-
-(deprecated in Java 8 and removed in Java 9 - for ParNew see the line below which is NOT deprecated) 
-
-young ParNew old MarkSweepCompact young ParNew old MarkSweepCompact
-
-#### -XX:+UseConcMarkSweepGC -XX:+UseParNewGC
-
-young ParNew old ConcurrentMarkSweep**
-
-#### -XX:+UseConcMarkSweepGC -XX:-UseParNewGC
-
-(deprecated in Java 8 and removed in Java 9)
-
-young Copy old ConcurrentMarkSweep**
-
-不支持组合
 - -XX:+UseParNewGC -XX:+UseSerialGC
 - -XX:+UseParNewGC -XX:+UseParallelOldGC
 
@@ -377,10 +342,10 @@ young Copy old ConcurrentMarkSweep**
 
 ## 内存泄漏
 
-1. 静态集合类
-2. 监听器
-3. 单例
-4. 生命周期长的对象引用生命周期短的对象
+- 静态集合类
+- 监听器
+- 单例
+- 生命周期长的对象引用生命周期短的对象
 
 ```java
 Object o1 = new Object();

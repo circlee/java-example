@@ -12,7 +12,7 @@ public class MyClassLoaderTest {
         try {
             myBarClass = classLoader.loadClass("com.example.class_loader.MyBar");
             Object myBar = myBarClass.newInstance();
-            System.out.println(myBar.getClass().getClassLoader());
+            System.out.println("classLoader: " + myBar.getClass().getClassLoader());
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (InstantiationException e) {

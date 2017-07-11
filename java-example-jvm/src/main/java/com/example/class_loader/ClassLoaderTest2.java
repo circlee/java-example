@@ -5,7 +5,7 @@ public class ClassLoaderTest2 {
     public static void main(String[] args) throws ClassNotFoundException {
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
 
-        System.out.println("loader: " + loader);
+        System.out.println("classLoader: " + loader);
 
         // 使用ClassLoader.loadClass()来加载类，不会执行初始化块
         loader.loadClass("com.example.class_loader.Bar1");
