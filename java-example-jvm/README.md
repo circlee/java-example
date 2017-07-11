@@ -210,8 +210,8 @@ public class MyClassLoaderTest {
 - -XX:MaxNewSize 设置新生代最大空间大小
 - -XX:PermSize 设置永久代最小空间大小
 - -XX:MaxPermSize 设置永久代最大空间大小
-- -XX:SurvivorRatio=1:8 设置Eden与Survivor的比例
-- -XX:NewRatio=1:2 设置Young与Old的比例
+- -XX:SurvivorRatio=3 设置Eden与Survivor的比例，如为3，表示Eden:From:To=3:2:2
+- -XX:NewRatio=3 设置Young与Old的比例，如为3，表示Young:Old=1:3
 
 ## JVM垃圾回收
 
@@ -286,9 +286,9 @@ PretenureSizeThreshold参数只对Serial和ParNew两款收集器有效。
 
 - 多线程并行
 - mark-sweep-compact 标记-清理-压缩
-- -XX:+UseParallelGC=3 设置并发线程数
-- -XX:MaxGCPauseMillis 大于0的毫秒值，尽可能保证垃圾收集耗时不超过该值
-- -XX:GCTimeRatio 大于0小于100的整数，垃圾收集耗时占总运行时间的比例
+- -XX:+UseParallelGC=3 设置并发线程数，可以设置与处理器数量相等
+- -XX:MaxGCPauseMillis=1000 大于0的毫秒值，尽可能保证垃圾收集耗时不超过该值
+- -XX:GCTimeRatio=99 大于0小于100的整数，垃圾收集耗时占总运行时间的比例，默认值99
 - -XX:+UseAdaptiveSizePolicy 自适应调节策略
 
 #### Parallel Old GC（-XX:+UseParallelOldGC）
@@ -311,6 +311,9 @@ PretenureSizeThreshold参数只对Serial和ParNew两款收集器有效。
 - Initial Mark 初始标记 --> Concurrent Mark 并发标记 --> Remark 重标记 --> Concurrent Sweep 并发清理
 - -XX:+UseCMSCompactAtFullCollection 启动压缩
 - -XX:+UseConcMarkSweepGC=3 设置并发线程数
+- -XX:CMSInitiatingOccupancyFraction=1G 指定还有多少剩余堆时开始执行并发收集
+- -XX:+UseCMSCompactAtFullCollection 打开对年老代的压缩，可能会影响性能，但是可以消除碎片
+- -XX:CMSFullGCsBeforeCompaction 运行多少次GC以后对内存空间进行压缩、整理
 
 #### G1 GC（-XX:UseG1GC）
 
