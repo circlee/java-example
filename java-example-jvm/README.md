@@ -202,8 +202,8 @@ public class MyClassLoaderTest {
 
 ![jvm-size](jvm-size.png)
 
-- -Xms 设置堆的最小空间大小。空余堆内存小于40%时，JVM就会增大堆直到-Xmx的最大限制
-- -Xmx 设置堆的最大空间大小。空余堆内存大于70%时，JVM就会减少堆直到-Xms的最小限制
+- -Xms 设置堆的最小空间大小。空余堆内存小于（-XX:MinHeapFreeRatio=40）40%时，JVM就会增大堆直到-Xmx的最大限制
+- -Xmx 设置堆的最大空间大小。空余堆内存大于（-XX:MaxHeapFreeRatio=70）70%时，JVM就会减少堆直到-Xms的最小限制
 - -Xmn 设置新生代内存大小的最大值，包括E区和两个S区的总和
 - -Xss 设置每个线程的堆栈大小
 - -XX:NewSize 设置新生代最小空间大小
@@ -295,11 +295,12 @@ PretenureSizeThreshold参数只对Serial和ParNew两款收集器有效。
 
 - 多线程并行
 - mark-summary-compact 标记-总结-压缩
-- -XX:+UseAdaptiveSizePolicy
 
 #### ParNew GC（-XX:+UseParNewGC）
 
 ![par-new-gc](par-new-gc.jpg)
+
+- -XX:ParallelGCThreads 设置执行内存回收的线程数
 
 #### CMS GC（-XX:+UseConcMarkSweepGC）
 
@@ -325,7 +326,7 @@ Type                    | Young       | Old/Perm
 -XX:+UseParallelGC      | Parallel GC | Serial Old GC
 -XX:+UseParNewGC        | ParNew GC   | Serial Old GC
 -XX:+UseParallelOldGC   | Parallel GC | Parallel Old GC
--XX:+UseConcMarkSweepGC | ParNew GC   | CMS GC/Serial Old GC
+-XX:+UseConcMarkSweepGC | ParNew GC   | CMS GC / Serial Old GC
 
 不支持组合：
 

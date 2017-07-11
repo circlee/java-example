@@ -24,8 +24,8 @@ public class HelloSender {
         /*
          * @param queue 队列名
          * @param durable 队列持久化，服务重启后队列仍存在。如果已经定义了一个非持久的同名队列，会报错
-         * @param exclusive
-         * @param autoDelete
+         * @param exclusive 排他队列，如果一个队列被声明为排他队列，该队列仅对首次申明它的连接可见，并在连接断开时自动删除
+         * @param autoDelete 自动删除，如果该队列没有任何订阅的消费者的话，该队列会被自动删除，这种队列适用于临时队列
          * @param arguments
          * @return
          */
