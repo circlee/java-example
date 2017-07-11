@@ -1,4 +1,4 @@
-package com.example;
+package com.example.class_loader;
 
 public class Bar2 {
 

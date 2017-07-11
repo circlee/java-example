@@ -1,4 +1,4 @@
-package com.example;
+package com.example.class_loader;
 
 import java.io.File;
 
@@ -10,7 +10,7 @@ public class MyClassLoaderTest {
 
         Class<?> myBarClass = null;
         try {
-            myBarClass = classLoader.loadClass("com.example.MyBar");
+            myBarClass = classLoader.loadClass("com.example.class_loader.MyBar");
             Object myBar = myBarClass.newInstance();
             System.out.println(myBar.getClass().getClassLoader());
         } catch (ClassNotFoundException e) {
