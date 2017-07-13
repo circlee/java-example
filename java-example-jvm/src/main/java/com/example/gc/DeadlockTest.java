@@ -1,6 +1,41 @@
 package com.example.gc;
 
-public class ThreadDeadlock {
+/*
+ * jstack PID
+ *
+ * Found one Java-level deadlock:
+ * =============================
+ * "t3":
+ *   waiting to lock monitor 0x000000001d9e6438 (object 0x000000076b5e7478, a java.lang.Object),
+ *   which is held by "t1"
+ * "t1":
+ *   waiting to lock monitor 0x000000001c4cdb08 (object 0x000000076b5e7488, a java.lang.Object),
+ *   which is held by "t2"
+ * "t2":
+ *   waiting to lock monitor 0x000000001c4d0658 (object 0x000000076b5e7498, a java.lang.Object),
+ *   which is held by "t3"
+
+ * Java stack information for the threads listed above:
+ * ===================================================
+ * "t3":
+ *         at com.example.gc.SyncThread.run(ThreadDeadlock.java:42)
+ *         - waiting to lock <0x000000076b5e7478> (a java.lang.Object)
+ *         - locked <0x000000076b5e7498> (a java.lang.Object)
+ *         at java.lang.Thread.run(Thread.java:745)
+ * "t1":
+ *         at com.example.gc.SyncThread.run(ThreadDeadlock.java:42)
+ *         - waiting to lock <0x000000076b5e7488> (a java.lang.Object)
+ *         - locked <0x000000076b5e7478> (a java.lang.Object)
+ *         at java.lang.Thread.run(Thread.java:745)
+ * "t2":
+ *         at com.example.gc.SyncThread.run(ThreadDeadlock.java:42)
+ *         - waiting to lock <0x000000076b5e7498> (a java.lang.Object)
+ *         - locked <0x000000076b5e7488> (a java.lang.Object)
+ *         at java.lang.Thread.run(Thread.java:745)
+ *
+ * Found 1 deadlock.
+ */
+public class DeadlockTest {
 
     public static void main(String[] args) throws InterruptedException {
         Object obj1 = new Object();
