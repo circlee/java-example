@@ -11,7 +11,6 @@ public class RedisPoolTest {
 
     /**
      * 连接一个redis实例
-     * @throws Exception
      */
     @Test
     public void test() throws Exception {
@@ -26,7 +25,6 @@ public class RedisPoolTest {
 
     /**
      * 连接多个redis实例，采用一致性哈稀分片
-     * @throws Exception
      */
     @Test
     public void testShare() throws Exception {

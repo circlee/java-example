@@ -1,6 +1,9 @@
 package com.example.advance;
 
-import com.rabbitmq.client.*;
+import com.rabbitmq.client.AMQP;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -53,12 +56,11 @@ public class HelloSender {
         channel.basicPublish("", QUEUE_NAME, props, message.getBytes("UTF-8"));
         System.out.println(String.format("Sent{queue=%s}: %s", QUEUE_NAME, message));
 
-        for (int i = 1; i < 7; i ++) {
+        for (int i = 1; i < 7; i++) {
             message = "Hello World!-" + i;
             channel.basicPublish("", QUEUE_NAME, null, message.getBytes("UTF-8"));
             System.out.println(String.format("Sent{queue=%s}: %s", QUEUE_NAME, message));
         }
-
 
 
         channel.close();

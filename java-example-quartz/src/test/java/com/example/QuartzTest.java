@@ -36,7 +36,7 @@ public class QuartzTest {
 
         Thread.sleep(1500);
 
-        for (int i = 0; Thread.activeCount() > 0; i ++) {
+        for (int i = 0; Thread.activeCount() > 0; i++) {
             if (i % 3 == 0) {
                 quartzManager.modifyJob("myJob", "test", Collections.singletonMap("x", i + ""));
             }

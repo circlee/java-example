@@ -25,6 +25,7 @@ public class HelloReceiver {
             public void handleConsumeOk(String consumerTag) {
                 // do something
             }
+
             @Override
             public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
                 String message = new String(body, "UTF-8");
@@ -36,6 +37,7 @@ public class HelloReceiver {
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void handleCancelOk(String consumerTag) {
                 // do something
