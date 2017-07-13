@@ -308,7 +308,7 @@ PretenureSizeThreshold参数只对Serial和ParNew两款收集器有效。
 
 - 多线程并发
 - mark-sweep 标记-清理
-- Initial Mark 初始标记 --> Concurrent Mark 并发标记 --> Remark 重标记 --> Concurrent Sweep 并发清理
+- Initial Mark 初始标记 --> Concurrent Mark 并发标记 --> Remark 重新标记 --> Concurrent Sweep 并发清理
 - -XX:+UseCMSCompactAtFullCollection 启动压缩
 - -XX:+UseConcMarkSweepGC=3 设置并发线程数
 - -XX:CMSInitiatingOccupancyFraction=1G 指定还有多少剩余堆时开始执行并发收集
@@ -338,11 +338,55 @@ Type                    | Young       | Old/Perm
 
 #### GC日志
 
-- -XX:+PrintGC 开启GC日志，为每一次Young GC和每一次Full GC打印一行信息
-- -XX:PrintGCDetails 开启详情GC日志，日志格式与GC算法有关
-- -XX:+PrintGCTimeStamps 为每一行日志添加时间
-- -XX:+PrintGCDateStamps 为第一行日志添加日期和时间
+- -XX:+PrintGC 输出GC日志概况，包括Young GC、Full GC
+- -XX:+PrintGCDetails 输出GC详情，日志格式与GC类型有关
+- -XX:+PrintGCTimeStamps 输出GC的时间戳，以基准时间的形式
+- -XX:+PrintGCDateStamps 输出GC的时间戳，以日期的形式，如：2017-07-13T21:18:11.018+0800
+- -XX:+PrintHeapAtGC 在进行GC的前后打印出堆的信息
 - -Xloggc=d://gc.log GC日志默认输出到终端，也可以通过些参数输出到指定文件
+
+```shell
+java -Xms20M -Xmx20M -Xmn10M -XX:+PrintGC -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+UseSerialGC GCTest
+# GC 时间戳: [GC 时间戳: [年轻代: 回收前大小->回收后大小(总大小), 回收耗时 secs] 堆回收前大小->堆回收后大小(堆总大小), 回收耗时 secs] [Times: user=各CPU总耗时 sys=回收器自身行为耗时, real=本次GC实际耗时 secs]
+2017-07-13T21:57:03.110+0800: [GC2017-07-13T21:57:03.110+0800: [DefNew: 6635K->213K(9216K), 0.0031640 secs] 6635K->6357K(19456K), 0.0032120 secs] [Times: user=0.01 sys=0.00, real=0.00 secs] 
+# GC 时间戳: [Full GC 时间戳: [年老代: 回收前大小->回收后大小(总大小), 回收耗时 secs] 堆回收前大小->堆回收后大小(堆总大小), [永久代 : 回收前大小->回收后大小(总大小)], 回收耗时 secs] [Times: user=各CPU总耗时 sys=回收器自身行为耗时, real=本次GC实际耗时 secs]
+2017-07-13T21:57:03.114+0800: [Full GC2017-07-13T21:57:03.114+0800: [Tenured: 6144K->6144K(10240K), 0.0036330 secs] 10623K->10451K(19456K), [Perm : 2424K->2424K(21248K)], 0.0037000 secs] [Times: user=0.00 sys=0.00, real=0.00 secs]
+```
+
+```shell
+java -Xms20M -Xmx20M -Xmn10M -XX:+PrintGC -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+UseParNewGC GCTest
+# GC 时间戳: [GC 时间戳: [年轻代: 回收前大小->回收后大小(总大小), 回收耗时 secs] 堆回收前大小->堆回收后大小(堆总大小), 回收耗时 secs] [Times: user=各CPU总耗时 sys=回收器自身行为耗时, real=本次GC实际耗时 secs]
+2017-07-13T22:19:12.108+0800: [GC2017-07-13T22:19:12.108+0800: [ParNew: 6635K->220K(9216K), 0.0040620 secs] 6635K->6364K(19456K), 0.0041120 secs] [Times: user=0.01 sys=0.00, real=0.01 secs] 
+# GC 时间戳: [Full GC 时间戳: [年老代: 回收前大小->回收后大小(总大小), 回收耗时 secs] 堆回收前大小->堆回收后大小(堆总大小), [永久代 : 回收前大小->回收后大小(总大小)], 回收耗时 secs] [Times: user=各CPU总耗时 sys=回收器自身行为耗时, real=本次GC实际耗时 secs]
+2017-07-13T22:19:12.113+0800: [Full GC2017-07-13T22:19:12.113+0800: [Tenured: 6144K->6144K(10240K), 0.0029180 secs] 10630K->10451K(19456K), [Perm : 2424K->2424K(21248K)], 0.0029650 secs] [Times: user=0.00 sys=0.00, real=0.00 secs]
+```
+
+```shell
+java -Xms20M -Xmx20M -Xmn10M -XX:+PrintGC -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+UseParallelGC GCTest
+# GC 时间戳: [GC-- [年轻代: 回收前大小->回收后大小(总大小)] 堆回收前大小->堆回收后大小(堆总大小), 回收耗时 secs] [Times: user=各CPU总耗时 sys=回收器自身行为耗时, real=本次GC实际耗时 secs]
+2017-07-13T21:27:32.812+0800: [GC-- [PSYoungGen: 6635K->6635K(9216K)] 10731K->14827K(19456K), 0.0029970 secs] [Times: user=0.00 sys=0.00, real=0.00 secs] 
+# GC 时间戳: [Full GC [年轻代: 回收前大小->回收后大小(总大小)] [年老代: 回收前大小->回收后大小(总大小)] 堆回收前大小->堆回收后大小(堆总大小) [永久代: 回收前大小->回收后大小(总大小)], 回收耗时 secs] [Times: user=各CPU总耗时 sys=回收器自身行为耗时, real=本次GC实际耗时 secs]
+2017-07-13T21:27:32.815+0800: [Full GC [PSYoungGen: 6635K->2260K(9216K)] [ParOldGen: 8192K->8192K(10240K)] 14827K->10452K(19456K) [PSPermGen: 2424K->2423K(21504K)], 0.0094280 secs] [Times: user=0.01 sys=0.00, real=0.01 secs]
+```
+
+```shell
+java -Xms20M -Xmx20M -Xmn10M -XX:+PrintGC -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+UseConcMarkSweepGC GCTest
+# GC 时间戳: [GC 时间戳: [年轻代: 回收前大小->回收后大小(总大小), 回收耗时 secs] 堆回收前大小->堆回收后大小(堆总大小), 回收耗时 secs] [Times: user=各CPU总耗时 sys=回收器自身行为耗时, real=本次GC实际耗时 secs]
+2017-07-13T22:26:52.295+0800: [GC2017-07-13T22:26:52.295+0800: [ParNew: 6635K->217K(9216K), 0.0031860 secs] 6635K->6363K(19456K), 0.0032650 secs] [Times: user=0.01 sys=0.00, real=0.01 secs] 
+# GC 时间戳: [Full GC 时间戳: [年老代: 回收前大小->回收后大小(总大小), 回收耗时 secs] 堆回收前大小->堆回收后大小(堆总大小), [永久代 : 回收前大小->回收后大小(总大小)], 0.0063380 secs] [Times: user=各CPU总耗时 sys=回收器自身行为耗时, real=本次GC实际耗时 secs]
+2017-07-13T22:26:52.300+0800: [Full GC2017-07-13T22:26:52.300+0800: [CMS: 6146K->6144K(10240K), 0.0062630 secs] 10629K->10452K(19456K), [CMS Perm : 2425K->2424K(21248K)], 0.0063380 secs] [Times: user=0.01 sys=0.00, real=0.00 secs] 
+# 初始标记 
+2017-07-13T22:26:52.307+0800: [GC [1 CMS-initial-mark: 6144K(10240K)] 10452K(19456K), 0.0003770 secs] [Times: user=0.00 sys=0.00, real=0.00 secs] 
+# 并发标记 
+2017-07-13T22:26:52.310+0800: [CMS-concurrent-mark: 0.002/0.002 secs] [Times: user=0.00 sys=0.00, real=0.01 secs] 
+# 
+2017-07-13T22:26:52.311+0800: [CMS-concurrent-preclean: 0.001/0.001 secs] [Times: user=0.00 sys=0.00, real=0.00 secs] 
+2017-07-13T22:26:52.311+0800: [CMS-concurrent-abortable-preclean: 0.000/0.000 secs] [Times: user=0.00 sys=0.00, real=0.00 secs] 
+# 重新标记
+2017-07-13T22:26:52.311+0800: [GC[YG occupancy: 4390 K (9216 K)]2017-07-13T22:26:52.311+0800: [Rescan (parallel) , 0.0005310 secs]2017-07-13T22:26:52.312+0800: [weak refs processing, 0.0000250 secs]2017-07-13T22:26:52.312+0800: [scrub string table, 0.0001290 secs] [1 CMS-remark: 6144K(10240K)] 10534K(19456K), 0.0007730 secs] [Times: user=0.00 sys=0.00, real=0.00 secs] 
+# 并发清理
+2017-07-13T22:26:52.312+0800: [CMS-concurrent-sweep: 0.000/0.000 secs] [Times: user=0.00 sys=0.00, real=0.00 secs]
+```
 
 ## 内存泄漏
 

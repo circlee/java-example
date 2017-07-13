@@ -18,6 +18,7 @@ public class GCTest {
         bytes2 = new byte[2 * MB];
         bytes3 = new byte[2 * MB];
         bytes4 = new byte[4 * MB];
+        System.gc();
     }
 
 }
