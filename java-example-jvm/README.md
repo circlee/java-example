@@ -358,7 +358,23 @@ o1 = null; // 这时o1指向的那个对象回收了吗？没有，因为它还�
 o2 = null; // 这样才能回收
 ```
 
-## JVisualVM 远程监听
+## JVisualVM 
+
+#### Java VisualVM 插件中心
+
+若原地址无法访问，登录`https://visualvm.github.io/pluginscenters.html`，更新为相应的地址
+
+![jvisualvm-plugin-setting](jvisualvm-plugin-setting.png)
+
+#### Visual GC
+
+![jvisualvm-plugin-visualgc](jvisualvm-plugin-visualgc.png)
+
+![jvisualvm-visualgc](jvisualvm-visualgc.png)
+
+#### 远程监听
+
+jstatd 服务可以查看【监视】页内容，包括堆、类、栈概况
 
 第一步：创建`jstatd.all.policy`文件
  
@@ -371,21 +387,24 @@ grant codebase "file:${java.home}/../lib/tools.jar" {
 第二步：启动 jstatd 服务
 
 ```shell
-jstatd -J-Djava.security.policy=jstatd.all.policy 
+jstatd -J-Djava.security.policy=jstatd.all.policy -J-Djava.rmi.server.hostname=192.168.198.187
 ```
 
+- `-p PORT` 默认1099
 - `-J-Djava.security.policy=POLICY_FILENAME` 指定配置文件
 - `-J-Djava.rmi.server.hostname=HOSTNAME` 指定IP地址
-- `-p PORT` 默认1099
-
-启动JMX：
-
-- `-J-Dcom.sun.management.jmxremote.port=PORT` 
+- `-J-Dcom.sun.management.jmxremote.port=PORT`
 - `-J-Dcom.sun.management.jmxremote.ssl=false`
 - `-J-Dcom.sun.management.jmxremote.authenticate=false`
 
-完整示例：
+![jvisualvm-add-jstatd](jvisualvm-add-jstatd.png)
+
+#### JMX 支持
+
+启动应用时，带上`com.sun.management.jmxremote`配置，启动JMX支持，可以查看更多内容
 
 ```shell
-jstatd -J-Djava.security.policy=jstatd.all.policy -J-Djava.rmi.server.hostname=192.168.198.187 -p 1099 -J-Dcom.sun.management.jmxremote.port=9888 -J-Dcom.sun.management.jmxremote.ssl=false -J-Dcom.sun.management.jmxremote.authenticate=false
+java -Djava.rmi.server.hostname=192.168.198.187 -Dcom.sun.management.jmxremote.port=9888 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false GCTest
 ```
+
+![jvisualvm-add-jmx](jvisualvm-add-jmx.png)
