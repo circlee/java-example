@@ -375,14 +375,15 @@ java -Xms20M -Xmx20M -Xmn10M -XX:+PrintGC -XX:+PrintGCDetails -XX:+PrintGCDateSt
 2017-07-13T22:26:52.295+0800: [GC2017-07-13T22:26:52.295+0800: [ParNew: 6635K->217K(9216K), 0.0031860 secs] 6635K->6363K(19456K), 0.0032650 secs] [Times: user=0.01 sys=0.00, real=0.01 secs] 
 # GC 时间戳: [Full GC 时间戳: [年老代: 回收前大小->回收后大小(总大小), 回收耗时 secs] 堆回收前大小->堆回收后大小(堆总大小), [永久代 : 回收前大小->回收后大小(总大小)], 0.0063380 secs] [Times: user=各CPU总耗时 sys=回收器自身行为耗时, real=本次GC实际耗时 secs]
 2017-07-13T22:26:52.300+0800: [Full GC2017-07-13T22:26:52.300+0800: [CMS: 6146K->6144K(10240K), 0.0062630 secs] 10629K->10452K(19456K), [CMS Perm : 2425K->2424K(21248K)], 0.0063380 secs] [Times: user=0.01 sys=0.00, real=0.00 secs] 
-# 初始标记 
+# 初始标记 暂停所有
 2017-07-13T22:26:52.307+0800: [GC [1 CMS-initial-mark: 6144K(10240K)] 10452K(19456K), 0.0003770 secs] [Times: user=0.00 sys=0.00, real=0.00 secs] 
 # 并发标记 
 2017-07-13T22:26:52.310+0800: [CMS-concurrent-mark: 0.002/0.002 secs] [Times: user=0.00 sys=0.00, real=0.01 secs] 
-# 
+# 并发预清理
 2017-07-13T22:26:52.311+0800: [CMS-concurrent-preclean: 0.001/0.001 secs] [Times: user=0.00 sys=0.00, real=0.00 secs] 
+# 并发预清理2
 2017-07-13T22:26:52.311+0800: [CMS-concurrent-abortable-preclean: 0.000/0.000 secs] [Times: user=0.00 sys=0.00, real=0.00 secs] 
-# 重新标记
+# 重新标记 暂停所有
 2017-07-13T22:26:52.311+0800: [GC[YG occupancy: 4390 K (9216 K)]2017-07-13T22:26:52.311+0800: [Rescan (parallel) , 0.0005310 secs]2017-07-13T22:26:52.312+0800: [weak refs processing, 0.0000250 secs]2017-07-13T22:26:52.312+0800: [scrub string table, 0.0001290 secs] [1 CMS-remark: 6144K(10240K)] 10534K(19456K), 0.0007730 secs] [Times: user=0.00 sys=0.00, real=0.00 secs] 
 # 并发清理
 2017-07-13T22:26:52.312+0800: [CMS-concurrent-sweep: 0.000/0.000 secs] [Times: user=0.00 sys=0.00, real=0.00 secs]
