@@ -338,8 +338,8 @@ Type                    | Young       | Old/Perm
 
 #### GC日志
 
-- -XX:+PrintGC 输出GC日志概况，包括Young GC、Full GC
-- -XX:+PrintGCDetails 输出GC详情，日志格式与GC类型有关
+- -XX:+PrintGC 输出GC的日志概况，包括Young GC、Full GC
+- -XX:+PrintGCDetails 输出GC的日志详情，日志格式与GC类型有关
 - -XX:+PrintGCTimeStamps 输出GC的时间戳，以基准时间的形式
 - -XX:+PrintGCDateStamps 输出GC的时间戳，以日期的形式，如：2017-07-13T21:18:11.018+0800
 - -XX:+PrintHeapAtGC 在进行GC的前后打印出堆的信息

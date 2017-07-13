@@ -1,12 +1,12 @@
 package com.example.gc;
 
 /*
- * java -verbose:gc -Xms20M -Xmx20M -Xmn10M -XX:+PrintGCDetails -XX:SurvivorRatio=8 GCTest
- * -verbose:gc 输出GC信息
- * -XX:+PrintGCDetails 输出GC详情
+ * java -Xms20M -Xmx20M -Xmn10M -XX:SurvivorRatio=8 -XX:+PrintGC -XX:+PrintGCDetails GCTest
  * -Xms20M 初始堆20M
  * -Xmx20M 最大堆20M
  * -Xmn10M 年轻代10M
+ * -XX:+PrintGC 输出GC的日志概况
+ * -XX:+PrintGCDetails 输出GC的日志详情
  */
 public class GCTest {
 
