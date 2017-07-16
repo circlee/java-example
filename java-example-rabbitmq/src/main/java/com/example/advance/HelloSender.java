@@ -51,6 +51,7 @@ public class HelloSender {
         /*
          * deliveryMode 非持久化 1 持久化 2
          * priority 优先级
+         * expiration 超时时间
          */
         AMQP.BasicProperties props = new AMQP.BasicProperties().builder().headers(headers).deliveryMode(2).priority(1).expiration("60000").build();
         channel.basicPublish("", QUEUE_NAME, props, message.getBytes("UTF-8"));
