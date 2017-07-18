@@ -1,6 +1,6 @@
 # Java - Concurrent 并发工具包
 
-> 参考Jakob Jenkov的[java.util.concurrent](http://tutorials.jenkov.com/java-util-concurrent/index.html)
+> 参考Jakob Jenkov的[java.util.concurrent](http://tutorials.jenkov.com/java-util-concurrent/index.html)。本文只做简单的介绍，具体用法可以查看完整示例。
 
 来自于java-1.5的java.util.concurrent工具包是Doug Lea的作品。他是对Java影响力最大的个人。
 
