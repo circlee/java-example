@@ -18,7 +18,8 @@ public class CountDownLatchTest {
         new Thread(waiter).start();
         new Thread(decrementer).start();
 
-        Thread.sleep(4000);
+        while (Thread.activeCount() > 0)
+            Thread.yield();
     }
 
     static class Waiter implements Runnable {

@@ -14,7 +14,8 @@ public class ExchangerTest {
         new Thread(new Lily(exchanger, "apple")).start();
         new Thread(new Lucy(exchanger, "pear")).start();
 
-        Thread.sleep(3000);
+        while (Thread.activeCount() > 0)
+            Thread.yield();
     }
 
     static class Lily implements Runnable {

@@ -19,7 +19,8 @@ public class CyclicBarrierTest {
         new Thread(waiter1).start();
         new Thread(waiter2).start();
 
-        Thread.sleep(4000);
+        while (Thread.activeCount() > 0)
+            Thread.yield();
     }
 
     static class Waiter implements Runnable {
