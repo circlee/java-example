@@ -18,6 +18,7 @@ public class JxlsUtil {
             Transformer transformer = jxlsHelper.createTransformer(input, output);
             JexlExpressionEvaluator evaluator = (JexlExpressionEvaluator) transformer.getTransformationConfig().getExpressionEvaluator();
             Map<String, Object> functions = new HashMap<>();
+            functions.put(JexlUtilFunction.definition, new JexlUtilFunction());
             functions.put(JexlDateFunction.definition, new JexlDateFunction());
             evaluator.getJexlEngine().setFunctions(functions);
             Context context = new Context();
