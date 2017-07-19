@@ -213,9 +213,9 @@ public class MyClassLoaderTest {
 - -XX:SurvivorRatio=3 设置Eden与Survivor的比例，如为3，表示Eden:From:To=3:2:2
 - -XX:NewRatio=3 设置Young与Old的比例，如为3，表示Young:Old=1:3
 
-## JVM垃圾回收
+## JVM 垃圾回收
 
-#### JVM内存分配策略
+#### JVM 内存分配策略
 
 - 对象优先在Eden区分配
 
@@ -259,7 +259,31 @@ PretenureSizeThreshold参数只对Serial和ParNew两款收集器有效。
 
 大部分情况下都还是会将HandlePromotionFailure开关打开，避免Full GC过于频繁。
 
-#### GC类型
+#### GC 算法
+
+- 引用计数 Reference Counting
+
+对象有一个引用，即增加一个计数，删除一个引用，则减少一个计数。垃圾回收时，清除计数为0的对象。缺点是无法处理循环引用。
+
+- 标记-清除 Mark-Sweep
+
+![gc-mark-sweep](gc-mark-sweep.png)
+
+分两阶段执行。第一阶段从引用根节点开始标记所有被引用的对象，第二阶段遍历整个堆，把未标记的对象清除。缺点是需要暂停整个应用、会产生内存碎片。
+
+- 复制 Copying
+
+![gc-copying](gc-copying.png)
+
+把内存空间划为两个相等的区域，每次只使用其中一个区域。垃圾回收时，遍历当前使用区域，把正在使用中的对象复制到另外一个区域中。每次只处理正在使用中的对象，复制成本比较小，同时复制过去以后还能进行相应的内存整理，不会出现“碎片”问题。缺点是需要两倍内存空间。
+
+- 标记-整理 Mark-Compact
+
+![gc-mark-compact](gc-mark-compact.png)
+
+结合了“标记-清除”和“复制”两个算法的优点。也是分两阶段，第一阶段从根节点开始标记所有被引用对象，第二阶段遍历整个堆，清除未标记对象，并且把存活对象“压缩”到堆的其中一块，按顺序排放。避免了“标记-清除”的碎片问题，同时也避免了“复制”的空间问题。
+
+#### GC 类型
 
 - Serial GC
 - Serial Old GC
