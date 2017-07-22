@@ -1,3 +1,3 @@
-# Java - Jackjson 序列化
+# Java - Bean 工具
 
-*PS：本文使用的是jackson-1.8.8.1*
+*PS：本文使用的是apache-beanutils-1.9.3*
