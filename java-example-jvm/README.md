@@ -367,7 +367,7 @@ Type                    | Young       | Old/Perm
 - -XX:+PrintGCTimeStamps 输出GC的时间戳，以基准时间的形式
 - -XX:+PrintGCDateStamps 输出GC的时间戳，以日期的形式，如：2017-07-13T21:18:11.018+0800
 - -XX:+PrintHeapAtGC 在进行GC的前后打印出堆的信息
-- -Xloggc=d://gc.log GC日志默认输出到终端，也可以通过些参数输出到指定文件
+- -Xloggc=d://gc.log GC日志默认输出到终端，也可以输出到指定文件
 
 ```shell
 java -Xms20M -Xmx20M -Xmn10M -XX:+PrintGC -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+UseSerialGC GCTest
@@ -411,6 +411,52 @@ java -Xms20M -Xmx20M -Xmn10M -XX:+PrintGC -XX:+PrintGCDetails -XX:+PrintGCDateSt
 2017-07-13T22:26:52.311+0800: [GC[YG occupancy: 4390 K (9216 K)]2017-07-13T22:26:52.311+0800: [Rescan (parallel) , 0.0005310 secs]2017-07-13T22:26:52.312+0800: [weak refs processing, 0.0000250 secs]2017-07-13T22:26:52.312+0800: [scrub string table, 0.0001290 secs] [1 CMS-remark: 6144K(10240K)] 10534K(19456K), 0.0007730 secs] [Times: user=0.00 sys=0.00, real=0.00 secs] 
 # 并发清理
 2017-07-13T22:26:52.312+0800: [CMS-concurrent-sweep: 0.000/0.000 secs] [Times: user=0.00 sys=0.00, real=0.00 secs]
+```
+
+```shell
+java -Xms20M -Xmx20M -Xmn10M -XX:+PrintGC -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+UseG1GC GCTest
+2017-07-21T01:34:15.998+0800: [GC pause (G1 Humongous Allocation) (young) (initial-mark), 0.0013323 secs]
+   [Parallel Time: 1.0 ms, GC Workers: 2]
+      [GC Worker Start (ms): Min: 65.7, Avg: 65.9, Max: 66.1, Diff: 0.4]
+      [Ext Root Scanning (ms): Min: 0.0, Avg: 0.5, Max: 0.9, Diff: 0.9, Sum: 0.9]
+      [Update RS (ms): Min: 0.0, Avg: 0.0, Max: 0.0, Diff: 0.0, Sum: 0.0]
+         [Processed Buffers: Min: 0, Avg: 0.0, Max: 0, Diff: 0, Sum: 0]
+      [Scan RS (ms): Min: 0.0, Avg: 0.0, Max: 0.0, Diff: 0.0, Sum: 0.0]
+      [Code Root Scanning (ms): Min: 0.0, Avg: 0.0, Max: 0.0, Diff: 0.0, Sum: 0.0]
+      [Object Copy (ms): Min: 0.1, Avg: 0.2, Max: 0.3, Diff: 0.3, Sum: 0.4]
+      [Termination (ms): Min: 0.0, Avg: 0.1, Max: 0.3, Diff: 0.3, Sum: 0.3]
+         [Termination Attempts: Min: 1, Avg: 1.0, Max: 1, Diff: 0, Sum: 2]
+      [GC Worker Other (ms): Min: 0.0, Avg: 0.0, Max: 0.0, Diff: 0.0, Sum: 0.0]
+      [GC Worker Total (ms): Min: 0.6, Avg: 0.8, Max: 1.0, Diff: 0.4, Sum: 1.6]
+      [GC Worker End (ms): Min: 66.7, Avg: 66.7, Max: 66.7, Diff: 0.0]
+   [Code Root Fixup: 0.0 ms]
+   [Code Root Purge: 0.0 ms]
+   [Clear CT: 0.0 ms]
+   [Other: 0.3 ms]
+      [Choose CSet: 0.0 ms]
+      [Ref Proc: 0.2 ms]
+      [Ref Enq: 0.0 ms]
+      [Redirty Cards: 0.0 ms]
+      [Humongous Register: 0.0 ms]
+      [Humongous Reclaim: 0.0 ms]
+      [Free CSet: 0.0 ms]
+   [Eden: 1024.0K(10.0M)->0.0B(9216.0K) Survivors: 0.0B->1024.0K Heap: 6774.6K(20.0M)->6480.1K(20.0M)]
+ [Times: user=0.00 sys=0.00, real=0.00 secs] 
+2017-07-21T01:34:16.000+0800: [GC concurrent-root-region-scan-start]
+2017-07-21T01:34:16.001+0800: [GC concurrent-root-region-scan-end, 0.0008980 secs]
+2017-07-21T01:34:16.001+0800: [GC concurrent-mark-start]
+2017-07-21T01:34:16.001+0800: [GC concurrent-mark-end, 0.0001357 secs]
+2017-07-21T01:34:16.001+0800: [Full GC (System.gc())  10M->10M(20M), 0.0144130 secs]
+   [Eden: 1024.0K(9216.0K)->0.0B(10.0M) Survivors: 1024.0K->0.0B Heap: 10.5M(20.0M)->10.2M(20.0M)], [Metaspace: 2478K->2478K(1056768K)]
+ [Times: user=0.00 sys=0.01, real=0.02 secs] 
+2017-07-21T01:34:16.016+0800: [GC remark, 0.0000353 secs]
+ [Times: user=0.00 sys=0.00, real=0.00 secs] 
+2017-07-21T01:34:16.017+0800: [GC concurrent-mark-abort]
+Heap
+ garbage-first heap   total 20480K, used 10494K [0x00000000fec00000, 0x00000000fed000a0, 0x0000000100000000)
+  region size 1024K, 1 young (1024K), 0 survivors (0K)
+ Metaspace       used 2484K, capacity 4486K, committed 4864K, reserved 1056768K
+  class space    used 267K, capacity 386K, committed 512K, reserved 1048576K
 ```
 
 ## 内存泄漏
