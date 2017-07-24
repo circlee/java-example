@@ -23,8 +23,10 @@ public class ReentrantLockTest2 {
                 }
             });
         }
+
         Thread.sleep(3000);
         executor.shutdown();
+
         System.out.println("count: " + count);
     }
 
