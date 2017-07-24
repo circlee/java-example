@@ -1,5 +1,6 @@
 package com.example.jxls;
 
+import org.jxls.builder.xls.XlsCommentAreaBuilder;
 import org.jxls.common.Context;
 import org.jxls.expression.JexlExpressionEvaluator;
 import org.jxls.transform.Transformer;
@@ -14,6 +15,7 @@ public class JxlsUtil {
 
     public static Boolean export(InputStream input, OutputStream output, Map<String, Object> data) {
         try {
+            XlsCommentAreaBuilder.addCommandMapping("merge", MergeCommand.class);
             JxlsHelper jxlsHelper = JxlsHelper.getInstance();
             Transformer transformer = jxlsHelper.createTransformer(input, output);
             JexlExpressionEvaluator evaluator = (JexlExpressionEvaluator) transformer.getTransformationConfig().getExpressionEvaluator();

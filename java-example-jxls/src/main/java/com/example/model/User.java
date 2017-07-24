@@ -1,6 +1,7 @@
 package com.example.model;
 
 import java.util.Date;
+import java.util.List;
 
 public class User {
 
@@ -8,6 +9,7 @@ public class User {
     private String account;
     private String password;
     private Date birth;
+    private List<Role> roles;
 
     public User(Long id, String account, String password) {
         this.id = id;
@@ -20,6 +22,14 @@ public class User {
         this.account = account;
         this.password = password;
         this.birth = birth;
+    }
+
+    public User(Long id, String account, String password, Date birth, List<Role> roles) {
+        this.id = id;
+        this.account = account;
+        this.password = password;
+        this.birth = birth;
+        this.roles = roles;
     }
 
     public Long getId() {
@@ -52,5 +62,13 @@ public class User {
 
     public void setBirth(Date birth) {
         this.birth = birth;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 }
