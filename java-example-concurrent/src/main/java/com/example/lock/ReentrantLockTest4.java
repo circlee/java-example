@@ -11,7 +11,7 @@ public class ReentrantLockTest4 {
         // testLockInterruptibly();
         testTryLock();
 
-        while (Thread.activeCount() > 0) {
+        while (Thread.activeCount() > 1) {
             Thread.yield();
         }
     }
