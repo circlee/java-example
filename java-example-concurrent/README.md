@@ -48,7 +48,7 @@
 - 可以设置容量大小，也可以不设置。如果不设置，最大为`Integer.MAX_VALUE`
 - 存储对象遵循FIFO（先进先出）顺序
 
-#### PriorityBlockingQueue*
+#### PriorityBlockingQueue
 
 - 队列里的对象必须实现`java.lang.Comparable`接口
 - 实现`Comparable.compareTo`方法，自定义队列的排序规则
