@@ -2,28 +2,20 @@ package com.example.jxls;
 
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.ss.util.CellUtil;
 import org.jxls.area.Area;
 import org.jxls.command.AbstractCommand;
 import org.jxls.command.Command;
 import org.jxls.common.CellRef;
 import org.jxls.common.Context;
 import org.jxls.common.Size;
-import org.jxls.expression.ExpressionEvaluator;
+import org.jxls.transform.poi.PoiCellData;
 import org.jxls.transform.poi.PoiTransformer;
 
 public class MergeCommand extends AbstractCommand {
     private Area area;
-    private String row = "1";
-
-    public String getRow() {
-        return row;
-    }
-
-    public void setRow(String row) {
-        this.row = row;
-        ;
-    }
+    private String rows;// 合并的行数
+    private String cols;// 合并的列数
+    private CellStyle cellStyle;// 第一个单元格的样式
 
     @Override
     public String getName() {
@@ -31,54 +23,77 @@ public class MergeCommand extends AbstractCommand {
     }
 
     @Override
+    public Command addArea(Area area) {
+        if (area == null) {
+            return this;
+        }
+        if (super.getAreaList().size() >= 1) {
+            throw new IllegalArgumentException("You can add only a single area to 'merge' command");
+        }
+        this.area = area;
+        return super.addArea(area);
+    }
+
+    @Override
     public Size applyAt(CellRef cellRef, Context context) {
-        Size resultSize = area.applyAt(cellRef, context);
+        int rows = 1, cols = 1;
 
-        int startCol = cellRef.getCol();
-        int startRow = cellRef.getRow();
+        if (this.rows != null) {
+            rows = (int) getTransformationConfig().getExpressionEvaluator().evaluate(this.rows, context.toMap());
+        }
+        if (this.cols != null) {
+            cols = (int) getTransformationConfig().getExpressionEvaluator().evaluate(this.cols, context.toMap());
+        }
+        if (rows > 1 || cols > 1) {
+            mergeRegion(cellRef, context, (PoiTransformer) this.getTransformer(), rows, cols);
+        }
 
-        ExpressionEvaluator evaluator = getTransformationConfig().getExpressionEvaluator();
-        int rowCount = (int) evaluator.evaluate(row, context.toMap());
+        area.applyAt(cellRef, context);
+        return new Size(cols, rows);
+    }
 
-        PoiTransformer transformer = (PoiTransformer) area.getTransformer();
+    protected void mergeRegion(CellRef cellRef, Context context, PoiTransformer transformer, int rows, int cols) {
         Workbook workbook = transformer.getWorkbook();
-        Sheet resultSheet = workbook.getSheet(cellRef.getSheetName());
-        CellStyle referenceStyle = getCellStyle(cellRef, resultSheet);
-        CellRangeAddress region = new CellRangeAddress(startRow, startRow + rowCount - 1, startCol, startCol);
-        setRegionStyle(referenceStyle, region, resultSheet, workbook);
-        resultSheet.addMergedRegion(region);
-        return resultSize;
-    }
+        Sheet sheet = workbook.getSheet(cellRef.getSheetName());
 
-    private CellStyle getCellStyle(CellRef cellRef, Sheet sheet) {
-        CellStyle borderStyle = sheet.getWorkbook().createCellStyle();
-        Row row = sheet.getRow(cellRef.getRow());
-        Cell cell = row.getCell(cellRef.getCol());
-        borderStyle.cloneStyleFrom(cell.getCellStyle());
-        return borderStyle;
-    }
+        CellRangeAddress region = new CellRangeAddress(cellRef.getRow(), cellRef.getRow() + rows - 1, cellRef.getCol(), cellRef.getCol() + cols - 1);
+        sheet.addMergedRegion(region);
 
-    private void setRegionStyle(CellStyle style, CellRangeAddress region, Sheet sheet, Workbook workbook) {
-        CellStyle referenceStyle = workbook.createCellStyle();
-        referenceStyle.cloneStyleFrom(style);
-        int firstRow = region.getFirstRow();
-        int lastRow = region.getLastRow();
-        int firstColumn = region.getFirstColumn();
-        int lastColumn = region.getLastColumn();
-
-        for (int i = firstRow; i <= lastRow; i++) {
-            Row row = CellUtil.getRow(i, sheet);
-            for (int j = firstColumn; j <= lastColumn; j++) {
-                Cell cell = CellUtil.getCell(row, j);
-                cell.setCellStyle(referenceStyle);
+        // 合并之后单元格样式会丢失，以下操作将合并后的单元格恢复成合并前第一个单元格的样式
+        if (cellStyle == null) {
+            PoiCellData cellData = (PoiCellData) transformer.getCellData(cellRef);
+            if (cellData != null) {
+                cellStyle = cellData.getCellStyle();
+            }
+        }
+        if (cellStyle != null) {
+            for (int startRow = region.getFirstRow(); startRow <= region.getLastRow(); startRow++) {
+                Row row = sheet.getRow(startRow);
+                if (row == null)
+                    row = sheet.createRow(startRow);
+                for (int startCol = region.getFirstColumn(); startCol <= region.getLastColumn(); startCol++) {
+                    Cell cell = row.getCell(startCol);
+                    if (cell == null)
+                        cell = row.createCell(startCol);
+                    cell.setCellStyle(cellStyle);
+                }
             }
         }
     }
 
-    @Override
-    public Command addArea(Area area) {
-        super.addArea(area);
-        this.area = area;
-        return this;
+    public String getCols() {
+        return cols;
+    }
+
+    public void setCols(String cols) {
+        this.cols = cols;
+    }
+
+    public String getRows() {
+        return rows;
+    }
+
+    public void setRows(String rows) {
+        this.rows = rows;
     }
 }
