@@ -13,7 +13,7 @@ public class CanalTest {
     @Test
     public void test() {
         // 创建链接
-        CanalConnector connector = CanalConnectors.newSingleConnector(new InetSocketAddress(AddressUtils.getHostIp(), 11111), "example2", "", "");
+        CanalConnector connector = CanalConnectors.newSingleConnector(new InetSocketAddress(AddressUtils.getHostIp(), 11111), "example", "", "");
         try {
             connector.connect();
             connector.subscribe(".*\\.user");
