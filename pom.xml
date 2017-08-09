@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.example</groupId>
+    <artifactId>java-example</artifactId>
+    <version>0.0.1</version>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>java-example-activemq</module>
+        <module>java-example-beanutils</module>
+        <module>java-example-canal</module>
+        <module>java-example-concurrent</module>
+        <module>java-example-jackson</module>
+        <module>java-example-jooq</module>
+        <module>java-example-jvm</module>
+        <module>java-example-jxls</module>
+        <module>java-example-lambda</module>
+        <module>java-example-okhttp</module>
+        <module>java-example-quartz</module>
+        <module>java-example-rabbitmq</module>
+        <module>java-example-redis</module>
+        <module>java-example-servlet</module>
+        <module>java-example-sorting</module>
+    </modules>
+
+</project>
