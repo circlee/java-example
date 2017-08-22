@@ -1,9 +1,14 @@
 package com.example;
 
+import com.google.gson.annotations.SerializedName;
+
 public class EasemobToken {
 
+    @SerializedName("access_token")
     private String accessToken;
+    @SerializedName("expires_in")
     private Long expiresIn;
+    @SerializedName("application")
     private String application;
 
     public String getAccessToken() {
