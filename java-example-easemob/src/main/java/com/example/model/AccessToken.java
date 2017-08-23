@@ -1,8 +1,8 @@
-package com.example;
+package com.example.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class EasemobToken {
+public class AccessToken {
 
     @SerializedName("access_token")
     private String accessToken;

@@ -7,7 +7,7 @@ public class EasemobTest {
     @Test
     public void test() {
         EasemobProperties easemobProperties = new EasemobProperties();
-        EasemobAccessTokenHolder easemobAccessTokenHolder = new EasemobAccessTokenHolder(easemobProperties);
+        EasemobAuthorizationHolder easemobAccessTokenHolder = new EasemobAuthorizationHolder(easemobProperties);
 
         String accessToken = easemobAccessTokenHolder.get();
         System.out.println("accessToken: " + accessToken);
@@ -16,8 +16,9 @@ public class EasemobTest {
     @Test
     public void testUserClient() {
         EasemobProperties easemobProperties = new EasemobProperties();
-        EasemobAccessTokenHolder easemobAccessTokenHolder = new EasemobAccessTokenHolder(easemobProperties);
+        EasemobAuthorizationHolder easemobAccessTokenHolder = new EasemobAuthorizationHolder(easemobProperties);
         EasemobUserClient easemobUserClient = new EasemobUserClient(easemobProperties, easemobAccessTokenHolder);
-        easemobUserClient.addUser("13750033560", "123456");
+        Boolean succeed = easemobUserClient.addUser("13750033568", "123456");
+        System.out.println("succeed: " + succeed);
     }
 }

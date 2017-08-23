@@ -1,61 +1,31 @@
 package com.example;
 
-import com.google.gson.Gson;
-import io.swagger.client.ApiException;
-import io.swagger.client.api.AuthenticationApi;
+import com.example.model.ResponseBody;
+import com.google.gson.reflect.TypeToken;
 import io.swagger.client.api.UsersApi;
 import io.swagger.client.model.RegisterUsers;
 import io.swagger.client.model.User;
 
-import java.util.function.Function;
-import java.util.function.Supplier;
-import java.util.logging.Logger;
+public class EasemobUserClient extends EasemobBaseClient {
 
-public class EasemobUserClient {
+    protected UsersApi api = new UsersApi();
 
-    private EasemobProperties easemobProperties;
-    private EasemobAccessTokenHolder easemobAccessTokenHolder;
-
-    private Gson gson = new Gson();
-    private UsersApi api = new UsersApi();
-
-    public EasemobUserClient(EasemobProperties easemobProperties, EasemobAccessTokenHolder easemobAccessTokenHolder) {
-        this.easemobProperties = easemobProperties;
-        this.easemobAccessTokenHolder = easemobAccessTokenHolder;
+    public EasemobUserClient(EasemobProperties properties, EasemobAuthorizationHolder authorizationHolder) {
+        super(properties, authorizationHolder);
     }
 
-    public void addUser(String username, String password) {
+    public Boolean addUser(String username, String password) {
         RegisterUsers registerUsers = new RegisterUsers();
         registerUsers.add(new User().username(username).password(password));
-        String responseBody = doApiAction(() -> api.orgNameAppNameUsersPost(easemobProperties.getOrgName(), easemobProperties.getAppName(), registerUsers, easemobAccessTokenHolder.get()));
-        System.out.println(responseBody);
+        ResponseBody<Object> responseBody = doApiActionRetried(
+                () -> api.orgNameAppNameUsersPost(properties.getOrgName(), properties.getAppName(), registerUsers, authorizationHolder.get()),
+                new TypeToken<ResponseBody<Object>>() {
+                });
+        return responseBody != null;
     }
 
-    private String doApiAction(ApiAction apiAction) {
-        try {
-            String responseBody = apiAction.apply();
-        } catch (ApiException e) {
-            if (e.getCode() == 401) {
-                System.out.println("The current token is invalid, re-generating token for you and calling it again");
-                easemobAccessTokenHolder.refresh();
-                return doApiAction(apiAction);
-            } else if (e.getCode() == 429) {
-                System.out.println("The api call is too frequent");
-                return null;
-            } else if (e.getCode() >= 500) {
-                System.out.println("The server connection failed and is being reconnected");
-                return doApiAction(apiAction);
-            } else {
-                System.out.println("The server may be faulty. Please try again later");
-            }
-        }
-
-        return null;
+    public Boolean saveUser(String username, String password) {
+        addUser(username, password);
+        return true;
     }
-
-    @FunctionalInterface
-    public interface ApiAction {
-        String apply() throws ApiException;
-    }
-
 }
