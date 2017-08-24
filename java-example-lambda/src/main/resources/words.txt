@@ -1,0 +1,60 @@
+life-kits 工具模块
+
+life-mongodb
+
+life-logs 日志模块（服务）
+- life-kits
+- life-mongodb
+
+life-common 公共模块（主要是工具类，及通用服务）
+- life-kits
+- life-logs
+
+life-commodity 商品模块（服务）
+- life-kits
+- life-common
+
+life-mq-engine
+- life-kits
+- life-logs
+- life-common
+
+life-user 用户模块（服务）
+- life-kits
+- life-common
+
+life-shop 店铺模块（服务）
+- life-kits
+- life-common
+
+life-marketing 营销模块（服务）
+- life-kits
+- life-common
+- life-commodity
+
+life-order 订单模块（服务）
+- life-kits
+- life-logs
+- life-common
+- life-mq-engine
+- life-commodity
+- life-marketing
+- life-user
+- life-shop
+
+life-platform 蜘点运营模块（应用层）
+- life-kits
+- life-mongodb
+- life-logs
+- life-common
+- life-mq-engine
+- life-commodity
+- life-marketing
+- life-user
+- life-shop
+- life-order
+
+life-platform-merchant 蜘点商家管理服务模块（应用层）
+- life-logs
+- life-mq-engine
+- life-platform

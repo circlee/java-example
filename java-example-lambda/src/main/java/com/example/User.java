@@ -1,6 +1,7 @@
 package com.example;
 
 import java.util.Date;
+import java.util.List;
 
 public class User {
 
@@ -9,6 +10,7 @@ public class User {
     private String password;
     private Integer age;
     private Date birth;
+    private List<String> loves;
 
     public User() {
     }
@@ -16,6 +18,12 @@ public class User {
     public User(Long id, String username) {
         this.id = id;
         this.username = username;
+    }
+
+    public User(Long id, String username, List<String> loves) {
+        this.id = id;
+        this.username = username;
+        this.loves = loves;
     }
 
     public Long getId() {
@@ -56,5 +64,13 @@ public class User {
 
     public void setBirth(Date birth) {
         this.birth = birth;
+    }
+
+    public List<String> getLoves() {
+        return loves;
+    }
+
+    public void setLoves(List<String> loves) {
+        this.loves = loves;
     }
 }
