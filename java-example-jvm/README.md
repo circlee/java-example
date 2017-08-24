@@ -210,8 +210,9 @@ public class MyClassLoaderTest {
 - -XX:MaxNewSize 设置新生代最大空间大小
 - -XX:PermSize 设置永久代最小空间大小
 - -XX:MaxPermSize 设置永久代最大空间大小
-- -XX:SurvivorRatio=3 设置Eden与Survivor的比例，如为3，表示Eden:From:To=3:2:2
 - -XX:NewRatio=3 设置Young与Old的比例，如为3，表示Young:Old=1:3
+- -XX:SurvivorRatio=3 设置Survivor与Eden的比例，如为3，表示From:To:Eden=1:1:3
+
 
 ## JVM 垃圾回收
 
