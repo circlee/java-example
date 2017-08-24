@@ -216,7 +216,7 @@ public class MyClassLoaderTest {
 
 ## JVM 垃圾回收
 
-#### JVM 内存分配策略
+### JVM 内存分配策略
 
 - 对象优先在Eden区分配
 
@@ -260,23 +260,39 @@ PretenureSizeThreshold参数只对Serial和ParNew两款收集器有效。
 
 大部分情况下都还是会将HandlePromotionFailure开关打开，避免Full GC过于频繁。
 
-#### GC 算法
+### GC 算法
+
+#### 哪些对象可以被回收
 
 - 引用计数 Reference Counting
 
-对象有一个引用，即增加一个计数，删除一个引用，则减少一个计数。垃圾回收时，清除计数为0的对象。缺点是无法处理循环引用。
+对象有一个引用，即增加一个计数，删除一个引用，则减少一个计数。垃圾回收时，清除计数为0的对象。缺点是无法处理循环引用（对象之间相互引用）。
+
+- 根搜索
+
+设立若干种根对象，当任何一个根对象到某一个对象均不可达时，则认为这个对象是可以被回收的。
+
+根对象包括：虚拟机栈中的引用的对象、方法区中的类静态属性引用的对象、方法区中的常量引用的对象，声明为final的常量值、本地方法栈中JNI的引用的对象
+
+#### 采用什么方式回收
 
 - 标记-清除 Mark-Sweep
 
 ![gc-mark-sweep](gc-mark-sweep.png)
 
-分两阶段执行。第一阶段从引用根节点开始标记所有被引用的对象，第二阶段遍历整个堆，把未标记的对象清除。缺点是需要暂停整个应用、会产生内存碎片。
+分两阶段执行。第一阶段从引用根节点开始标记所有被引用的对象，第二阶段遍历整个堆，把未标记的对象清除。
+
+缺点是需要暂停整个应用、会产生内存碎片。原因是如果错过了标记阶段，就会被误清除。
 
 - 复制 Copying
 
 ![gc-copying](gc-copying.png)
 
-把内存空间划为两个相等的区域，每次只使用其中一个区域。垃圾回收时，遍历当前使用区域，把正在使用中的对象复制到另外一个区域中。每次只处理正在使用中的对象，复制成本比较小，同时复制过去以后还能进行相应的内存整理，不会出现“碎片”问题。缺点是需要两倍内存空间。
+把内存空间划为两个相等的区域，每次只使用其中一个区域。垃圾回收时，遍历当前使用区域，把存活对象复制到另外一个区域中，并更新存活对象的内存引用地址。
+
+每次只处理正在使用中的对象，复制成本比较小，同时复制过去以后还能进行相应的内存整理，不会出现“碎片”问题。
+
+缺点是需要两倍内存空间。
 
 - 标记-整理 Mark-Compact
 
@@ -298,28 +314,32 @@ PretenureSizeThreshold参数只对Serial和ParNew两款收集器有效。
 
 ![serial-gc](serial-gc.jpg)
 
-- 单线程串行
-- mark-sweep-compact 标记-清理-压缩
+- 年轻代、单线程、串行
+- 复制
 
 #### Serial Old GC
 
 ![serial-old-gc](serial-old-gc.jpg)
 
+- 年老代、单线程、串行
+- 复制-整理
+
 #### Parallel GC（-XX:+UseParallelGC）
 
 ![parallel-gc](parallel-gc.png)
 
-- 多线程并行
-- mark-sweep-compact 标记-清理-压缩
+- 年轻代、多线程、并行
+- 复制
 - -XX:+UseParallelGC=3 设置并发线程数，可以设置与处理器数量相等
-- -XX:MaxGCPauseMillis=1000 大于0的毫秒值，尽可能保证垃圾收集耗时不超过该值
-- -XX:GCTimeRatio=99 大于0小于100的整数，垃圾收集耗时占总运行时间的比例，默认值99
-- -XX:+UseAdaptiveSizePolicy 自适应调节策略
+- -XX:MaxGCPauseMillis=1000 大于0的毫秒值，最大的停顿时间
+- -XX:GCTimeRatio=99 大于0小于100的整数，控制吞吐量
+- -XX:MaxTenuringThreshold=15 晋升为年老代的年龄
+- -XX:+UseAdaptiveSizePolicy 内存自适应调节策略
 
 #### Parallel Old GC（-XX:+UseParallelOldGC）
 
-- 多线程并行
-- mark-summary-compact 标记-总结-压缩
+- 年老代、多线程、并行
+- mark-summary-compact 标记-整理
 
 #### ParNew GC（-XX:+UseParNewGC）
 
@@ -334,11 +354,10 @@ PretenureSizeThreshold参数只对Serial和ParNew两款收集器有效。
 - 多线程并发
 - mark-sweep 标记-清理
 - Initial Mark 初始标记 --> Concurrent Mark 并发标记 --> Remark 重新标记 --> Concurrent Sweep 并发清理
-- -XX:+UseCMSCompactAtFullCollection 启动压缩
+- -XX:+UseCMSCompactAtFullCollection 是否在Full GC后启动整理内存碎片
+- -XX:CMSFullGCsBeforeCompaction 运行多少次Full GC以后对内存空间进行整理
 - -XX:+UseConcMarkSweepGC=3 设置并发线程数
-- -XX:CMSInitiatingOccupancyFraction=1G 指定还有多少剩余堆时开始执行并发收集
-- -XX:+UseCMSCompactAtFullCollection 打开对年老代的压缩，可能会影响性能，但是可以消除碎片
-- -XX:CMSFullGCsBeforeCompaction 运行多少次GC以后对内存空间进行压缩、整理
+- -XX:CMSInitiatingOccupancyFraction=1G 指定还有多少剩余堆时开始执行Full GC
 
 #### G1 GC（-XX:UseG1GC）
 
