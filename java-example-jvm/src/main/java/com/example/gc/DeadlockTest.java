@@ -14,7 +14,7 @@ package com.example.gc;
  * "t2":
  *   waiting to lock monitor 0x000000001c4d0658 (object 0x000000076b5e7498, a java.lang.Object),
  *   which is held by "t3"
-
+ *
  * Java stack information for the threads listed above:
  * ===================================================
  * "t3":
