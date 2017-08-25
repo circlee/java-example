@@ -79,6 +79,7 @@ public class LambdaCollectorTest {
         // parallel 并行，默认是串行
         // 根据用户名称分组
         Map<String, List<User>> map = users.stream().parallel().collect(Collectors.groupingBy(User::getUsername));
+        map = users.parallelStream().collect(Collectors.groupingBy(User::getUsername));
         // 根据用户名称分组，然后再统计名称出现的次数
         Map<String, Long> map2 = users.stream().collect(Collectors.groupingBy(User::getUsername, Collectors.counting()));
         map2.forEach((k, v) -> System.out.println(String.format("%s ==>> %d", k, v)));
