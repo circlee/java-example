@@ -314,22 +314,19 @@ PretenureSizeThreshold参数只对Serial和ParNew两款收集器有效。
 
 ![serial-gc](serial-gc.jpg)
 
-- 年轻代、单线程、串行
-- 复制
+- 年轻代、单线程、串行、复制
 
 #### Serial Old GC
 
 ![serial-old-gc](serial-old-gc.jpg)
 
-- 年老代、单线程、串行
-- 复制-整理
+- 年老代、单线程、串行、标记-整理
 
 #### Parallel GC（-XX:+UseParallelGC）
 
 ![parallel-gc](parallel-gc.png)
 
-- 年轻代、多线程、并行
-- 复制
+- 年轻代、多线程、并行、复制
 - -XX:+UseParallelGC=3 设置并发线程数，可以设置与处理器数量相等
 - -XX:MaxGCPauseMillis=1000 大于0的毫秒值，最大的停顿时间
 - -XX:GCTimeRatio=99 大于0小于100的整数，控制吞吐量
@@ -338,21 +335,20 @@ PretenureSizeThreshold参数只对Serial和ParNew两款收集器有效。
 
 #### Parallel Old GC（-XX:+UseParallelOldGC）
 
-- 年老代、多线程、并行
-- mark-summary-compact 标记-整理
+- 年老代、多线程、并行、标记-整理
 
 #### ParNew GC（-XX:+UseParNewGC）
 
 ![par-new-gc](par-new-gc.jpg)
 
+- 年轻代、多线程、并行、复制
 - -XX:ParallelGCThreads 设置执行内存回收的线程数
 
 #### CMS GC（-XX:+UseConcMarkSweepGC）
 
 ![cms-gc](cms-gc.jpg)
 
-- 多线程并发
-- mark-sweep 标记-清理
+- 年老代、多线程、并发、标记-清除
 - Initial Mark 初始标记 --> Concurrent Mark 并发标记 --> Remark 重新标记 --> Concurrent Sweep 并发清理
 - -XX:+UseCMSCompactAtFullCollection 是否在Full GC后启动整理内存碎片
 - -XX:CMSFullGCsBeforeCompaction 运行多少次Full GC以后对内存空间进行整理
