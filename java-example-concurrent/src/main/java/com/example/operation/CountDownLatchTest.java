@@ -18,7 +18,7 @@ public class CountDownLatchTest {
         new Thread(waiter).start();
         new Thread(decrementer).start();
 
-        while (Thread.activeCount() > 0)
+        while (Thread.activeCount() > 1)
             Thread.yield();
     }
 

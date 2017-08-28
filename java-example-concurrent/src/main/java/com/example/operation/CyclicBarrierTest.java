@@ -11,7 +11,7 @@ import java.util.concurrent.CyclicBarrier;
 public class CyclicBarrierTest {
 
     public static void main(String[] args) throws Exception {
-        CyclicBarrier barrier = new CyclicBarrier(3);
+        CyclicBarrier barrier = new CyclicBarrier(2);
 
         Waiter waiter1 = new Waiter(barrier, "lily", 3000L);
         Waiter waiter2 = new Waiter(barrier, "lucy", 2000L);
@@ -19,7 +19,7 @@ public class CyclicBarrierTest {
         new Thread(waiter1).start();
         new Thread(waiter2).start();
 
-        while (Thread.activeCount() > 0)
+        while (Thread.activeCount() > 1)
             Thread.yield();
     }
 

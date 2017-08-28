@@ -14,7 +14,7 @@ public class ExchangerTest {
         new Thread(new Lily(exchanger, "apple")).start();
         new Thread(new Lucy(exchanger, "pear")).start();
 
-        while (Thread.activeCount() > 0)
+        while (Thread.activeCount() > 1)
             Thread.yield();
     }
 
