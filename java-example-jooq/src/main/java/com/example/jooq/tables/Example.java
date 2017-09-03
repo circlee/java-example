@@ -38,7 +38,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Example extends TableImpl<ExampleRecord> {
 
-    private static final long serialVersionUID = 663165547;
+    private static final long serialVersionUID = 916419686;
 
     /**
      * The reference instance of <code>schema.example</code>
@@ -61,67 +61,62 @@ public class Example extends TableImpl<ExampleRecord> {
     /**
      * The column <code>schema.example.name</code>. 名称
      */
-    public final TableField<ExampleRecord, String> NAME = createField("name", org.jooq.impl.SQLDataType.VARCHAR.length(100), this, "名称");
+    public final TableField<ExampleRecord, String> NAME = createField("name", org.jooq.impl.SQLDataType.VARCHAR.length(100).defaultValue(org.jooq.impl.DSL.inline("", org.jooq.impl.SQLDataType.VARCHAR)), this, "名称");
 
     /**
      * The column <code>schema.example.code</code>. 编码
      */
-    public final TableField<ExampleRecord, String> CODE = createField("code", org.jooq.impl.SQLDataType.VARCHAR.length(20).nullable(false), this, "编码");
+    public final TableField<ExampleRecord, String> CODE = createField("code", org.jooq.impl.SQLDataType.VARCHAR.length(20).defaultValue(org.jooq.impl.DSL.inline("", org.jooq.impl.SQLDataType.VARCHAR)), this, "编码");
 
     /**
      * The column <code>schema.example.state</code>. 状态
      */
-    public final TableField<ExampleRecord, String> STATE = createField("state", org.jooq.impl.SQLDataType.CHAR.length(1), this, "状态");
+    public final TableField<ExampleRecord, String> STATE = createField("state", org.jooq.impl.SQLDataType.CHAR.length(1).defaultValue(org.jooq.impl.DSL.inline("", org.jooq.impl.SQLDataType.CHAR)), this, "状态");
 
     /**
      * The column <code>schema.example.grade</code>. 等级
      */
-    public final TableField<ExampleRecord, Byte> GRADE = createField("grade", org.jooq.impl.SQLDataType.TINYINT, this, "等级");
+    public final TableField<ExampleRecord, Byte> GRADE = createField("grade", org.jooq.impl.SQLDataType.TINYINT.defaultValue(org.jooq.impl.DSL.inline("0", org.jooq.impl.SQLDataType.TINYINT)), this, "等级");
 
     /**
      * The column <code>schema.example.score</code>. 得分
      */
-    public final TableField<ExampleRecord, Integer> SCORE = createField("score", org.jooq.impl.SQLDataType.INTEGER, this, "得分");
+    public final TableField<ExampleRecord, Integer> SCORE = createField("score", org.jooq.impl.SQLDataType.INTEGER.defaultValue(org.jooq.impl.DSL.inline("0", org.jooq.impl.SQLDataType.INTEGER)), this, "得分");
 
     /**
      * The column <code>schema.example.price</code>. 价格
      */
-    public final TableField<ExampleRecord, BigDecimal> PRICE = createField("price", org.jooq.impl.SQLDataType.DECIMAL.precision(14, 2), this, "价格");
+    public final TableField<ExampleRecord, BigDecimal> PRICE = createField("price", org.jooq.impl.SQLDataType.DECIMAL.precision(14, 2).defaultValue(org.jooq.impl.DSL.inline("0.00", org.jooq.impl.SQLDataType.DECIMAL)), this, "价格");
 
     /**
-     * The column <code>schema.example.birth</code>.
+     * The column <code>schema.example.birth</code>. 生日
      */
-    public final TableField<ExampleRecord, Date> BIRTH = createField("birth", org.jooq.impl.SQLDataType.DATE, this, "");
+    public final TableField<ExampleRecord, Date> BIRTH = createField("birth", org.jooq.impl.SQLDataType.DATE, this, "生日");
 
     /**
-     * The column <code>schema.example.sleep</code>.
+     * The column <code>schema.example.sleep</code>. 睡眠
      */
-    public final TableField<ExampleRecord, Time> SLEEP = createField("sleep", org.jooq.impl.SQLDataType.TIME, this, "");
+    public final TableField<ExampleRecord, Time> SLEEP = createField("sleep", org.jooq.impl.SQLDataType.TIME, this, "睡眠");
 
     /**
      * The column <code>schema.example.createdDate</code>. 创建时间
      */
-    public final TableField<ExampleRecord, Timestamp> CREATEDDATE = createField("createdDate", org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false), this, "创建时间");
+    public final TableField<ExampleRecord, Timestamp> CREATEDDATE = createField("createdDate", org.jooq.impl.SQLDataType.TIMESTAMP.defaultValue(org.jooq.impl.DSL.inline("CURRENT_TIMESTAMP", org.jooq.impl.SQLDataType.TIMESTAMP)), this, "创建时间");
 
     /**
      * The column <code>schema.example.createdBy</code>. 创建人
      */
-    public final TableField<ExampleRecord, Long> CREATEDBY = createField("createdBy", org.jooq.impl.SQLDataType.BIGINT.nullable(false), this, "创建人");
+    public final TableField<ExampleRecord, Long> CREATEDBY = createField("createdBy", org.jooq.impl.SQLDataType.BIGINT.defaultValue(org.jooq.impl.DSL.inline("-1", org.jooq.impl.SQLDataType.BIGINT)), this, "创建人");
 
     /**
      * The column <code>schema.example.modifiedDate</code>. 最后修改时间
      */
-    public final TableField<ExampleRecord, Timestamp> MODIFIEDDATE = createField("modifiedDate", org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false), this, "最后修改时间");
+    public final TableField<ExampleRecord, Timestamp> MODIFIEDDATE = createField("modifiedDate", org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false).defaultValue(org.jooq.impl.DSL.inline("CURRENT_TIMESTAMP", org.jooq.impl.SQLDataType.TIMESTAMP)), this, "最后修改时间");
 
     /**
      * The column <code>schema.example.modifiedBy</code>. 操作人
      */
-    public final TableField<ExampleRecord, Long> MODIFIEDBY = createField("modifiedBy", org.jooq.impl.SQLDataType.BIGINT.nullable(false), this, "操作人");
-
-    /**
-     * The column <code>schema.example.version</code>.
-     */
-    public final TableField<ExampleRecord, Timestamp> VERSION = createField("version", org.jooq.impl.SQLDataType.TIMESTAMP, this, "");
+    public final TableField<ExampleRecord, Long> MODIFIEDBY = createField("modifiedBy", org.jooq.impl.SQLDataType.BIGINT.defaultValue(org.jooq.impl.DSL.inline("-1", org.jooq.impl.SQLDataType.BIGINT)), this, "操作人");
 
     /**
      * Create a <code>schema.example</code> table reference
