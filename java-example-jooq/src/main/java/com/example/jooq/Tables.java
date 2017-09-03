@@ -5,13 +5,12 @@ package com.example.jooq;
 
 
 import com.example.jooq.tables.Example;
-import com.example.jooq.tables.User;
 
 import javax.annotation.Generated;
 
 
 /**
- * Convenience access to all tables in test
+ * Convenience access to all tables in schema
  */
 @Generated(
     value = {
@@ -27,9 +26,4 @@ public class Tables {
      * 示例
      */
     public static final Example EXAMPLE = com.example.jooq.tables.Example.EXAMPLE;
-
-    /**
-     * The table <code>test.user</code>.
-     */
-    public static final User USER = com.example.jooq.tables.User.USER;
 }
