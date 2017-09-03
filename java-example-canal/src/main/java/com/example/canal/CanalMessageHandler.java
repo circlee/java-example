@@ -24,6 +24,7 @@ public class CanalMessageHandler extends Thread {
         while (true) {
             try {
                 connector.connect();
+                connector.subscribe(properties.getSubscribe());
                 doRun();
             } catch (CanalClientException e) {
                 e.printStackTrace();
@@ -52,15 +53,21 @@ public class CanalMessageHandler extends Thread {
                 }
                 continue;
             }
-            DefaultTransactionDefinition transactionDefinition = new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED);
-            TransactionStatus transactionStatus = transactionManager.getTransaction(transactionDefinition);
+
+            TransactionStatus transactionStatus = null;
+            if (transactionManager != null) {
+                DefaultTransactionDefinition transactionDefinition = new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRED);
+                transactionStatus = transactionManager.getTransaction(transactionDefinition);
+            }
             try {
                 handleMessage(message);
-                transactionManager.commit(transactionStatus);
+                if (transactionStatus != null)
+                    transactionManager.commit(transactionStatus);
                 connector.ack(message.getId());
             } catch (Exception e) {
                 e.printStackTrace();
-                transactionManager.rollback(transactionStatus);
+                if (transactionStatus != null)
+                    transactionManager.rollback(transactionStatus);
                 connector.rollback(message.getId());
             }
         }

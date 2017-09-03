@@ -7,6 +7,7 @@ public class CanalProperties {
     private String destination = "example";
     private String username = "";
     private String password = "";
+    private String subscribe = ".*\\..*";
     private Long reconnectMillis = 6000L;
 
     public String getHost() {
@@ -47,6 +48,14 @@ public class CanalProperties {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getSubscribe() {
+        return subscribe;
+    }
+
+    public void setSubscribe(String subscribe) {
+        this.subscribe = subscribe;
     }
 
     public Long getReconnectMillis() {
