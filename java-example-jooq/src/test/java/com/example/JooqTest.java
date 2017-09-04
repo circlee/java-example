@@ -1,10 +1,10 @@
 package com.example;
 
-import com.example.jooq.Tables;
-import com.example.jooq.tables.records.UserRecord;
+import com.example.jooq.Schema;
+import com.example.jooq.tables.Example;
+import com.example.jooq.tables.records.ExampleRecord;
 import org.jooq.DSLContext;
 import org.jooq.Record;
-import org.jooq.Result;
 import org.jooq.SQLDialect;
 import org.jooq.impl.DSL;
 import org.junit.Test;
@@ -24,12 +24,13 @@ public class JooqTest {
         try (Connection conn = DriverManager.getConnection(mysqlUrl, mysqlUser, mysqlPassword)) {
             DSLContext dsl = DSL.using(conn, SQLDialect.MYSQL);
 
-            Result<Record> result = dsl.select().from(Tables.USER).fetch();
-            for (Record record : result) {
-                Long id = record.getValue(Tables.USER.ID);
-                String account = record.getValue(Tables.USER.ACCOUNT);
-                String password = record.getValue(Tables.USER.PASSWORD);
-                System.out.println(String.format("id=%s account=%s password=%s", id, account, password));
+            Example EXAMPLE = Schema.SCHEMA.EXAMPLE;
+            List<Record> records = dsl.select().from(EXAMPLE).fetch();
+            for (Record record : records) {
+                Long id = record.getValue(EXAMPLE.ID);
+                String code = record.getValue(EXAMPLE.CODE);
+                String name = record.getValue(EXAMPLE.NAME);
+                System.out.println(String.format("id=%s code=%s name=%s", id, code, name));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -41,12 +42,13 @@ public class JooqTest {
         try (Connection conn = DriverManager.getConnection(mysqlUrl, mysqlUser, mysqlPassword)) {
             DSLContext dsl = DSL.using(conn, SQLDialect.MYSQL);
 
-            List<UserRecord> users = dsl.select().from(Tables.USER).fetchInto(Tables.USER);
-            for (UserRecord user : users) {
-                Long id = user.getId();
-                String account = user.getAccount();
-                String password = user.getPassword();
-                System.out.println(String.format("id=%s account=%s password=%s", id, account, password));
+            Example EXAMPLE = Schema.SCHEMA.EXAMPLE;
+            List<ExampleRecord> records = dsl.select().from(EXAMPLE).fetchInto(EXAMPLE);
+            for (ExampleRecord record : records) {
+                Long id = record.getId();
+                String code = record.getCode();
+                String name = record.getName();
+                System.out.println(String.format("id=%s code=%s name=%s", id, code, name));
             }
         } catch (Exception e) {
             e.printStackTrace();
