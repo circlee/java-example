@@ -1,7 +1,10 @@
 package com.example.quartz;
 
 import org.quartz.*;
+import org.quartz.impl.matchers.GroupMatcher;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class QuartzManager {
@@ -432,6 +435,119 @@ public class QuartzManager {
         }
     }
 
+    /**
+     * 获取Job
+     *
+     * @param jobName  任务名
+     * @param jobGroup 任务组
+     * @return
+     */
+    public JobDetail getJob(String jobName, String jobGroup) {
+        try {
+            JobKey jobKey = JobKey.jobKey(jobName, jobGroup);
+            return scheduler.getJobDetail(jobKey);
+        } catch (SchedulerException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * 获取所有Job
+     *
+     * @return
+     */
+    public List<JobDetail> listJob() {
+        try {
+            List<JobDetail> jobDetails = new ArrayList<>();
+            for (String jobGroup : scheduler.getJobGroupNames()) {
+                for (JobKey jobKey : scheduler.getJobKeys(GroupMatcher.jobGroupEquals(jobGroup))) {
+                    JobDetail jobDetail = scheduler.getJobDetail(jobKey);
+                    if (jobDetail != null)
+                        jobDetails.add(jobDetail);
+                }
+            }
+            return jobDetails;
+        } catch (SchedulerException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+    /**
+     * 获取触发器
+     *
+     * @param jobName  任务名
+     * @param jobGroup 任务组
+     * @return
+     */
+    public Trigger getTrigger(String jobName, String jobGroup) {
+        try {
+            String triggerName = "TRIGGER-" + jobName;
+            String triggerGroup = "TRIGGER-GROUP-" + jobGroup;
+            TriggerKey triggerKey = TriggerKey.triggerKey(triggerName, triggerGroup);
+            return scheduler.getTrigger(triggerKey);
+        } catch (SchedulerException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * 获取触发器
+     *
+     * @param jobName      任务名
+     * @param jobGroup     任务组
+     * @param triggerName  触发器名
+     * @param triggerGroup 触发器组
+     * @return
+     */
+    public Trigger getTrigger(String jobName, String jobGroup, String triggerName, String triggerGroup) {
+        try {
+            TriggerKey triggerKey = TriggerKey.triggerKey(triggerName, triggerGroup);
+            return scheduler.getTrigger(triggerKey);
+        } catch (SchedulerException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * 获取触发器
+     *
+     * @param jobKey
+     * @return
+     */
+    public List<? extends Trigger> listTrigger(JobKey jobKey) {
+        try {
+            return scheduler.getTriggersOfJob(jobKey);
+        } catch (SchedulerException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+    /**
+     * 获取所有触发器
+     *
+     * @return
+     */
+    public List<? extends Trigger> listTrigger() {
+        try {
+            List<Trigger> triggers = new ArrayList<>();
+            for (String triggerGroup : scheduler.getTriggerGroupNames()) {
+                for (TriggerKey triggerKey : scheduler.getTriggerKeys(GroupMatcher.triggerGroupEquals(triggerGroup))) {
+                    Trigger trigger = scheduler.getTrigger(triggerKey);
+                    if (trigger != null)
+                        triggers.add(trigger);
+                }
+            }
+            return triggers;
+        } catch (SchedulerException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
 
     /**
      * 移除任务
