@@ -55,4 +55,22 @@ public class JooqTest {
         }
     }
 
+    @Test
+    public void test3() throws Exception {
+        try (Connection conn = DriverManager.getConnection(mysqlUrl, mysqlUser, mysqlPassword)) {
+            DSLContext dsl = DSL.using(conn, SQLDialect.MYSQL);
+
+            Example EXAMPLE = Schema.SCHEMA.EXAMPLE;
+            List<Record> records = dsl.select().from(EXAMPLE).fetch();
+            for (Record record : records) {
+                Long id = record.getValue(EXAMPLE.ID);
+                String code = record.getValue(EXAMPLE.CODE);
+                String name = record.getValue(EXAMPLE.NAME);
+                System.out.println(String.format("id=%s code=%s name=%s", id, code, name));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }
