@@ -10,6 +10,7 @@
 
     <modules>
         <module>java-example-activemq</module>
+        <module>java-example-assembly</module>
         <module>java-example-beanutils</module>
         <module>java-example-canal</module>
         <module>java-example-concurrent</module>
