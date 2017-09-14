@@ -33,185 +33,185 @@ import org.jooq.impl.UpdatableRecordImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class ExampleRecord extends UpdatableRecordImpl<ExampleRecord> implements Record13<Long, String, String, String, Byte, Integer, BigDecimal, Date, Time, Timestamp, Long, Timestamp, Long> {
 
-    private static final long serialVersionUID = 217753160;
+    private static final long serialVersionUID = 1242821672;
 
     /**
-     * Setter for <code>schema.example.id</code>. Id
+     * Setter for <code>test.example.id</code>. Id
      */
     public void setId(Long value) {
         set(0, value);
     }
 
     /**
-     * Getter for <code>schema.example.id</code>. Id
+     * Getter for <code>test.example.id</code>. Id
      */
     public Long getId() {
         return (Long) get(0);
     }
 
     /**
-     * Setter for <code>schema.example.name</code>. 名称
+     * Setter for <code>test.example.name</code>. 名称
      */
     public void setName(String value) {
         set(1, value);
     }
 
     /**
-     * Getter for <code>schema.example.name</code>. 名称
+     * Getter for <code>test.example.name</code>. 名称
      */
     public String getName() {
         return (String) get(1);
     }
 
     /**
-     * Setter for <code>schema.example.code</code>. 编码
+     * Setter for <code>test.example.code</code>. 编码
      */
     public void setCode(String value) {
         set(2, value);
     }
 
     /**
-     * Getter for <code>schema.example.code</code>. 编码
+     * Getter for <code>test.example.code</code>. 编码
      */
     public String getCode() {
         return (String) get(2);
     }
 
     /**
-     * Setter for <code>schema.example.state</code>. 状态
+     * Setter for <code>test.example.state</code>. 状态
      */
     public void setState(String value) {
         set(3, value);
     }
 
     /**
-     * Getter for <code>schema.example.state</code>. 状态
+     * Getter for <code>test.example.state</code>. 状态
      */
     public String getState() {
         return (String) get(3);
     }
 
     /**
-     * Setter for <code>schema.example.grade</code>. 等级
+     * Setter for <code>test.example.grade</code>. 等级
      */
     public void setGrade(Byte value) {
         set(4, value);
     }
 
     /**
-     * Getter for <code>schema.example.grade</code>. 等级
+     * Getter for <code>test.example.grade</code>. 等级
      */
     public Byte getGrade() {
         return (Byte) get(4);
     }
 
     /**
-     * Setter for <code>schema.example.score</code>. 得分
+     * Setter for <code>test.example.score</code>. 得分
      */
     public void setScore(Integer value) {
         set(5, value);
     }
 
     /**
-     * Getter for <code>schema.example.score</code>. 得分
+     * Getter for <code>test.example.score</code>. 得分
      */
     public Integer getScore() {
         return (Integer) get(5);
     }
 
     /**
-     * Setter for <code>schema.example.price</code>. 价格
+     * Setter for <code>test.example.price</code>. 价格
      */
     public void setPrice(BigDecimal value) {
         set(6, value);
     }
 
     /**
-     * Getter for <code>schema.example.price</code>. 价格
+     * Getter for <code>test.example.price</code>. 价格
      */
     public BigDecimal getPrice() {
         return (BigDecimal) get(6);
     }
 
     /**
-     * Setter for <code>schema.example.birth</code>. 生日
+     * Setter for <code>test.example.birth</code>. 生日
      */
     public void setBirth(Date value) {
         set(7, value);
     }
 
     /**
-     * Getter for <code>schema.example.birth</code>. 生日
+     * Getter for <code>test.example.birth</code>. 生日
      */
     public Date getBirth() {
         return (Date) get(7);
     }
 
     /**
-     * Setter for <code>schema.example.sleep</code>. 睡眠
+     * Setter for <code>test.example.sleep</code>. 睡眠
      */
     public void setSleep(Time value) {
         set(8, value);
     }
 
     /**
-     * Getter for <code>schema.example.sleep</code>. 睡眠
+     * Getter for <code>test.example.sleep</code>. 睡眠
      */
     public Time getSleep() {
         return (Time) get(8);
     }
 
     /**
-     * Setter for <code>schema.example.createdDate</code>. 创建时间
+     * Setter for <code>test.example.createdDate</code>. 创建时间
      */
     public void setCreateddate(Timestamp value) {
         set(9, value);
     }
 
     /**
-     * Getter for <code>schema.example.createdDate</code>. 创建时间
+     * Getter for <code>test.example.createdDate</code>. 创建时间
      */
     public Timestamp getCreateddate() {
         return (Timestamp) get(9);
     }
 
     /**
-     * Setter for <code>schema.example.createdBy</code>. 创建人
+     * Setter for <code>test.example.createdBy</code>. 创建人
      */
     public void setCreatedby(Long value) {
         set(10, value);
     }
 
     /**
-     * Getter for <code>schema.example.createdBy</code>. 创建人
+     * Getter for <code>test.example.createdBy</code>. 创建人
      */
     public Long getCreatedby() {
         return (Long) get(10);
     }
 
     /**
-     * Setter for <code>schema.example.modifiedDate</code>. 最后修改时间
+     * Setter for <code>test.example.modifiedDate</code>. 最后修改时间
      */
     public void setModifieddate(Timestamp value) {
         set(11, value);
     }
 
     /**
-     * Getter for <code>schema.example.modifiedDate</code>. 最后修改时间
+     * Getter for <code>test.example.modifiedDate</code>. 最后修改时间
      */
     public Timestamp getModifieddate() {
         return (Timestamp) get(11);
     }
 
     /**
-     * Setter for <code>schema.example.modifiedBy</code>. 操作人
+     * Setter for <code>test.example.modifiedBy</code>. 操作人
      */
     public void setModifiedby(Long value) {
         set(12, value);
     }
 
     /**
-     * Getter for <code>schema.example.modifiedBy</code>. 操作人
+     * Getter for <code>test.example.modifiedBy</code>. 操作人
      */
     public Long getModifiedby() {
         return (Long) get(12);

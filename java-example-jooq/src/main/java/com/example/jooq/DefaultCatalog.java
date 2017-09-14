@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.annotation.Generated;
 
+import org.jooq.Schema;
 import org.jooq.impl.CatalogImpl;
 
 
@@ -26,7 +27,7 @@ import org.jooq.impl.CatalogImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class DefaultCatalog extends CatalogImpl {
 
-    private static final long serialVersionUID = -1158780125;
+    private static final long serialVersionUID = -2088303623;
 
     /**
      * The reference instance of <code></code>
@@ -34,9 +35,9 @@ public class DefaultCatalog extends CatalogImpl {
     public static final DefaultCatalog DEFAULT_CATALOG = new DefaultCatalog();
 
     /**
-     * The schema <code>schema</code>.
+     * The schema <code>test</code>.
      */
-    public final Schema SCHEMA = com.example.jooq.Schema.SCHEMA;
+    public final Test TEST = com.example.jooq.Test.TEST;
 
     /**
      * No further instances allowed
@@ -46,14 +47,14 @@ public class DefaultCatalog extends CatalogImpl {
     }
 
     @Override
-    public final List<org.jooq.Schema> getSchemas() {
+    public final List<Schema> getSchemas() {
         List result = new ArrayList();
         result.addAll(getSchemas0());
         return result;
     }
 
-    private final List<org.jooq.Schema> getSchemas0() {
-        return Arrays.<org.jooq.Schema>asList(
-            Schema.SCHEMA);
+    private final List<Schema> getSchemas0() {
+        return Arrays.<Schema>asList(
+            Test.TEST);
     }
 }

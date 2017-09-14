@@ -15,7 +15,7 @@ import org.jooq.impl.AbstractKeys;
 
 
 /**
- * A class modelling foreign key relationships between tables of the <code>schema</code> 
+ * A class modelling foreign key relationships between tables of the <code>test</code> 
  * schema
  */
 @Generated(

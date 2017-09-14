@@ -78,7 +78,7 @@
                             <includes>example</includes>
                             <excludes></excludes>
                             <inputSchema>test</inputSchema>
-                            <outputSchema>schema</outputSchema>
+                            <outputSchema>test</outputSchema>
                         </database>
                         <target>
                             <packageName>com.example.jooq</packageName>

@@ -10,7 +10,7 @@ import javax.annotation.Generated;
 
 
 /**
- * Convenience access to all tables in schema
+ * Convenience access to all tables in test
  */
 @Generated(
     value = {
