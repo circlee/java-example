@@ -1,6 +1,5 @@
 package com.example;
 
-import com.example.jooq.Schema;
 import com.example.jooq.tables.Example;
 import com.example.jooq.tables.records.ExampleRecord;
 import org.jooq.DSLContext;
@@ -24,7 +23,7 @@ public class JooqTest {
         try (Connection conn = DriverManager.getConnection(mysqlUrl, mysqlUser, mysqlPassword)) {
             DSLContext dsl = DSL.using(conn, SQLDialect.MYSQL);
 
-            Example EXAMPLE = Schema.SCHEMA.EXAMPLE;
+            Example EXAMPLE = Example.EXAMPLE;
             List<Record> records = dsl.select().from(EXAMPLE).fetch();
             for (Record record : records) {
                 Long id = record.getValue(EXAMPLE.ID);
@@ -42,7 +41,7 @@ public class JooqTest {
         try (Connection conn = DriverManager.getConnection(mysqlUrl, mysqlUser, mysqlPassword)) {
             DSLContext dsl = DSL.using(conn, SQLDialect.MYSQL);
 
-            Example EXAMPLE = Schema.SCHEMA.EXAMPLE;
+            Example EXAMPLE = Example.EXAMPLE;
             List<ExampleRecord> records = dsl.select().from(EXAMPLE).fetchInto(EXAMPLE);
             for (ExampleRecord record : records) {
                 Long id = record.getId();
@@ -60,7 +59,7 @@ public class JooqTest {
         try (Connection conn = DriverManager.getConnection(mysqlUrl, mysqlUser, mysqlPassword)) {
             DSLContext dsl = DSL.using(conn, SQLDialect.MYSQL);
 
-            Example EXAMPLE = Schema.SCHEMA.EXAMPLE;
+            Example EXAMPLE = Example.EXAMPLE;
             List<Record> records = dsl.select().from(EXAMPLE).fetch();
             for (Record record : records) {
                 Long id = record.getValue(EXAMPLE.ID);
@@ -68,6 +67,23 @@ public class JooqTest {
                 String name = record.getValue(EXAMPLE.NAME);
                 System.out.println(String.format("id=%s code=%s name=%s", id, code, name));
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void test4() throws Exception {
+        try (Connection conn = DriverManager.getConnection(mysqlUrl, mysqlUser, mysqlPassword)) {
+            DSLContext dsl = DSL.using(conn, SQLDialect.MYSQL);
+
+            Example EXAMPLE = Example.EXAMPLE;
+            ExampleRecord example = dsl.newRecord(EXAMPLE);
+            example.setName("AAA");
+            // example.setCode("bbb");
+            dsl.update(EXAMPLE)
+                    .set(example)
+                    .execute();
         } catch (Exception e) {
             e.printStackTrace();
         }
