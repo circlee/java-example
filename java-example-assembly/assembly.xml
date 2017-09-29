@@ -10,6 +10,7 @@
         <dependencySet>
             <outputDirectory>/</outputDirectory>
             <useProjectArtifact>true</useProjectArtifact>
+            <useTransitiveDependencies>false</useTransitiveDependencies>
             <unpack>true</unpack>
             <scope>runtime</scope>
             <excludes>
