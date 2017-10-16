@@ -15,6 +15,7 @@
         <module>java-example-canal</module>
         <module>java-example-concurrent</module>
 		<module>java-example-easemob</module>
+		<module>java-example-flume</module>
         <module>java-example-jackson</module>
         <module>java-example-jooq</module>
         <module>java-example-jvm</module>
