@@ -495,6 +495,105 @@ o1 = null; // 这时o1指向的那个对象回收了吗？没有，因为它还�
 o2 = null; // 这样才能回收
 ```
 
+## JStat
+
+[JVM调优前戏之JDK命令行工具---jstat](http://lousama.com/2016/01/20/jdk命令行工具详解-jstat)
+
+```shell
+# 监视虚拟机运行时状态信息
+# option  操作参数
+# vmid  本地虚拟机进程ID
+# interval  连续输出的时间间隔
+# count  连续输出的次数
+jstat -<option> <vmid> [<interval> [<count>]]
+```
+
+```shell
+# 监视类装载、卸载数量、总空间以及耗费的时间
+# Loaded  加载 Class 的数量
+# Bytes  Class 字节大小
+# Unloaded  未加载 Class 的数量
+# Bytes  未加载 Class 的字节大小
+# Time  加载时间
+jstat -class 8282
+```
+
+```shell
+# 输出 JIT 编译过的方法数量耗时等
+# Compiled  编译数量
+# Failed  编译失败数量
+# Invalid  无效数量
+# Time  编译耗时
+# FailedType  失败类型
+# FailedMethod  失败方法的全限定名
+jstat -compiler 8282
+```
+
+```shell
+# 输出已被 JIT 编译的方法
+# Compiled  最近被JIT编译的方法数量
+# Size  最近被JIT编译方法的字节码数量
+# Type  最近被编译的编译类型
+# Method  方法的去按限定名
+jstat -printcompilation 8282
+```
+
+```shell
+# 监视 Java 堆以及 GC 的状况
+# C 即 Capacity 总容量、U 即 Used 已使用的容量
+# S0C  Survivor0区的总容量
+# S1C  Survivor1区的总容量
+# S0U  Survivor0区已使用的容量
+# S1U  Survivor1区已使用的容量
+# EC  Eden区的总容量
+# EU  Eden区已使用的容量
+# OC  Old区的总容量
+# OU  Old区已使用的容量
+# MC  元空间(JDK8之前的永久代)的总容量
+# MU  元空间已使用的容量
+# CCSC  压缩类空间总容量
+# CCSU  压缩类空间已使用的容量
+# YGC  新生代垃圾回收次数
+# YGCT  新生代垃圾回收时间
+# FGC  老年代垃圾回收次数
+# FGCT  老年代垃圾回收时间
+# GCT  垃圾回收总消耗时间
+jstat -gc 8282
+```
+
+```shell
+# 同 -gc，不过还会输出 Java 堆各区域使用到的最大、最小空间
+# NGCMN  新生代占用的最小空间
+# NGCMX  新生代占用的最大空间
+# OGCMN  老年代占用的最小空间
+# OGCMX  老年代占用的最大空间
+# MCMN  元空间占用的最小空间
+# MCMX  元空间占用的最大空间
+# CCSMN  压缩类占用的最小空间
+# CCSMX  压缩类占用的最大空间
+jstat -gccapacity 8282
+```
+
+```shell
+# 同 -gc，不过输出的是已使用空间占总空间的百分比
+jstat -gcutil 8282
+```
+
+```shell
+# 监视新生代 GC 状况 / 输出最大最小空间
+# TT  老年化阈值
+# MTT  最大老年化阈值
+# DSS 幸存者区所需空间大小
+jstat -gcnew 8282
+jstat -gcnewcapcacity 8282
+```
+
+```shell
+# 监视老年代 GC 状况 / 输出最大最小空间
+jstat -gcold 8282
+jstat -gcoldcapacity 8282
+```
+
 ## JVisualVM 
 
 #### Java VisualVM 插件中心
