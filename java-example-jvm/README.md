@@ -391,94 +391,47 @@ Type                    | Young       | Old/Perm
 - -XX:+PrintHeapAtGC 在进行GC的前后打印出堆的信息
 - -Xloggc=d://gc.log GC日志默认输出到终端，也可以输出到指定文件
 
+输出回收前后大小变化，以及回收耗时
+
 ```shell
+# Young GC  DefNew 年轻代
+# Full GC  Tenured 年老代、Perm 永久代
 java -Xms20M -Xmx20M -Xmn10M -XX:+PrintGC -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+UseSerialGC GCTest
-# GC 时间戳: [GC 时间戳: [年轻代: 回收前大小->回收后大小(总大小), 回收耗时 secs] 堆回收前大小->堆回收后大小(堆总大小), 回收耗时 secs] [Times: user=各CPU总耗时 sys=回收器自身行为耗时, real=本次GC实际耗时 secs]
-2017-07-13T21:57:03.110+0800: [GC2017-07-13T21:57:03.110+0800: [DefNew: 6635K->213K(9216K), 0.0031640 secs] 6635K->6357K(19456K), 0.0032120 secs] [Times: user=0.01 sys=0.00, real=0.00 secs] 
-# GC 时间戳: [Full GC 时间戳: [年老代: 回收前大小->回收后大小(总大小), 回收耗时 secs] 堆回收前大小->堆回收后大小(堆总大小), [永久代 : 回收前大小->回收后大小(总大小)], 回收耗时 secs] [Times: user=各CPU总耗时 sys=回收器自身行为耗时, real=本次GC实际耗时 secs]
-2017-07-13T21:57:03.114+0800: [Full GC2017-07-13T21:57:03.114+0800: [Tenured: 6144K->6144K(10240K), 0.0036330 secs] 10623K->10451K(19456K), [Perm : 2424K->2424K(21248K)], 0.0037000 secs] [Times: user=0.00 sys=0.00, real=0.00 secs]
 ```
 
 ```shell
+# Young GC  ParNew 年轻代
+# Full GC  Tenured 年老代、Perm 永久代
 java -Xms20M -Xmx20M -Xmn10M -XX:+PrintGC -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+UseParNewGC GCTest
-# GC 时间戳: [GC 时间戳: [年轻代: 回收前大小->回收后大小(总大小), 回收耗时 secs] 堆回收前大小->堆回收后大小(堆总大小), 回收耗时 secs] [Times: user=各CPU总耗时 sys=回收器自身行为耗时, real=本次GC实际耗时 secs]
-2017-07-13T22:19:12.108+0800: [GC2017-07-13T22:19:12.108+0800: [ParNew: 6635K->220K(9216K), 0.0040620 secs] 6635K->6364K(19456K), 0.0041120 secs] [Times: user=0.01 sys=0.00, real=0.01 secs] 
-# GC 时间戳: [Full GC 时间戳: [年老代: 回收前大小->回收后大小(总大小), 回收耗时 secs] 堆回收前大小->堆回收后大小(堆总大小), [永久代 : 回收前大小->回收后大小(总大小)], 回收耗时 secs] [Times: user=各CPU总耗时 sys=回收器自身行为耗时, real=本次GC实际耗时 secs]
-2017-07-13T22:19:12.113+0800: [Full GC2017-07-13T22:19:12.113+0800: [Tenured: 6144K->6144K(10240K), 0.0029180 secs] 10630K->10451K(19456K), [Perm : 2424K->2424K(21248K)], 0.0029650 secs] [Times: user=0.00 sys=0.00, real=0.00 secs]
 ```
 
 ```shell
+# Young GC  PSYoungGen 年轻代
+# Full GC  PSYoungGen 年轻代、ParOldGen 年老代、PSPermGen 永久代
 java -Xms20M -Xmx20M -Xmn10M -XX:+PrintGC -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+UseParallelGC GCTest
-# GC 时间戳: [GC-- [年轻代: 回收前大小->回收后大小(总大小)] 堆回收前大小->堆回收后大小(堆总大小), 回收耗时 secs] [Times: user=各CPU总耗时 sys=回收器自身行为耗时, real=本次GC实际耗时 secs]
-2017-07-13T21:27:32.812+0800: [GC-- [PSYoungGen: 6635K->6635K(9216K)] 10731K->14827K(19456K), 0.0029970 secs] [Times: user=0.00 sys=0.00, real=0.00 secs] 
-# GC 时间戳: [Full GC [年轻代: 回收前大小->回收后大小(总大小)] [年老代: 回收前大小->回收后大小(总大小)] 堆回收前大小->堆回收后大小(堆总大小) [永久代: 回收前大小->回收后大小(总大小)], 回收耗时 secs] [Times: user=各CPU总耗时 sys=回收器自身行为耗时, real=本次GC实际耗时 secs]
-2017-07-13T21:27:32.815+0800: [Full GC [PSYoungGen: 6635K->2260K(9216K)] [ParOldGen: 8192K->8192K(10240K)] 14827K->10452K(19456K) [PSPermGen: 2424K->2423K(21504K)], 0.0094280 secs] [Times: user=0.01 sys=0.00, real=0.01 secs]
 ```
 
 ```shell
+# Young GC  ParNew 年轻代
+# Full GC  CMS 年老代、CMS Perm 永久代
+# CMS-initial-mark 初始标记 暂停所有
+# CMS-concurrent-mark 并发标记
+# CMS-concurrent-preclean
+# CMS-concurrent-abortable-preclean
+# CMS-remark 重新标记 暂停所有
+# CMS-concurrent-sweep 并发清理
 java -Xms20M -Xmx20M -Xmn10M -XX:+PrintGC -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+UseConcMarkSweepGC GCTest
-# GC 时间戳: [GC 时间戳: [年轻代: 回收前大小->回收后大小(总大小), 回收耗时 secs] 堆回收前大小->堆回收后大小(堆总大小), 回收耗时 secs] [Times: user=各CPU总耗时 sys=回收器自身行为耗时, real=本次GC实际耗时 secs]
-2017-07-13T22:26:52.295+0800: [GC2017-07-13T22:26:52.295+0800: [ParNew: 6635K->217K(9216K), 0.0031860 secs] 6635K->6363K(19456K), 0.0032650 secs] [Times: user=0.01 sys=0.00, real=0.01 secs] 
-# GC 时间戳: [Full GC 时间戳: [年老代: 回收前大小->回收后大小(总大小), 回收耗时 secs] 堆回收前大小->堆回收后大小(堆总大小), [永久代 : 回收前大小->回收后大小(总大小)], 0.0063380 secs] [Times: user=各CPU总耗时 sys=回收器自身行为耗时, real=本次GC实际耗时 secs]
-2017-07-13T22:26:52.300+0800: [Full GC2017-07-13T22:26:52.300+0800: [CMS: 6146K->6144K(10240K), 0.0062630 secs] 10629K->10452K(19456K), [CMS Perm : 2425K->2424K(21248K)], 0.0063380 secs] [Times: user=0.01 sys=0.00, real=0.00 secs] 
-# 初始标记 暂停所有
-2017-07-13T22:26:52.307+0800: [GC [1 CMS-initial-mark: 6144K(10240K)] 10452K(19456K), 0.0003770 secs] [Times: user=0.00 sys=0.00, real=0.00 secs] 
-# 并发标记 
-2017-07-13T22:26:52.310+0800: [CMS-concurrent-mark: 0.002/0.002 secs] [Times: user=0.00 sys=0.00, real=0.01 secs] 
-# 并发预清理
-2017-07-13T22:26:52.311+0800: [CMS-concurrent-preclean: 0.001/0.001 secs] [Times: user=0.00 sys=0.00, real=0.00 secs] 
-# 并发预清理2
-2017-07-13T22:26:52.311+0800: [CMS-concurrent-abortable-preclean: 0.000/0.000 secs] [Times: user=0.00 sys=0.00, real=0.00 secs] 
-# 重新标记 暂停所有
-2017-07-13T22:26:52.311+0800: [GC[YG occupancy: 4390 K (9216 K)]2017-07-13T22:26:52.311+0800: [Rescan (parallel) , 0.0005310 secs]2017-07-13T22:26:52.312+0800: [weak refs processing, 0.0000250 secs]2017-07-13T22:26:52.312+0800: [scrub string table, 0.0001290 secs] [1 CMS-remark: 6144K(10240K)] 10534K(19456K), 0.0007730 secs] [Times: user=0.00 sys=0.00, real=0.00 secs] 
-# 并发清理
-2017-07-13T22:26:52.312+0800: [CMS-concurrent-sweep: 0.000/0.000 secs] [Times: user=0.00 sys=0.00, real=0.00 secs]
 ```
 
 ```shell
+# pause young initial-mark
+# concurrent-root-region-scan-start
+# concurrent-root-region-scan-end
+# concurrent-mark-start
+# concurrent-mark-end
+# remark
+# concurrent-mark-abort
 java -Xms20M -Xmx20M -Xmn10M -XX:+PrintGC -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+UseG1GC GCTest
-2017-07-21T01:34:15.998+0800: [GC pause (G1 Humongous Allocation) (young) (initial-mark), 0.0013323 secs]
-   [Parallel Time: 1.0 ms, GC Workers: 2]
-      [GC Worker Start (ms): Min: 65.7, Avg: 65.9, Max: 66.1, Diff: 0.4]
-      [Ext Root Scanning (ms): Min: 0.0, Avg: 0.5, Max: 0.9, Diff: 0.9, Sum: 0.9]
-      [Update RS (ms): Min: 0.0, Avg: 0.0, Max: 0.0, Diff: 0.0, Sum: 0.0]
-         [Processed Buffers: Min: 0, Avg: 0.0, Max: 0, Diff: 0, Sum: 0]
-      [Scan RS (ms): Min: 0.0, Avg: 0.0, Max: 0.0, Diff: 0.0, Sum: 0.0]
-      [Code Root Scanning (ms): Min: 0.0, Avg: 0.0, Max: 0.0, Diff: 0.0, Sum: 0.0]
-      [Object Copy (ms): Min: 0.1, Avg: 0.2, Max: 0.3, Diff: 0.3, Sum: 0.4]
-      [Termination (ms): Min: 0.0, Avg: 0.1, Max: 0.3, Diff: 0.3, Sum: 0.3]
-         [Termination Attempts: Min: 1, Avg: 1.0, Max: 1, Diff: 0, Sum: 2]
-      [GC Worker Other (ms): Min: 0.0, Avg: 0.0, Max: 0.0, Diff: 0.0, Sum: 0.0]
-      [GC Worker Total (ms): Min: 0.6, Avg: 0.8, Max: 1.0, Diff: 0.4, Sum: 1.6]
-      [GC Worker End (ms): Min: 66.7, Avg: 66.7, Max: 66.7, Diff: 0.0]
-   [Code Root Fixup: 0.0 ms]
-   [Code Root Purge: 0.0 ms]
-   [Clear CT: 0.0 ms]
-   [Other: 0.3 ms]
-      [Choose CSet: 0.0 ms]
-      [Ref Proc: 0.2 ms]
-      [Ref Enq: 0.0 ms]
-      [Redirty Cards: 0.0 ms]
-      [Humongous Register: 0.0 ms]
-      [Humongous Reclaim: 0.0 ms]
-      [Free CSet: 0.0 ms]
-   [Eden: 1024.0K(10.0M)->0.0B(9216.0K) Survivors: 0.0B->1024.0K Heap: 6774.6K(20.0M)->6480.1K(20.0M)]
- [Times: user=0.00 sys=0.00, real=0.00 secs] 
-2017-07-21T01:34:16.000+0800: [GC concurrent-root-region-scan-start]
-2017-07-21T01:34:16.001+0800: [GC concurrent-root-region-scan-end, 0.0008980 secs]
-2017-07-21T01:34:16.001+0800: [GC concurrent-mark-start]
-2017-07-21T01:34:16.001+0800: [GC concurrent-mark-end, 0.0001357 secs]
-2017-07-21T01:34:16.001+0800: [Full GC (System.gc())  10M->10M(20M), 0.0144130 secs]
-   [Eden: 1024.0K(9216.0K)->0.0B(10.0M) Survivors: 1024.0K->0.0B Heap: 10.5M(20.0M)->10.2M(20.0M)], [Metaspace: 2478K->2478K(1056768K)]
- [Times: user=0.00 sys=0.01, real=0.02 secs] 
-2017-07-21T01:34:16.016+0800: [GC remark, 0.0000353 secs]
- [Times: user=0.00 sys=0.00, real=0.00 secs] 
-2017-07-21T01:34:16.017+0800: [GC concurrent-mark-abort]
-Heap
- garbage-first heap   total 20480K, used 10494K [0x00000000fec00000, 0x00000000fed000a0, 0x0000000100000000)
-  region size 1024K, 1 young (1024K), 0 survivors (0K)
- Metaspace       used 2484K, capacity 4486K, committed 4864K, reserved 1056768K
-  class space    used 267K, capacity 386K, committed 512K, reserved 1048576K
 ```
 
 ## 内存泄漏
@@ -496,8 +449,6 @@ o2 = null; // 这样才能回收
 ```
 
 ## JStat
-
-[JVM调优前戏之JDK命令行工具---jstat](http://lousama.com/2016/01/20/jdk命令行工具详解-jstat)
 
 ```shell
 # 监视虚拟机运行时状态信息
