@@ -219,7 +219,6 @@ public class MyClassLoaderTest {
 - -XX:NewRatio=3 设置Young与Old的比例，如为3，表示Young:Old=1:3
 - -XX:SurvivorRatio=3 设置Survivor与Eden的比例，如为3，表示From:To:Eden=1:1:3
 
-
 ## JVM 垃圾回收
 
 ### JVM 内存分配策略
@@ -454,12 +453,12 @@ o2 = null; // 这样才能回收
 
 ### jstat
 
-FULL GC 的次数其实是暂停次数
+FULL GC的次数其实是暂停次数
 
 ```shell
 # 监视虚拟机运行时状态信息
 # option  操作参数
-# vmid  本地虚拟机进程 ID
+# vmid  本地虚拟机进程ID
 # interval  连续输出的时间间隔
 # count  连续输出的次数
 jstat -<option> <vmid> [<interval> [<count>]]
@@ -467,16 +466,16 @@ jstat -<option> <vmid> [<interval> [<count>]]
 
 ```shell
 # 监视类装载、卸载数量、总空间以及耗费的时间
-# Loaded  加载 Class 的数量
-# Bytes  Class 字节大小
-# Unloaded  未加载 Class 的数量
-# Bytes  未加载 Class 的字节大小
+# Loaded  加载Class的数量
+# Bytes  Class字节大小
+# Unloaded  未加载Class的数量
+# Bytes  未加载Class的字节大小
 # Time  加载时间
 jstat -class 8282
 ```
 
 ```shell
-# 输出 JIT 编译过的方法数量耗时等
+# 输出JIT编译过的方法数量耗时等
 # Compiled  编译数量
 # Failed  编译失败数量
 # Invalid  无效数量
@@ -487,26 +486,26 @@ jstat -compiler 8282
 ```
 
 ```shell
-# 输出已被 JIT 编译的方法
-# Compiled  最近被 JIT 编译的方法数量
-# Size  最近被 JIT 编译方法的字节码数量
+# 输出已被JIT编译的方法
+# Compiled  最近被JIT编译的方法数量
+# Size  最近被JIT编译方法的字节码数量
 # Type  最近被编译的编译类型
 # Method  方法的去按限定名
 jstat -printcompilation 8282
 ```
 
 ```shell
-# 监视 Java 堆以及 GC 的状况
-# C 即 Capacity 总容量、U 即 Used 已使用的容量
-# S0C  Survivor0 区的总容量
-# S1C  Survivor1 区的总容量
-# S0U  Survivor0 区已使用的容量
-# S1U  Survivor1 区已使用的容量
-# EC  Eden 区的总容量
-# EU  Eden 区已使用的容量
-# OC  Old 区的总容量
-# OU  Old 区已使用的容量
-# MC  元空间（JDK8 之前的永久代）的总容量
+# 监视Java堆以及GC的状况
+# C即Capacity总容量、U即Used已使用的容量
+# S0C  Survivor0区的总容量
+# S1C  Survivor1区的总容量
+# S0U  Survivor0区已使用的容量
+# S1U  Survivor1区已使用的容量
+# EC  Eden区的总容量
+# EU  Eden区已使用的容量
+# OC  Old区的总容量
+# OU  Old区已使用的容量
+# MC  元空间（JDK8之前的永久代）的总容量
 # MU  元空间已使用的容量
 # CCSC  压缩类空间总容量
 # CCSU  压缩类空间已使用的容量
@@ -519,7 +518,7 @@ jstat -gc 8282
 ```
 
 ```shell
-# 同 -gc，不过还会输出 Java 堆各区域使用到的最大、最小空间
+# 同-gc，不过还会输出Java堆各区域使用到的最大、最小空间
 # NGCMN  新生代占用的最小空间
 # NGCMX  新生代占用的最大空间
 # OGCMN  老年代占用的最小空间
@@ -532,12 +531,12 @@ jstat -gccapacity 8282
 ```
 
 ```shell
-# 同 -gc，不过输出的是已使用空间占总空间的百分比
+# 同-gc，不过输出的是已使用空间占总空间的百分比
 jstat -gcutil 8282
 ```
 
 ```shell
-# 监视新生代 GC 状况 / 输出最大最小空间
+# 监视新生代GC状况/输出最大最小空间
 # TT  老年化阈值
 # MTT  最大老年化阈值
 # DSS 幸存者区所需空间大小
@@ -546,7 +545,7 @@ jstat -gcnewcapcacity 8282
 ```
 
 ```shell
-# 监视老年代 GC 状况 / 输出最大最小空间
+# 监视老年代GC状况/输出最大最小空间
 jstat -gcold 8282
 jstat -gcoldcapacity 8282
 ```
@@ -557,39 +556,35 @@ jstat -gcoldcapacity 8282
 # 监视虚拟机运行时状态信息
 # option  操作参数
 #   -dump  生成堆转储快照
-#   -finalizerinfo  显示在 F-Queue 队列等待 Finalizer 线程执行 finalizer 方法的对象
-#   -heap  显示 Java 堆使用情况，在 CMS 下会有几率导致进程中断，推荐使用 jstat 代替
-#   -histo  显示堆中对象的统计信息，加 live 关键字会强制做 1 次 FULL GC
-#   -clstats  显示元空间内存状态，该口令是 JDK8 开始使用，之前是 -permstat
-#   -F  当 -dump 没有响应时，强制生成 dump 快照
+#   -finalizerinfo  显示在F-Queue队列等待Finalizer线程执行finalizer方法的对象
+#   -heap  显示Java堆使用情况，在CMS下会有几率导致进程中断，推荐使用jstat代替
+#   -histo  显示堆中对象的统计信息，加live关键字会强制做1次FULL GC
+#   -clstats  显示元空间内存状态，该口令是JDK8开始使用，之前是-permstat
+#   -F  当-dump没有响应时，强制生成dump快照
 jstack -<option> <vmid>
 ```
 
 ### jmap
 
 ```shell
-# 用于生成 Heap Dump 文件
-# option  操作参数
-#   -flag  输出/关闭/设置指定 JVM 参数
-#   -flags  输出所有 JVM 参数的值
-#   -sysprops  输出系统属性，等同于 System.getProperties()
+# 用于生成Heap Dump文件
 jmap -<option> <vmid>
 ```
 
 ```shell
-# .hprof  后缀是为了后续可以直接用 MAT（Memory Anlysis Tool）
+# .hprof  后缀是为了后续可以直接用MAT（Memory Anlysis Tool）
 jmap -dump:live,format=b,file=dump.hprof 8282
 ```
 
 ### jhat
 
 ```shell
-# 与 jmap 搭配使用，用来分析 jmap 生成的 dump
+# 与jmap搭配使用，用来分析jmap生成的dump
 jhat <dumpfile>
 ```
 
 ```shell
-# 分配 512M 内存去启动 HTTP 服务器
+# 分配512M内存去启动HTTP服务器
 jhat -J-Xmx512m dump.hprof
 ```
 
@@ -598,10 +593,10 @@ jhat -J-Xmx512m dump.hprof
 ```shell
 # 列出正在运行的虚拟机进程
 # option  操作参数
-#   -l  输出主类全名或 jar 路径
-#   -q  只输出 vmid
-#   -m  输出 JVM 启动时传递给 main() 的参数
-#   -v  输出 JVM 启动时显示指定的 JVM 参数
+#   -l  输出主类全名或jar路径
+#   -q  只输出vmid
+#   -m  输出JVM启动时传递给main()的参数
+#   -v  输出JVM启动时显示指定的JVM参数
 jps -<option>
 ```
 
@@ -610,9 +605,9 @@ jps -<option>
 ```shell
 # 实时查看和调整虚拟机运行参数
 # option  操作参数
-#   -flag  输出/关闭/设置指定 JVM 参数
-#   -flags  输出所有 JVM 参数的值
-#   -sysprops  输出系统属性，等同于 System.getProperties()
+#   -flag  输出/关闭/设置指定JVM参数
+#   -flags  输出所有JVM参数的值
+#   -sysprops  输出系统属性，等同于System.getProperties()
 jinfo -<option> <vmid>
 ```
 
