@@ -24,7 +24,7 @@
 
 #### 类的生命周期
 
-五个阶段：加载、验证、准备、解析、初始化。
+五个阶段：加载、连接（验证、准备、解析）、初始化、使用、卸载。
 
 加载、验证、准备、初始化发生的顺序是确定的，而解析阶段则不一定，某些情况下可以在初始化阶段之后开始，这是为了支持Java语言的运行时绑定（也成为动态绑定或晚期绑定）。
 
@@ -130,7 +130,7 @@ public class ClassLoaderTest {
         // 使用Class.forName()来加载类，默认会执行初始化块
         Class.forName("com.example.class_loader.Bar2");// 打印输出：Bar2 静态初始化块执行了！
 
-        //使用Class.forName()来加载类，并指定ClassLoader，初始化时不执行静态块
+        // 使用Class.forName()来加载类，并指定ClassLoader，初始化时不执行静态块
         Class.forName("com.example.class_loader.Bar3", false, loader);
     }
 }
@@ -204,7 +204,7 @@ public class MyClassLoaderTest {
 }
 ```
 
-## JVM内存模型
+## JVM 内存模型
 
 ![jvm-size](jvm-size.png)
 
