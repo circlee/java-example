@@ -11,6 +11,8 @@ public class Main {
     static Logger logger = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) {
-        logger.info("do something");
+        logger.info("doing one...");
+        logger.info("doing two...");
+        logger.info("doing three...");
     }
 }
