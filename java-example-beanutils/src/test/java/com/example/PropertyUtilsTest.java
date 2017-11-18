@@ -35,8 +35,8 @@ public class PropertyUtilsTest {
         other.setUsername("conanli");
         other.setPassword("123456");
         other.setBirth(new Date());
-        // other.setLoves(new String[] {"ball1", "ball2"});
-        other.setJobs(Arrays.asList("job1", "job2"));
+        // other.setLoves(new String[] {"ball1", "ball2"});// array -> list 异常
+        // other.setJobs(Arrays.asList("job1", "job2"));// list -> array 异常
 
         User user = new User();
         PropertyUtils.copyProperties(user, other);
