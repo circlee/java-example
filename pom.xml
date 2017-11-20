@@ -27,6 +27,7 @@
         <module>java-example-redis</module>
         <module>java-example-servlet</module>
         <module>java-example-sorting</module>
+        <module>java-example-vertx</module>
     </modules>
 
 </project>
