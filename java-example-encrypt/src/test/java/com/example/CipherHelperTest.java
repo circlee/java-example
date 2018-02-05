@@ -11,20 +11,20 @@ import java.security.PublicKey;
  * @author liweitang
  * @date 2018/2/4
  */
-public class PowerCipherTest {
+public class CipherHelperTest {
 
     @Test
     public void testRSA() {
-        KeyPair keyPair = PowerCipher.generateRSAKeyPair();
-        String publicCode = PowerCipher.toRSAPublicCode(keyPair.getPublic());
-        String privateCode = PowerCipher.toRSAPrivateCode(keyPair.getPrivate());
+        KeyPair keyPair = CipherHelper.generateRSAKeyPair();
+        String publicCode = CipherHelper.toRSAPublicCode(keyPair.getPublic());
+        String privateCode = CipherHelper.toRSAPrivateCode(keyPair.getPrivate());
 
-        PublicKey publicKey = PowerCipher.toRSAPublicKey(publicCode);
-        PrivateKey privateKey = PowerCipher.toRSAPrivateKey(privateCode);
+        PublicKey publicKey = CipherHelper.toRSAPublicKey(publicCode);
+        PrivateKey privateKey = CipherHelper.toRSAPrivateKey(privateCode);
 
         String str = "123456";
-        String encrypted = PowerCipher.doRSAEncrypt(str, publicKey);
-        String decrypted = PowerCipher.doRSADecrypt(encrypted, privateKey);
+        String encrypted = CipherHelper.doRSAEncrypt(str, publicKey);
+        String decrypted = CipherHelper.doRSADecrypt(encrypted, privateKey);
 
         System.out.println(String.format("      str: %s", str));
         System.out.println(String.format(" pub-code: %s", publicCode));
@@ -35,14 +35,14 @@ public class PowerCipherTest {
 
     @Test
     public void testAES() {
-        SecretKey secretKey = PowerCipher.generateAESSecretKey();
-        String secretCode = PowerCipher.toAESSecretCode(secretKey);
+        SecretKey secretKey = CipherHelper.generateAESSecretKey();
+        String secretCode = CipherHelper.toAESSecretCode(secretKey);
 
         // secretKey = PowerCipher.toAESSecretKey("FRkDirKbVLfILRGAjjA35Q==");
 
         String str = "123456";
-        String encrypted = PowerCipher.doAESEncrypt(str, secretKey);
-        String decrypted = PowerCipher.doAESDecrypt(encrypted, secretKey);
+        String encrypted = CipherHelper.doAESEncrypt(str, secretKey);
+        String decrypted = CipherHelper.doAESDecrypt(encrypted, secretKey);
 
         System.out.println(String.format("      str: %s", str));
         System.out.println(String.format(" sec-code: %s", secretCode));

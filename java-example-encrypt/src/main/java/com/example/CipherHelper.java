@@ -13,7 +13,7 @@ import java.util.Base64;
  * @author liweitang
  * @date 2018/2/1
  */
-public class PowerCipher {
+public class CipherHelper {
 
     private final static String RSA = "RSA";
     private final static String AES = "AES";
