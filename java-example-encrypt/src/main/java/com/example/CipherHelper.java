@@ -13,19 +13,12 @@ import java.util.Base64;
  * @author liweitang
  * @date 2018/2/1
  */
-public class PowerCipher {
+public class CipherHelper {
 
-    private final static String RSA = "RSA";
-    private final static String AES = "AES";
-
-    /**
-     * 生成RSA密钥对
-     *
-     * @return
-     */
-    public static KeyPair generateRSAKeyPair() {
-        return generateRSAKeyPair(1024);
-    }
+    public final static Integer RSA_1024 = 1024;
+    public final static Integer RSA_2048 = 1024;
+    private final static String ALGO_RSA = "RSA";
+    private final static String ALGO_AES = "AES";
 
     /**
      * 生成RSA密钥对
@@ -34,8 +27,11 @@ public class PowerCipher {
      * @return
      */
     public static KeyPair generateRSAKeyPair(Integer keySize) {
+        if (!RSA_1024.equals(keySize) && !RSA_2048.equals(keySize)) {
+            return null;
+        }
         try {
-            KeyPairGenerator generator = KeyPairGenerator.getInstance(RSA);
+            KeyPairGenerator generator = KeyPairGenerator.getInstance(ALGO_RSA);
             generator.initialize(keySize);
             return generator.generateKeyPair();
         } catch (NoSuchAlgorithmException e) {
@@ -76,7 +72,7 @@ public class PowerCipher {
         try {
             Base64.Decoder decoder = Base64.getDecoder();
             X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(decoder.decode(publicCode));
-            KeyFactory keyFactory = KeyFactory.getInstance(RSA);
+            KeyFactory keyFactory = KeyFactory.getInstance(ALGO_RSA);
             return keyFactory.generatePublic(publicKeySpec);
         } catch (Exception e) {
             e.printStackTrace();
@@ -94,7 +90,7 @@ public class PowerCipher {
         try {
             Base64.Decoder decoder = Base64.getDecoder();
             PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(decoder.decode(privateCode));
-            KeyFactory keyFactory = KeyFactory.getInstance(RSA);
+            KeyFactory keyFactory = KeyFactory.getInstance(ALGO_RSA);
             return keyFactory.generatePrivate(privateKeySpec);
         } catch (Exception e) {
             e.printStackTrace();
@@ -119,7 +115,7 @@ public class PowerCipher {
      */
     public static SecretKey generateAESSecretKey(Integer keySize) {
         try {
-            KeyGenerator generator = KeyGenerator.getInstance(AES);
+            KeyGenerator generator = KeyGenerator.getInstance(ALGO_AES);
             generator.init(keySize);
             return generator.generateKey();
         } catch (NoSuchAlgorithmException e) {
@@ -148,7 +144,7 @@ public class PowerCipher {
     public static SecretKey toAESSecretKey(String secretCode) {
         try {
             Base64.Decoder decoder = Base64.getDecoder();
-            SecretKeySpec secretKeySpec = new SecretKeySpec(decoder.decode(secretCode), AES);
+            SecretKeySpec secretKeySpec = new SecretKeySpec(decoder.decode(secretCode), ALGO_AES);
             return secretKeySpec;
         } catch (Exception e) {
             e.printStackTrace();
@@ -158,19 +154,19 @@ public class PowerCipher {
     }
 
     public static String doRSAEncrypt(String str, Key key) {
-        return encrypt(str, RSA, key);
+        return encrypt(str, ALGO_RSA, key);
     }
 
     public static String doRSADecrypt(String str, Key key) {
-        return decrypt(str, RSA, key);
+        return decrypt(str, ALGO_RSA, key);
     }
 
     public static String doAESEncrypt(String str, Key key) {
-        return encrypt(str, AES, key);
+        return encrypt(str, ALGO_AES, key);
     }
 
     public static String doAESDecrypt(String str, Key key) {
-        return decrypt(str, AES, key);
+        return decrypt(str, ALGO_AES, key);
     }
 
     /**
