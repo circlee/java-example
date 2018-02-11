@@ -35,7 +35,7 @@ public class CipherHelperTest {
 
     @Test
     public void testAES() {
-        SecretKey secretKey = CipherHelper.generateAESSecretKey();
+        SecretKey secretKey = CipherHelper.generateAESSecretKey(CipherHelper.AES_128);
         String secretCode = CipherHelper.toAESSecretCode(secretKey);
 
         // secretKey = PowerCipher.toAESSecretKey("FRkDirKbVLfILRGAjjA35Q==");

@@ -17,6 +17,8 @@ public class CipherHelper {
 
     public final static Integer RSA_1024 = 1024;
     public final static Integer RSA_2048 = 1024;
+    public final static Integer AES_128 = 128;
+    public final static Integer AES_256 = 256;
     private final static String ALGO_RSA = "RSA";
     private final static String ALGO_AES = "AES";
 
@@ -101,19 +103,13 @@ public class CipherHelper {
     /**
      * 生成AES密钥
      *
-     * @return
-     */
-    public static SecretKey generateAESSecretKey() {
-        return generateAESSecretKey(128);
-    }
-
-    /**
-     * 生成AES密钥
-     *
      * @param keySize
      * @return
      */
     public static SecretKey generateAESSecretKey(Integer keySize) {
+        if (!AES_128.equals(keySize) && !AES_256.equals(keySize)) {
+            return null;
+        }
         try {
             KeyGenerator generator = KeyGenerator.getInstance(ALGO_AES);
             generator.init(keySize);
