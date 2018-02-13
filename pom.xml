@@ -29,6 +29,7 @@
         <module>java-example-servlet</module>
         <module>java-example-sorting</module>
         <module>java-example-vertx</module>
+        <module>java-example-webmagic</module>
     </modules>
 
 </project>
