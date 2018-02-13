@@ -1,5 +1,8 @@
 package com.example;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
@@ -17,8 +20,10 @@ import java.util.Base64;
  */
 public class CipherHelper {
 
+    private static Logger logger = LoggerFactory.getLogger(CipherHelper.class);
+
     /**
-     * 生成密钥对
+     * 生成公私钥
      *
      * @param algorithm
      * @return
@@ -29,7 +34,7 @@ public class CipherHelper {
             generator.initialize(algorithm.getKeySize());
             return generator.generateKeyPair();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.info("生成公私钥失败", e);
         }
         return null;
     }
@@ -50,7 +55,7 @@ public class CipherHelper {
             generator.init(algorithm.getKeySize(), random);
             return generator.generateKey();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.info("生成密钥失败", e);
         }
         return null;
     }
@@ -80,7 +85,7 @@ public class CipherHelper {
     }
 
     /**
-     * 转换AES密钥
+     * 转换密钥格式
      *
      * @param algorithm
      * @param secretKey
@@ -105,7 +110,7 @@ public class CipherHelper {
             KeyFactory keyFactory = KeyFactory.getInstance(algorithm.getName());
             return keyFactory.generatePublic(publicKeySpec);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.info("公钥转换失败", e);
         }
         return null;
     }
@@ -124,13 +129,13 @@ public class CipherHelper {
             KeyFactory keyFactory = KeyFactory.getInstance(algorithm.getName());
             return keyFactory.generatePrivate(privateKeySpec);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.info("私钥转换失败", e);
         }
         return null;
     }
 
     /**
-     * 转换密钥
+     * 转换密钥格式
      *
      * @param algorithm
      * @param secretCode
@@ -142,7 +147,7 @@ public class CipherHelper {
             SecretKeySpec secretKeySpec = new SecretKeySpec(decoder.decode(secretCode), algorithm.getName());
             return secretKeySpec;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.info("密钥转换失败", e);
         }
         return null;
 
@@ -165,6 +170,7 @@ public class CipherHelper {
             return encrypt(algorithm.getAlgo(), key, parameterSpec, content);
         } catch (Exception e) {
             e.printStackTrace();
+            logger.info("加密失败", e);
         }
         return null;
     }
@@ -185,7 +191,7 @@ public class CipherHelper {
             }
             return decrypt(algorithm.getAlgo(), key, parameterSpec, content);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.info("解密失败", e);
         }
         return null;
 
@@ -207,7 +213,7 @@ public class CipherHelper {
             String coding = encoder.encodeToString(encrypted);
             return coding;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.info("加密失败", e);
         }
         return null;
     }
@@ -228,7 +234,7 @@ public class CipherHelper {
             String coding = new String(decrypted, "UTF-8");
             return coding;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.info("解密失败", e);
         }
         return null;
     }
@@ -246,7 +252,7 @@ public class CipherHelper {
             Cipher cipher = createCipher(algo, Cipher.ENCRYPT_MODE, key, parameterSpec);
             return cipher.doFinal(packet);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.info("加密失败", e);
         }
         return null;
     }
@@ -264,7 +270,7 @@ public class CipherHelper {
             Cipher cipher = createCipher(algo, Cipher.DECRYPT_MODE, key, parameterSpec);
             return cipher.doFinal(packet);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.info("解密失败", e);
         }
         return null;
     }
@@ -288,7 +294,7 @@ public class CipherHelper {
             }
             return cipher;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.info("创建编码工具失败", e);
         }
         return null;
     }
