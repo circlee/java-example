@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicLong;
 public class HelloReceiver {
 
     public static void main(String[] argv) throws Exception {
-        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("test");
+        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("consumer-test");
         consumer.setNamesrvAddr("localhost:9876");
         consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
         consumer.subscribe("hello", "*");

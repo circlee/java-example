@@ -13,10 +13,10 @@ import java.util.List;
 public class HelloSender {
 
     public static void main(String[] args) throws Exception {
-        DefaultMQProducer producer = new DefaultMQProducer("test");
+        DefaultMQProducer producer = new DefaultMQProducer("producer-test");
         producer.setNamesrvAddr("localhost:9876");
         producer.start();
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 3; i++) {
             try {
                 Message msg = new Message("hello", "hello-a", ("Hello RocketMQ " + i).getBytes(RemotingHelper.DEFAULT_CHARSET));
                 SendResult sendResult = producer.send(msg);
