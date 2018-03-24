@@ -1,31 +1,37 @@
 package com.example.hello;
 
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
-import org.apache.rocketmq.client.producer.MQProducer;
-import org.apache.rocketmq.client.producer.MessageQueueSelector;
 import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.common.message.Message;
-import org.apache.rocketmq.common.message.MessageQueue;
-import org.apache.rocketmq.remoting.common.RemotingHelper;
 
-import java.util.List;
+import java.nio.charset.Charset;
 
 public class HelloSender {
 
     public static void main(String[] args) throws Exception {
+        /**
+         * 初始化
+         */
         DefaultMQProducer producer = new DefaultMQProducer("producer-test");
         producer.setNamesrvAddr("localhost:9876");
+
+        /**
+         * 启动
+         */
         producer.start();
+
+        /**
+         * 发送消息
+         */
         for (int i = 0; i < 3; i++) {
-            try {
-                Message msg = new Message("hello", "hello-a", ("Hello RocketMQ " + i).getBytes(RemotingHelper.DEFAULT_CHARSET));
-                SendResult sendResult = producer.send(msg);
-                System.out.printf("%s%n", sendResult);
-            } catch (Exception e) {
-                e.printStackTrace();
-                Thread.sleep(1000);
-            }
+            Message msg = new Message("hello", "hello-a", ("Hello RocketMQ " + i).getBytes(Charset.forName("UTF-8")));
+            SendResult sendResult = producer.send(msg);
+            System.out.printf("%s%n", sendResult);
         }
+
+        /**
+         * 关闭
+         */
         producer.shutdown();
     }
 

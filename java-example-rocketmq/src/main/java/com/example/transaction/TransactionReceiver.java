@@ -1,4 +1,4 @@
-package com.example.hello;
+package com.example.transaction;
 
 
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
@@ -10,16 +10,16 @@ import org.apache.rocketmq.common.message.MessageExt;
 
 import java.util.List;
 
-public class HelloReceiver {
+public class TransactionReceiver {
 
     public static void main(String[] argv) throws Exception {
         /**
          * 初始化
          */
-        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("consumer-test");
+        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("transaction-test");
         consumer.setNamesrvAddr("localhost:9876");
         consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
-        consumer.subscribe("hello", "*");
+        consumer.subscribe("transaction", "*");
 
         /**
          * 监听消息
