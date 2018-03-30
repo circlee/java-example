@@ -27,17 +27,7 @@ public class AliyunTransactionalSender {
         defaultMQProducer.setTransactionCheckListener(new TransactionCheckListener() {
             @Override
             public LocalTransactionState checkLocalTransactionState(MessageExt msg) {
-                String body = new String(msg.getBody());
-                if (body.contains("0")) {
-                    return LocalTransactionState.COMMIT_MESSAGE;
-                }
-                if (body.contains("1")) {
-                    return LocalTransactionState.UNKNOW;
-                }
-                if (body.contains("2")) {
-                    // return LocalTransactionState.ROLLBACK_MESSAGE;
-                }
-                return LocalTransactionState.UNKNOW;
+                return LocalTransactionState.COMMIT_MESSAGE;
             }
         });
 
@@ -49,25 +39,21 @@ public class AliyunTransactionalSender {
         /**
          * 发送信息
          */
-        Message message = new Message("conanli-test", "Hello World".getBytes());
+        Message message = new Message("conanli-test", "conanli-test-unknow", "Hello World".getBytes());
         SendResult sendResult = defaultMQProducer.sendMessageInTransaction(message, new LocalTransactionExecuter() {
             @Override
             public LocalTransactionState executeLocalTransactionBranch(Message msg, Object arg) {
-                String body = new String(msg.getBody());
-                if (body.contains("0")) {
+                String tags = msg.getTags();
+                if (tags.contains("commit")) {
                     return LocalTransactionState.COMMIT_MESSAGE;
                 }
-                if (body.contains("1")) {
+                if (tags.contains("unknow")) {
                     return LocalTransactionState.UNKNOW;
                 }
-                if (body.contains("2")) {
+                if (tags.contains("rollback")) {
                     // return LocalTransactionState.ROLLBACK_MESSAGE;
                 }
-                try {
-                    Thread.sleep(3000);
-                } catch (Exception e) {
-                }
-                return LocalTransactionState.UNKNOW;
+                return LocalTransactionState.COMMIT_MESSAGE;
             }
         }, null);
         System.out.println(sendResult);
