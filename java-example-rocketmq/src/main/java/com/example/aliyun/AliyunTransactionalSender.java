@@ -40,7 +40,7 @@ public class AliyunTransactionalSender {
          * 发送信息
          */
         Message message = new Message("conanli-test", "conanli-test-unknow", "Hello World".getBytes());
-        SendResult sendResult = defaultMQProducer.sendMessageInTransaction(message, new LocalTransactionExecuter() {
+        LocalTransactionExecuter transactionExecuter = new LocalTransactionExecuter() {
             @Override
             public LocalTransactionState executeLocalTransactionBranch(Message msg, Object arg) {
                 String tags = msg.getTags();
@@ -51,21 +51,18 @@ public class AliyunTransactionalSender {
                     return LocalTransactionState.UNKNOW;
                 }
                 if (tags.contains("rollback")) {
-                    // return LocalTransactionState.ROLLBACK_MESSAGE;
+                    return LocalTransactionState.ROLLBACK_MESSAGE;
                 }
                 return LocalTransactionState.COMMIT_MESSAGE;
             }
-        }, null);
+        };
+        SendResult sendResult = defaultMQProducer.sendMessageInTransaction(message, transactionExecuter, null);
         System.out.println(sendResult);
 
         /**
          * 关闭
          */
-        defaultMQProducer.shutdown();
-
-        while (true) {
-            Thread.yield();
-        }
+        // defaultMQProducer.shutdown();
     }
 
 }

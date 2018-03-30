@@ -30,10 +30,6 @@ public class AlionsTransactionalSender {
         TransactionProducer producer = ONSFactory.createTransactionProducer(properties, new LocalTransactionChecker() {
             @Override
             public TransactionStatus check(Message msg) {
-                String body = new String(msg.getBody(), Charset.forName("UTF-8"));
-                if (body.contains("1")) {
-                    // return TransactionStatus.RollbackTransaction;
-                }
                 return TransactionStatus.CommitTransaction;
             }
         });
@@ -47,28 +43,30 @@ public class AlionsTransactionalSender {
         /**
          * 发送消息
          */
-        for (int i = 0; i < 3; i++) {
-            Message msg = new Message("conanli-test", "conanli-test-a", ("Hello RocketMQ " + i).getBytes(Charset.forName("UTF-8")));
-            SendResult sendResult = producer.send(msg, new LocalTransactionExecuter() {
-                @Override
-                public TransactionStatus execute(Message msg, Object arg) {
-                    String body = new String(msg.getBody(), Charset.forName("UTF-8"));
-                    if (body.contains("1")) {
-                        // return TransactionStatus.RollbackTransaction;
-                    }
-                    if (body.contains("2")) {
-                        return TransactionStatus.Unknow;
-                    }
+        Message msg = new Message("conanli-test", "conanli-test-unknow", "Hello RocketMQ".getBytes(Charset.forName("UTF-8")));
+        LocalTransactionExecuter transactionExecuter = new LocalTransactionExecuter() {
+            @Override
+            public TransactionStatus execute(Message msg, Object arg) {
+                String tags = msg.getTag();
+                if (tags.contains("commit")) {
                     return TransactionStatus.CommitTransaction;
                 }
-            }, null);
-            System.out.printf("%s%n", sendResult);
-        }
+                if (tags.contains("unknow")) {
+                    return TransactionStatus.Unknow;
+                }
+                if (tags.contains("rollback")) {
+                    return TransactionStatus.RollbackTransaction;
+                }
+                return TransactionStatus.CommitTransaction;
+            }
+        };
+        SendResult sendResult = producer.send(msg, transactionExecuter, null);
+        System.out.println(sendResult);
 
         /**
          * 关闭
          */
-        producer.shutdown();
+        // producer.shutdown();
     }
 
 }
