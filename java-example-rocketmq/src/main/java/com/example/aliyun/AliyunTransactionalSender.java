@@ -2,6 +2,8 @@ package com.example.aliyun;
 
 import org.apache.rocketmq.client.producer.*;
 import org.apache.rocketmq.common.message.Message;
+import org.apache.rocketmq.common.message.MessageAccessor;
+import org.apache.rocketmq.common.message.MessageConst;
 import org.apache.rocketmq.common.message.MessageExt;
 
 import java.nio.charset.Charset;
@@ -67,7 +69,12 @@ public class AliyunTransactionalSender {
                 return LocalTransactionState.COMMIT_MESSAGE;
             }
         };
-        SendResult sendResult = producer.sendMessageInTransaction(msg, transactionExecuter, null);
+        // SendResult sendResult = producer.sendMessageInTransaction(msg, transactionExecuter, null);
+
+        MessageAccessor.putProperty(msg, MessageConst.PROPERTY_TRANSACTION_PREPARED, "true");
+        MessageAccessor.putProperty(msg, MessageConst.PROPERTY_PRODUCER_GROUP, producerGroup);
+        SendResult sendResult = producer.send(msg);
+        producer.getDefaultMQProducerImpl().endTransaction(sendResult, LocalTransactionState.COMMIT_MESSAGE, null);
         System.out.printf("%s Send Message: %s, and Result: %s %n", Thread.currentThread().getName(), msg, sendResult);
 
         /**

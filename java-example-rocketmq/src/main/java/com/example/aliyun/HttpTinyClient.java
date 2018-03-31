@@ -32,7 +32,7 @@ import java.util.List;
 public class HttpTinyClient {
 
     public static HttpResult httpGet(String url, List<String> headers, List<String> paramValues,
-        String encoding, long readTimeoutMs) throws IOException {
+                                     String encoding, long readTimeoutMs) throws IOException {
         String encodedContent = encodingParams(paramValues, encoding);
         url += (null == encodedContent) ? "" : ("?" + encodedContent);
 
@@ -62,7 +62,7 @@ public class HttpTinyClient {
     }
 
     private static String encodingParams(List<String> paramValues, String encoding)
-        throws UnsupportedEncodingException {
+            throws UnsupportedEncodingException {
         StringBuilder sb = new StringBuilder();
         if (null == paramValues) {
             return null;
@@ -101,7 +101,7 @@ public class HttpTinyClient {
      * @throws IOException
      */
     public static HttpResult httpPost(String url, List<String> headers, List<String> paramValues,
-        String encoding, long readTimeoutMs) throws IOException {
+                                      String encoding, long readTimeoutMs) throws IOException {
         String encodedContent = encodingParams(paramValues, encoding);
 
         HttpURLConnection conn = null;
@@ -145,11 +145,11 @@ public class HttpTinyClient {
     public static String clearNewLine(String str) {
         String newString = str.trim();
         int index = newString.indexOf("\r");
-        if(index != -1) {
+        if (index != -1) {
             return newString.substring(0, index);
         } else {
             index = newString.indexOf("\n");
-            return index != -1?newString.substring(0, index):newString;
+            return index != -1 ? newString.substring(0, index) : newString;
         }
     }
 

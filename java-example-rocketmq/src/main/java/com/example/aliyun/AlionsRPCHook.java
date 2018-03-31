@@ -1,6 +1,5 @@
 package com.example.aliyun;
 
-import com.aliyun.openservices.ons.api.impl.authority.AuthUtil;
 import org.apache.rocketmq.remoting.CommandCustomHeader;
 import org.apache.rocketmq.remoting.RPCHook;
 import org.apache.rocketmq.remoting.protocol.RemotingCommand;

@@ -2,6 +2,8 @@ package com.example.transaction;
 
 import org.apache.rocketmq.client.producer.*;
 import org.apache.rocketmq.common.message.Message;
+import org.apache.rocketmq.common.message.MessageAccessor;
+import org.apache.rocketmq.common.message.MessageConst;
 import org.apache.rocketmq.common.message.MessageExt;
 
 import java.nio.charset.Charset;
@@ -38,7 +40,7 @@ public class TransactionSender {
         /**
          * 发送消息
          */
-        Message msg = new Message("transaction", "transaction-test", "Hello Transactional RocketMQ".getBytes(Charset.forName("UTF-8")));
+        Message msg = new Message("transaction", "transaction-test-unknow", "Hello Transactional RocketMQ".getBytes(Charset.forName("UTF-8")));
         LocalTransactionExecuter transactionExecuter = new LocalTransactionExecuter() {
             @Override
             public LocalTransactionState executeLocalTransactionBranch(Message msg, Object arg) {
@@ -55,7 +57,12 @@ public class TransactionSender {
                 return LocalTransactionState.COMMIT_MESSAGE;
             }
         };
-        SendResult sendResult = producer.sendMessageInTransaction(msg, transactionExecuter, null);
+        // SendResult sendResult = producer.sendMessageInTransaction(msg, transactionExecuter, null);
+
+        MessageAccessor.putProperty(msg, MessageConst.PROPERTY_TRANSACTION_PREPARED, "true");
+        MessageAccessor.putProperty(msg, MessageConst.PROPERTY_PRODUCER_GROUP, producerGroup);
+        SendResult sendResult = producer.send(msg);
+        producer.getDefaultMQProducerImpl().endTransaction(sendResult, LocalTransactionState.COMMIT_MESSAGE, null);
         System.out.printf("%s Send Message: %s, and Result: %s %n", Thread.currentThread().getName(), msg, sendResult);
 
         /**
