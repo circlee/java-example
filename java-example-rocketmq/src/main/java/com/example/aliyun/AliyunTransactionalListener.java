@@ -1,12 +1,11 @@
 package com.example.aliyun;
 
-import org.apache.rocketmq.client.producer.DefaultMQProducer;
-import org.apache.rocketmq.client.producer.SendResult;
-import org.apache.rocketmq.common.message.Message;
+import org.apache.rocketmq.client.producer.LocalTransactionState;
+import org.apache.rocketmq.client.producer.TransactionCheckListener;
+import org.apache.rocketmq.client.producer.TransactionMQProducer;
+import org.apache.rocketmq.common.message.MessageExt;
 
-import java.nio.charset.Charset;
-
-public class AliyunSender {
+public class AliyunTransactionalListener {
 
     private static String accessKeyId = "rWsPV9hO0ukTatvc";
     private static String accessKeySecret = "H7AtmjhZwqWdt515b0s7qu5IYnBJo3";
@@ -27,27 +26,25 @@ public class AliyunSender {
         /**
          * 初始化
          */
-        DefaultMQProducer producer = new DefaultMQProducer(rpcHook);
+        TransactionMQProducer producer = new TransactionMQProducer(producerGroup, rpcHook);
         producer.setNamesrvAddr(HttpTinyClient.fetchNamesrvAddress(nameServer));
-        producer.setProducerGroup(producerGroup);
         producer.setVipChannelEnabled(vipChannelEnabled);
+
+        /**
+         * 回调
+         */
+        producer.setTransactionCheckListener(new TransactionCheckListener() {
+            @Override
+            public LocalTransactionState checkLocalTransactionState(MessageExt msg) {
+                System.out.printf("%s Receive Callback Message: %s %n", Thread.currentThread().getName(), msg);
+                return LocalTransactionState.COMMIT_MESSAGE;
+            }
+        });
 
         /**
          * 启动
          */
         producer.start();
-
-        /**
-         * 发送信息
-         */
-        Message msg = new Message("conanli-test", "conanli-test-commit", "Hello RocketMQ".getBytes(Charset.forName("UTF-8")));
-        SendResult sendResult = producer.send(msg);
-        System.out.printf("%s Send Message: %s, and Result: %s %n", Thread.currentThread().getName(), msg, sendResult);
-
-        /**
-         * 关闭
-         */
-        producer.shutdown();
     }
 
 }

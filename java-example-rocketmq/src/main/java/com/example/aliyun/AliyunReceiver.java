@@ -1,47 +1,58 @@
 package com.example.aliyun;
 
 
-import com.aliyun.openservices.ons.api.*;
+import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
+import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
+import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
+import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
+import org.apache.rocketmq.common.consumer.ConsumeFromWhere;
+import org.apache.rocketmq.common.message.MessageExt;
 
-import java.util.Properties;
+import java.util.List;
 
 public class AliyunReceiver {
 
+    private static String accessKeyId = "rWsPV9hO0ukTatvc";
+    private static String accessKeySecret = "H7AtmjhZwqWdt515b0s7qu5IYnBJo3";
+    private static String onsChannel = "ALIYUN";
+    private static String nameServer = "http://onsaddr-internet.aliyun.com/rocketmq/nsaddr4client-internet";
+    private static String consumerGroup = "CID-conanli";
+    private static Boolean vipChannelEnabled = false;
+
     public static void main(String[] argv) throws Exception {
-        Properties properties = new Properties();
-        //您在控制台创建的 Producer ID
-        properties.put(PropertyKeyConst.ConsumerId, "CID-conanli");
-        // AccessKey 阿里云身份验证，在阿里云服务器管理控制台创建
-        properties.put(PropertyKeyConst.AccessKey, "rWsPV9hO0ukTatvc");
-        // SecretKey 阿里云身份验证，在阿里云服务器管理控制台创建
-        properties.put(PropertyKeyConst.SecretKey, "H7AtmjhZwqWdt515b0s7qu5IYnBJo3");
-        //设置发送超时时间，单位毫秒
-        properties.setProperty(PropertyKeyConst.SendMsgTimeoutMillis, "3000");
-        // 设置 TCP 接入域名（此处以公共云生产环境为例）
-        properties.put(PropertyKeyConst.ONSAddr, "http://onsaddr-internet.aliyun.com/rocketmq/nsaddr4client-internet");
+        /**
+         * Alions
+         */
+        AlionsRPCHook rpcHook = new AlionsRPCHook();
+        rpcHook.setAccessKeyId(accessKeyId);
+        rpcHook.setAccessKeySecret(accessKeySecret);
+        rpcHook.setOnsChannel(onsChannel);
 
         /**
          * 初始化
          */
-        Consumer consumer = ONSFactory.createConsumer(properties);
+        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer(rpcHook);
+        consumer.setNamesrvAddr(HttpTinyClient.fetchNamesrvAddress(nameServer));
+        consumer.setConsumerGroup(consumerGroup);
+        consumer.setVipChannelEnabled(vipChannelEnabled);
+        consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
+        consumer.subscribe("conanli-test", "*");
 
         /**
          * 监听消息
          */
-        consumer.subscribe("conanli-test", "*", new MessageListener() {
+        consumer.registerMessageListener(new MessageListenerConcurrently() {
             @Override
-            public Action consume(Message message, ConsumeContext context) {
-                System.out.printf("%s Receive New Messages: %s %n", Thread.currentThread().getName(), message);
-                return Action.CommitMessage;
+            public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs, ConsumeConcurrentlyContext context) {
+                System.out.printf("%s Receive New Message: %s %n", Thread.currentThread().getName(), msgs);
+                return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
             }
         });
-
 
         /**
          * 启动
          */
         consumer.start();
-        System.out.printf("Consumer Started.%n");
     }
 
 }

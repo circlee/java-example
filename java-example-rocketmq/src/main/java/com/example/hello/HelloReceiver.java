@@ -12,12 +12,16 @@ import java.util.List;
 
 public class HelloReceiver {
 
+    private static String namesrvAddr = "localhost:9876";
+    private static String consumerGroup = "consumer-test";
+
     public static void main(String[] argv) throws Exception {
         /**
          * 初始化
          */
-        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("consumer-test");
-        consumer.setNamesrvAddr("localhost:9876");
+        DefaultMQPushConsumer consumer = new DefaultMQPushConsumer();
+        consumer.setNamesrvAddr(namesrvAddr);
+        consumer.setConsumerGroup(consumerGroup);
         consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
         consumer.subscribe("hello", "*");
 
@@ -27,7 +31,7 @@ public class HelloReceiver {
         consumer.registerMessageListener(new MessageListenerConcurrently() {
             @Override
             public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs, ConsumeConcurrentlyContext context) {
-                System.out.printf("%s Receive New Messages: %s %n", Thread.currentThread().getName(), msgs);
+                System.out.printf("%s Receive New Message: %s %n", Thread.currentThread().getName(), msgs);
                 return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
             }
         });
@@ -36,7 +40,6 @@ public class HelloReceiver {
          * 启动
          */
         consumer.start();
-        System.out.printf("Consumer Started.%n");
     }
 
 }

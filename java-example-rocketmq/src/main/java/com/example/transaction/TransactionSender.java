@@ -8,12 +8,16 @@ import java.nio.charset.Charset;
 
 public class TransactionSender {
 
+    private static String namesrvAddr = "localhost:9876";
+    private static String producerGroup = "transaction-producer-test";
+
     public static void main(String[] args) throws Exception {
         /**
          * 初始化
          */
-        TransactionMQProducer producer = new TransactionMQProducer("transaction-test");
-        producer.setNamesrvAddr("localhost:9876");
+        TransactionMQProducer producer = new TransactionMQProducer();
+        producer.setNamesrvAddr(namesrvAddr);
+        producer.setProducerGroup(producerGroup);
 
         /**
          * 回调
@@ -21,10 +25,7 @@ public class TransactionSender {
         producer.setTransactionCheckListener(new TransactionCheckListener() {
             @Override
             public LocalTransactionState checkLocalTransactionState(MessageExt msg) {
-                String body = new String(msg.getBody(), Charset.forName("UTF-8"));
-                if (body.contains("2")) {
-                    return LocalTransactionState.ROLLBACK_MESSAGE;
-                }
+                System.out.printf("%s Receive Callback Message: %s %n", Thread.currentThread().getName(), msg);
                 return LocalTransactionState.COMMIT_MESSAGE;
             }
         });
@@ -37,20 +38,29 @@ public class TransactionSender {
         /**
          * 发送消息
          */
-        for (int i = 0; i < 3; i++) {
-            Message msg = new Message("transaction", "transaction-a", ("Transactional RocketMQ " + i).getBytes(Charset.forName("UTF-8")));
-            SendResult sendResult = producer.sendMessageInTransaction(msg, new LocalTransactionExecuter() {
-                @Override
-                public LocalTransactionState executeLocalTransactionBranch(Message msg, Object arg) {
+        Message msg = new Message("transaction", "transaction-test", "Hello Transactional RocketMQ".getBytes(Charset.forName("UTF-8")));
+        LocalTransactionExecuter transactionExecuter = new LocalTransactionExecuter() {
+            @Override
+            public LocalTransactionState executeLocalTransactionBranch(Message msg, Object arg) {
+                String tags = msg.getTags();
+                if (tags.contains("commit")) {
+                    return LocalTransactionState.COMMIT_MESSAGE;
+                }
+                if (tags.contains("unknow")) {
                     return LocalTransactionState.UNKNOW;
                 }
-            }, null);
-            System.out.printf("%s%n", sendResult);
-        }
+                if (tags.contains("rollback")) {
+                    return LocalTransactionState.ROLLBACK_MESSAGE;
+                }
+                return LocalTransactionState.COMMIT_MESSAGE;
+            }
+        };
+        SendResult sendResult = producer.sendMessageInTransaction(msg, transactionExecuter, null);
+        System.out.printf("%s Send Message: %s, and Result: %s %n", Thread.currentThread().getName(), msg, sendResult);
 
         /**
          * 关闭
          */
-        producer.shutdown();
+        // producer.shutdown();
     }
 }

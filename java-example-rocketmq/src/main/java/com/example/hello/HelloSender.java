@@ -8,12 +8,16 @@ import java.nio.charset.Charset;
 
 public class HelloSender {
 
+    private static String namesrvAddr = "localhost:9876";
+    private static String producerGroup = "producer-test";
+
     public static void main(String[] args) throws Exception {
         /**
          * 初始化
          */
-        DefaultMQProducer producer = new DefaultMQProducer("producer-test");
-        producer.setNamesrvAddr("localhost:9876");
+        DefaultMQProducer producer = new DefaultMQProducer();
+        producer.setNamesrvAddr(namesrvAddr);
+        producer.setProducerGroup(producerGroup);
 
         /**
          * 启动
@@ -23,11 +27,9 @@ public class HelloSender {
         /**
          * 发送消息
          */
-        for (int i = 0; i < 3; i++) {
-            Message msg = new Message("hello", "hello-a", ("Hello RocketMQ " + i).getBytes(Charset.forName("UTF-8")));
-            SendResult sendResult = producer.send(msg);
-            System.out.printf("%s%n", sendResult);
-        }
+        Message msg = new Message("hello", "hello-test", "Hello RocketMQ".getBytes(Charset.forName("UTF-8")));
+        SendResult sendResult = producer.send(msg);
+        System.out.printf("%s Send Message: %s, and Result: %s %n", Thread.currentThread().getName(), msg, sendResult);
 
         /**
          * 关闭
