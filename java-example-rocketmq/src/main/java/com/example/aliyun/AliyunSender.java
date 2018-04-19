@@ -11,11 +11,13 @@ public class AliyunSender {
     private static String accessKeyId = "rWsPV9hO0ukTatvc";
     private static String accessKeySecret = "H7AtmjhZwqWdt515b0s7qu5IYnBJo3";
     private static String onsChannel = "ALIYUN";
-    private static String nameServer = "http://onsaddr-internet.aliyun.com/rocketmq/nsaddr4client-internet";
-    private static String producerGroup = "PID-conanli";
+    private static String onsAddr = "http://onsaddr-internet.aliyun.com/rocketmq/nsaddr4client-internet";
+    private static String producerGroup = "PID-conanli-producer";
     private static Boolean vipChannelEnabled = false;
 
     public static void main(String[] args) throws Exception {
+        String nameServer = HttpTinyClient.fetchNamesrvAddress(onsAddr);
+
         /**
          * Alions
          */
@@ -28,7 +30,7 @@ public class AliyunSender {
          * 初始化
          */
         DefaultMQProducer producer = new DefaultMQProducer(rpcHook);
-        producer.setNamesrvAddr(HttpTinyClient.fetchNamesrvAddress(nameServer));
+        producer.setNamesrvAddr(nameServer);
         producer.setProducerGroup(producerGroup);
         producer.setVipChannelEnabled(vipChannelEnabled);
 

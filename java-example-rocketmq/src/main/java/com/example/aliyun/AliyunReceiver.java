@@ -7,6 +7,7 @@ import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
 import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
 import org.apache.rocketmq.common.consumer.ConsumeFromWhere;
 import org.apache.rocketmq.common.message.MessageExt;
+import org.apache.rocketmq.common.protocol.heartbeat.MessageModel;
 
 import java.util.List;
 
@@ -15,11 +16,13 @@ public class AliyunReceiver {
     private static String accessKeyId = "rWsPV9hO0ukTatvc";
     private static String accessKeySecret = "H7AtmjhZwqWdt515b0s7qu5IYnBJo3";
     private static String onsChannel = "ALIYUN";
-    private static String nameServer = "http://onsaddr-internet.aliyun.com/rocketmq/nsaddr4client-internet";
-    private static String consumerGroup = "CID-conanli";
+    private static String onsAddr = "http://onsaddr-internet.aliyun.com/rocketmq/nsaddr4client-internet";
+    private static String consumerGroup = "CID-conanli-consumer";
     private static Boolean vipChannelEnabled = false;
 
     public static void main(String[] argv) throws Exception {
+        String nameServer = HttpTinyClient.fetchNamesrvAddress(onsAddr);
+
         /**
          * Alions
          */
@@ -32,12 +35,13 @@ public class AliyunReceiver {
          * 初始化
          */
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer(rpcHook);
-        consumer.setNamesrvAddr(HttpTinyClient.fetchNamesrvAddress(nameServer));
+
+        consumer.setNamesrvAddr(nameServer);
         consumer.setConsumerGroup(consumerGroup);
         consumer.setVipChannelEnabled(vipChannelEnabled);
-        consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
+        consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_LAST_OFFSET);
         consumer.subscribe("conanli-test", "*");
-
+        consumer.setMessageModel(MessageModel.CLUSTERING);
         /**
          * 监听消息
          */
