@@ -44,7 +44,7 @@ public class XProjectLogHubProcessor implements ILogHubProcessor {
                 FastLog log = flg.getLogs(lIdx);
                 for (int cIdx = 0; cIdx < log.getContentsCount(); ++cIdx) {
                     FastLogContent content = log.getContents(cIdx);
-                    System.out.println(content.getKey() + "\t:\t" + content.getValue());
+                    System.out.println(flg.getLogTags(3).getValue() + "-" + lIdx + "-" + cIdx + "\t:\t" + content.getValue());
                     try {
                         /**
                          * 参数true表示立即将checkpoint更新到服务端，为false会将checkpoint缓存在本地，
