@@ -11,6 +11,7 @@
     <modules>
         <module>java-example-activemq</module>
         <module>java-example-alilog</module>
+        <module>java-example-alioss</module>
         <module>java-example-assembly</module>
         <module>java-example-beanutils</module>
         <module>java-example-canal</module>
