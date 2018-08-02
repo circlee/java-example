@@ -21,6 +21,7 @@
 		<module>java-example-flume</module>
         <module>java-example-jackson</module>
         <module>java-example-jooq</module>
+        <module>java-example-jpush</module>
         <module>java-example-jvm</module>
         <module>java-example-jwt</module>
         <module>java-example-jxls</module>
